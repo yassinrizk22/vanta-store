@@ -1,26 +1,233 @@
 <!DOCTYPE html>
 <html>
-<body style="background:#000;color:#fff;font-family:sans-serif;text-align:center;padding:50px">
+<head>
+<meta charset="UTF-8">
+<title>VANTA Product</title>
 
-<img id="img" width="300"><br><br>
+<style>
+body{
+margin:0;
+background:#000;
+color:#fff;
+font-family:sans-serif;
+}
+
+/* LAYOUT */
+.container{
+display:flex;
+gap:50px;
+padding:60px;
+flex-wrap:wrap;
+}
+
+/* IMAGE */
+.image img{
+width:350px;
+}
+
+/* INFO */
+.info{
+max-width:400px;
+}
+
+.desc{
+opacity:.7;
+margin:15px 0;
+line-height:1.6;
+}
+
+/* SIZE */
+select{
+width:100%;
+padding:10px;
+background:#000;
+color:#fff;
+border:1px solid #333;
+margin-top:15px;
+}
+
+/* BUTTONS */
+button{
+width:100%;
+padding:12px;
+margin-top:15px;
+border:none;
+cursor:pointer;
+}
+
+.add{
+background:#fff;
+color:#000;
+}
+
+.order{
+background:#111;
+color:#fff;
+border:1px solid #333;
+}
+
+/* TOAST */
+.toast{
+position:fixed;
+bottom:20px;
+right:20px;
+background:#111;
+padding:12px 18px;
+opacity:0;
+transition:.3s;
+border:1px solid #333;
+}
+.toast.show{opacity:1;}
+
+/* MOBILE */
+@media(max-width:700px){
+.container{
+padding:20px;
+text-align:center;
+justify-content:center;
+}
+.image img{
+width:250px;
+}
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<div class="image">
+<img id="img">
+</div>
+
+<div class="info">
 <h2 id="name"></h2>
 <p id="price"></p>
 
-<button onclick="add()">Add to Cart</button>
+<p id="desc" class="desc"></p>
+
+<select id="size">
+<option value="">Select Size</option>
+<option>M</option>
+<option>L</option>
+<option>XL</option>
+<option>XXL</option>
+</select>
+
+<button class="add" onclick="add()">Add to Cart</button>
+<button class="order" onclick="orderNow()">Order</button>
+
+</div>
+
+</div>
+
+<div id="toast" class="toast"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
 
 <script>
-let p=JSON.parse(localStorage.getItem("p"));
+const client = supabase.createClient(
+"https://ojtrvxaptsavzmzjymci.supabase.co",
+"sb_publishable_Qv9Pl1_DfFf4wEHS_ApMTQ_FuoR0ylh"
+);
 
-img.src=p.img;
-name.innerText=p.n;
-price.innerText=p.p+" EGP";
+let id = new URLSearchParams(window.location.search).get("id");
+let product;
 
-function add(){
-let cart=JSON.parse(localStorage.getItem("cart"))||[];
-cart.push(p);
-localStorage.setItem("cart",JSON.stringify(cart));
-alert("Added");
+/* TOAST */
+function showToast(msg){
+let t=document.getElementById("toast");
+t.innerText=msg;
+t.classList.add("show");
+setTimeout(()=>t.classList.remove("show"),2000);
 }
+
+/* LOAD */
+async function load(){
+
+let {data,error} = await client
+.from("products")
+.select("*")
+.eq("id",id)
+.single();
+
+if(error){
+showToast("Error loading product");
+return;
+}
+
+product = data;
+
+img.src = product.image;
+name.innerText = product.name;
+price.innerText = product.price + " EGP";
+desc.innerText = product.description || "No description";
+
+}
+
+/* ADD */
+function add(){
+
+let size = document.getElementById("size").value;
+
+if(!size){
+showToast("Select size first");
+return;
+}
+
+let cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+cart.push({
+...product,
+size:size,
+qty:1
+});
+
+localStorage.setItem("cart", JSON.stringify(cart));
+
+showToast("Added to cart ✔");
+}
+
+/* ORDER FIXED */
+function orderNow(){
+
+let size = document.getElementById("size").value;
+
+/* تحقق */
+if(!size){
+showToast("Select size first");
+return;
+}
+
+if(!product){
+showToast("Product not loaded");
+return;
+}
+
+/* حفظ */
+let orderData = {
+id: product.id,
+name: product.name,
+price: product.price,
+image: product.image,
+size: size,
+qty: 1
+};
+
+localStorage.setItem("orderNow", JSON.stringify(orderData));
+
+/* UX */
+showToast("Preparing your order...");
+
+/* تأخير */
+setTimeout(()=>{
+window.location.href="checkout.html";
+},1000);
+
+}
+
+load();
 </script>
 
 </body>
