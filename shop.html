@@ -4,6 +4,9 @@
 <meta charset="UTF-8">
 <title>VANTA Shop</title>
 
+<!-- ✅ مهم للموبايل -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Montserrat:wght@300;500&display=swap" rel="stylesheet">
 
 <style>
@@ -20,6 +23,7 @@ margin:0;
 background:var(--bg);
 color:var(--text);
 font-family:'Montserrat',sans-serif;
+overflow-x:hidden; /* ✅ منع اسكرول جانبي */
 }
 
 /* NAV */
@@ -173,6 +177,56 @@ opacity:0;
 transform:scale(1.4);
 }
 }
+
+/* ===== 📱 MOBILE RESPONSIVE ===== */
+@media (max-width:768px){
+
+nav{
+padding:15px 20px;
+flex-direction:column;
+gap:10px;
+}
+
+nav div:last-child{
+display:flex;
+flex-wrap:wrap;
+gap:10px;
+}
+
+nav a{
+margin-left:0;
+}
+
+.top{
+padding:15px 20px;
+flex-direction:column;
+}
+
+.top input,
+.top select{
+width:100%;
+}
+
+.grid{
+padding:20px;
+gap:20px;
+grid-template-columns:repeat(auto-fill,minmax(160px,1fr));
+}
+
+.card img{
+height:200px;
+}
+
+.info h3{
+font-size:16px;
+}
+
+.logo{
+font-size:28px;
+letter-spacing:10px;
+}
+
+}
 </style>
 </head>
 
@@ -321,7 +375,6 @@ localStorage.setItem("cart",JSON.stringify(cart));
 showToast("Added ✔");
 }
 
-/* CINEMATIC ORDER */
 function orderNow(index){
 
 let p = products[index];
@@ -337,7 +390,6 @@ showToast("Out of stock");
 return;
 }
 
-/* حفظ */
 localStorage.setItem("orderNow", JSON.stringify({
 id:p.id,
 name:p.name,
@@ -347,23 +399,19 @@ size:size,
 qty:1
 }));
 
-/* animation */
 let t=document.getElementById("transition");
 t.classList.add("active");
 
-/* redirect */
 setTimeout(()=>{
 window.location.href="checkout.html";
 },5000);
 }
 
-/* SEARCH */
 document.getElementById("search").oninput=(e)=>{
 let v=e.target.value.toLowerCase();
 render(products.filter(p=>p.name.toLowerCase().includes(v)));
 };
 
-/* SORT */
 document.getElementById("sort").onchange=(e)=>{
 let v=e.target.value;
 let sorted=[...products];
