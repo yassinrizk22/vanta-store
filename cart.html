@@ -4,6 +4,9 @@
 <meta charset="UTF-8">
 <title>VANTA Cart</title>
 
+<!-- ✅ مهم للموبايل -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600&family=Montserrat:wght@300;500&display=swap" rel="stylesheet">
 
 <style>
@@ -12,6 +15,7 @@ margin:0;
 background:#000;
 color:#fff;
 font-family:'Montserrat';
+overflow-x:hidden; /* ✅ منع اسكرول جانبي */
 }
 
 /* OVERLAY */
@@ -26,6 +30,7 @@ backdrop-filter:blur(8px);
 display:flex;
 justify-content:center;
 align-items:center;
+padding:15px; /* ✅ علشان الموبايل */
 }
 
 /* POPUP */
@@ -162,6 +167,53 @@ color:#fff;
 
 .close:hover{
 background:#444;
+}
+
+/* ===== 📱 MOBILE RESPONSIVE ===== */
+@media (max-width:768px){
+
+.cart-box{
+width:100%;
+max-height:90vh;
+padding:20px;
+border-radius:15px;
+}
+
+h2{
+font-size:20px;
+text-align:center;
+}
+
+.item{
+gap:10px;
+}
+
+.item img{
+width:60px;
+height:60px;
+}
+
+.qty{
+gap:6px;
+}
+
+.qty button{
+padding:4px 8px;
+}
+
+.total{
+font-size:16px;
+text-align:center;
+}
+
+.actions{
+flex-direction:column;
+}
+
+.actions button{
+width:100%;
+}
+
 }
 </style>
 </head>
