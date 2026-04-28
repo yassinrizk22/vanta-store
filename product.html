@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<body style="background:#000;color:#fff;font-family:sans-serif;text-align:center;padding:50px">
+
+<img id="img" width="300"><br><br>
+<h2 id="name"></h2>
+<p id="price"></p>
+
+<button onclick="add()">Add to Cart</button>
+
+<script>
+let p=JSON.parse(localStorage.getItem("p"));
+
+img.src=p.img;
+name.innerText=p.n;
+price.innerText=p.p+" EGP";
+
+function add(){
+let cart=JSON.parse(localStorage.getItem("cart"))||[];
+cart.push(p);
+localStorage.setItem("cart",JSON.stringify(cart));
+alert("Added");
+}
+</script>
+
+</body>
+</html>

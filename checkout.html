@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>VANTA Checkout</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600&family=Montserrat:wght@300;500&display=swap" rel="stylesheet">
+
+<style>
+body{
+margin:0;
+background:#000;
+color:#fff;
+font-family:'Montserrat';
+}
+
+.container{
+max-width:600px;
+margin:60px auto;
+background:#111;
+padding:30px;
+border-radius:15px;
+}
+
+h2{
+font-family:'Playfair Display';
+margin-bottom:20px;
+}
+
+input, select{
+width:100%;
+padding:12px;
+margin-bottom:12px;
+background:#000;
+border:1px solid #333;
+color:#fff;
+}
+
+button{
+width:100%;
+padding:14px;
+background:#fff;
+color:#000;
+border:none;
+cursor:pointer;
+transition:.3s;
+}
+
+button:hover{
+transform:scale(1.03);
+}
+
+.product{
+background:#000;
+padding:12px;
+margin-bottom:15px;
+border:1px solid #222;
+}
+
+.live{
+font-size:13px;
+margin-bottom:10px;
+color:#aaa;
+}
+
+.live span{
+color:#fff;
+font-weight:bold;
+}
+
+.success{
+display:none;
+text-align:center;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container" id="formBox">
+
+<h2>Complete Your Order</h2>
+
+<div id="product" class="product"></div>
+
+<div class="live">
+Selected Size: <span id="liveSize">-</span>
+</div>
+
+<input id="name" placeholder="Full Name">
+<input id="email" placeholder="Email">
+<input id="phone" placeholder="Phone Number">
+<input id="governorate" placeholder="Governorate">
+
+<select id="size" onchange="updateSize()">
+<option value="">Select Size</option>
+<option>M</option>
+<option>L</option>
+<option>XL</option>
+<option>XXL</option>
+</select>
+
+<button onclick="submitOrder()">Place Order</button>
+
+</div>
+
+<div class="container success" id="successBox">
+<h2>Order Confirmed 🖤</h2>
+<p id="orderId"></p>
+<button onclick="goShop()">Continue Shopping</button>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+
+<script>
+const client = supabase.createClient(
+"https://ojtrvxaptsavzmzjymci.supabase.co",
+"sb_publishable_Qv9Pl1_DfFf4wEHS_ApMTQ_FuoR0ylh"
+);
+
+/* DATA */
+let order = JSON.parse(localStorage.getItem("orderNow"));
+let cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+let productBox = document.getElementById("product");
+let sizeSelect = document.getElementById("size");
+let live = document.getElementById("liveSize");
+
+/* عرض المنتج */
+if(order){
+productBox.innerHTML = `<b>${order.n}</b><br>${order.p} EGP`;
+sizeSelect.value = order.size || "";
+live.innerText = order.size || "-";
+}
+else if(cart.length > 0){
+let html="";
+cart.forEach(i=>{
+html += `${i.n} (${i.size}) - ${i.p} EGP<br>`;
+});
+productBox.innerHTML = html;
+sizeSelect.style.display="none";
+live.innerText = "Multiple Items";
+}
+
+/* تحديث المقاس */
+function updateSize(){
+let val = sizeSelect.value;
+live.innerText = val;
+
+if(order){
+order.size = val;
+localStorage.setItem("orderNow", JSON.stringify(order));
+}
+}
+
+/* Order ID */
+function generateOrderId(){
+return "VANTA-" + Math.floor(Math.random()*1000000);
+}
+
+/* إرسال الطلب */
+async function submitOrder(){
+
+let name = document.getElementById("name").value;
+let phone = document.getElementById("phone").value;
+let gov = document.getElementById("governorate").value;
+
+if(!name || !phone || !gov){
+alert("Fill required fields");
+return;
+}
+
+let orderId = generateOrderId();
+
+/* إدخال الداتابيز */
+if(order){
+
+await client.from("orders").insert([{
+name:name,
+phone:phone,
+governorate:gov,
+size:order.size,
+product:order.n,
+price:order.p
+}]);
+
+}
+
+else if(cart.length > 0){
+
+for(let i of cart){
+await client.from("orders").insert([{
+name:name,
+phone:phone,
+governorate:gov,
+size:i.size,
+product:i.n,
+price:i.p
+}]);
+}
+
+}
+
+/* تنظيف */
+localStorage.removeItem("orderNow");
+localStorage.removeItem("cart");
+
+/* عرض النجاح */
+document.getElementById("formBox").style.display="none";
+document.getElementById("successBox").style.display="block";
+document.getElementById("orderId").innerText = "Order ID: " + orderId;
+
+}
+
+/* رجوع */
+function goShop(){
+window.location.href="shop.html";
+}
+</script>
+
+</body>
+</html>

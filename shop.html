@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>VANTA Shop</title>
+
+<style>
+:root{
+--bg:#000;
+--text:#fff;
+--muted:#9a9a9a;
+--line:#111;
+--danger:#ff3b3b;
+}
+
+body{
+margin:0;
+background:var(--bg);
+color:var(--text);
+font-family:sans-serif;
+}
+
+/* NAV */
+nav{
+display:flex;
+justify-content:space-between;
+padding:20px 60px;
+border-bottom:1px solid var(--line);
+}
+
+nav a{
+margin-left:20px;
+text-decoration:none;
+color:var(--muted);
+transition:0.3s;
+}
+nav a:hover{color:#fff}
+
+/* GRID */
+.grid{
+display:grid;
+grid-template-columns:repeat(auto-fill,minmax(260px,1fr));
+gap:30px;
+padding:40px;
+}
+
+/* CARD */
+.card{
+background:#111;
+border-radius:15px;
+overflow:hidden;
+transition:0.3s;
+}
+
+.card:hover{
+transform:translateY(-10px);
+}
+
+.card img{
+width:100%;
+height:300px;
+object-fit:cover;
+}
+
+.info{
+padding:15px;
+}
+
+/* STOCK */
+.stock{
+font-size:12px;
+margin-top:5px;
+}
+
+.low{ color:var(--danger); }
+.ok{ color:#888; }
+
+/* SIZE */
+.size select{
+width:100%;
+margin-top:8px;
+padding:6px;
+background:#000;
+color:#fff;
+border:1px solid #333;
+}
+
+/* BUTTONS */
+.btn{
+width:100%;
+margin-top:10px;
+padding:10px;
+border:none;
+cursor:pointer;
+transition:0.2s;
+}
+
+.add{
+background:#fff;
+color:#000;
+}
+
+.add:hover{
+background:#ddd;
+}
+
+.order{
+background:#222;
+color:#fff;
+}
+
+.order:hover{
+background:#444;
+}
+
+.btn:disabled{
+background:#333;
+color:#777;
+cursor:not-allowed;
+}
+
+/* EMPTY */
+.empty{
+text-align:center;
+padding:40px;
+color:#777;
+}
+</style>
+</head>
+
+<body>
+
+<!-- NAV -->
+<nav>
+<div>VANTA</div>
+<div>
+<a href="index.html">Home</a>
+<a href="shop.html">Shop</a>
+<a href="about.html">About</a>
+<a href="cart.html">Cart</a>
+</div>
+</nav>
+
+<!-- PRODUCTS -->
+<div id="products" class="grid"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+
+<script>
+const client = supabase.createClient(
+"https://ojtrvxaptsavzmzjymci.supabase.co",
+"sb_publishable_Qv9Pl1_DfFf4wEHS_ApMTQ_FuoR0ylh"
+);
+
+/* LOAD */
+async function load(){
+
+let {data} = await client.from("products").select("*");
+
+let c = document.getElementById("products");
+c.innerHTML="";
+
+if(!data || data.length===0){
+c.innerHTML="<div class='empty'>No products yet...</div>";
+return;
+}
+
+data.forEach((i,index)=>{
+
+let stockText = i.stock > 0
+? `<p class="stock ${i.stock <= 3 ? 'low' : 'ok'}">
+${i.stock <= 3 ? 'Only ' + i.stock + ' left 🔥' : i.stock + ' in stock'}
+</p>`
+: `<p class="stock low">Out of stock</p>`;
+
+c.innerHTML+=`
+<div class="card">
+
+<img src="${i.image}">
+
+<div class="info">
+<h3>${i.name}</h3>
+<p>${i.price} EGP</p>
+
+${stockText}
+
+<div class="size">
+<select id="size-${index}">
+<option value="M">M</option>
+<option value="L">L</option>
+<option value="XL">XL</option>
+<option value="XXL">XXL</option>
+</select>
+</div>
+
+<button class="btn add"
+${i.stock <= 0 ? "disabled" : ""}
+onclick="add(${index},'${i.name}','${i.price}','${i.image}')">
+Add to Cart
+</button>
+
+<button class="btn order"
+${i.stock <= 0 ? "disabled" : ""}
+onclick="orderNow(${index},
+'${i.name}',
+'${i.price}',
+'${i.image}',
+${i.stock},
+'${i.id}')">
+Order
+</button>
+
+</div>
+</div>
+`;
+
+});
+
+}
+
+/* ADD */
+function add(index,n,p,img){
+
+let size = document.getElementById("size-"+index).value;
+
+let cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+cart.push({n,p,img,size,qty:1});
+
+localStorage.setItem("cart", JSON.stringify(cart));
+
+window.location.href="cart.html";
+}
+
+/* ORDER + UPDATE STOCK */
+async function orderNow(index,n,p,img,stock,id){
+
+let size = document.getElementById("size-"+index).value;
+
+if(stock <= 0){
+alert("Out of stock");
+return;
+}
+
+/* تقليل المخزون */
+await client
+.from("products")
+.update({ stock: stock - 1 })
+.eq("id", id);
+
+/* حفظ الطلب */
+localStorage.setItem("orderNow", JSON.stringify({
+n,p,img,size,qty:1
+}));
+
+window.location.href="checkout.html";
+}
+
+load();
+</script>
+
+</body>
+</html>

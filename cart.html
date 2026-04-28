@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>VANTA Cart</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600&family=Montserrat:wght@300;500&display=swap" rel="stylesheet">
+
+<style>
+body{
+margin:0;
+background:#000;
+color:#fff;
+font-family:'Montserrat';
+}
+
+/* OVERLAY */
+.overlay{
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+background:rgba(0,0,0,0.85);
+backdrop-filter:blur(8px);
+display:flex;
+justify-content:center;
+align-items:center;
+}
+
+/* POPUP */
+.cart-box{
+width:520px;
+max-height:85vh;
+background:#111;
+border-radius:20px;
+padding:25px;
+display:flex;
+flex-direction:column;
+animation:fadeIn 0.4s ease;
+}
+
+@keyframes fadeIn{
+from{transform:scale(0.9);opacity:0}
+to{transform:scale(1);opacity:1}
+}
+
+h2{
+font-family:'Playfair Display';
+margin-bottom:15px;
+}
+
+/* ITEMS */
+.items{
+flex:1;
+overflow-y:auto;
+}
+
+.item{
+display:flex;
+gap:15px;
+margin-bottom:15px;
+border-bottom:1px solid #222;
+padding-bottom:10px;
+}
+
+.item img{
+width:70px;
+height:70px;
+border-radius:10px;
+object-fit:cover;
+}
+
+.info{
+flex:1;
+}
+
+/* SIZE */
+.size{
+margin-top:5px;
+}
+
+.size select{
+background:#000;
+color:#fff;
+border:1px solid #333;
+padding:5px;
+outline:none;
+}
+
+/* QTY */
+.qty{
+display:flex;
+gap:10px;
+align-items:center;
+margin-top:5px;
+}
+
+.qty button{
+background:#222;
+border:none;
+color:#fff;
+padding:5px 10px;
+cursor:pointer;
+transition:0.2s;
+}
+
+.qty button:hover{
+background:#fff;
+color:#000;
+}
+
+/* REMOVE */
+.remove{
+background:none;
+border:none;
+color:#888;
+cursor:pointer;
+font-size:12px;
+margin-top:5px;
+}
+
+.remove:hover{
+color:#fff;
+}
+
+/* TOTAL */
+.total{
+margin-top:10px;
+font-size:18px;
+}
+
+/* ACTIONS */
+.actions{
+display:flex;
+gap:10px;
+margin-top:15px;
+}
+
+.actions button{
+flex:1;
+padding:12px;
+border:none;
+cursor:pointer;
+transition:0.3s;
+font-weight:bold;
+}
+
+.checkout{
+background:#fff;
+color:#000;
+}
+
+.checkout:hover{
+background:#ccc;
+}
+
+.close{
+background:#222;
+color:#fff;
+}
+
+.close:hover{
+background:#444;
+}
+</style>
+</head>
+
+<body>
+
+<div class="overlay">
+
+<div class="cart-box">
+
+<h2>Your Cart</h2>
+
+<div class="items" id="items"></div>
+
+<div class="total" id="total"></div>
+
+<div class="actions">
+<button class="checkout" onclick="goCheckout()">Checkout</button>
+<button class="close" onclick="goBack()">Continue</button>
+</div>
+
+</div>
+
+</div>
+
+<script>
+
+function loadCart(){
+
+let cart = JSON.parse(localStorage.getItem("cart")) || [];
+let container = document.getElementById("items");
+let total = 0;
+
+container.innerHTML="";
+
+cart.forEach((item,index)=>{
+
+let price = parseInt(item.p || item.price);
+let qty = item.qty || 1;
+let size = item.size || "M";
+
+total += price * qty;
+
+container.innerHTML += `
+<div class="item">
+<img src="${item.img || item.image}">
+<div class="info">
+
+<div>${item.n || item.name}</div>
+<div>${price} EGP</div>
+
+<div class="size">
+<select onchange="changeSize(${index}, this.value)">
+<option ${size==="M"?"selected":""}>M</option>
+<option ${size==="L"?"selected":""}>L</option>
+<option ${size==="XL"?"selected":""}>XL</option>
+<option ${size==="XXL"?"selected":""}>XXL</option>
+</select>
+</div>
+
+<div class="qty">
+<button onclick="changeQty(${index},-1)">-</button>
+<span>${qty}</span>
+<button onclick="changeQty(${index},1)">+</button>
+</div>
+
+<button class="remove" onclick="removeItem(${index})">Remove</button>
+
+</div>
+</div>
+`;
+
+});
+
+document.getElementById("total").innerText = "Total: " + total + " EGP";
+
+}
+
+/* SIZE CHANGE */
+function changeSize(i,val){
+let cart = JSON.parse(localStorage.getItem("cart")) || [];
+cart[i].size = val;
+localStorage.setItem("cart", JSON.stringify(cart));
+}
+
+/* QTY */
+function changeQty(i,delta){
+let cart = JSON.parse(localStorage.getItem("cart")) || [];
+cart[i].qty = (cart[i].qty || 1) + delta;
+
+if(cart[i].qty <= 0){
+cart.splice(i,1);
+}
+
+localStorage.setItem("cart", JSON.stringify(cart));
+loadCart();
+}
+
+/* REMOVE */
+function removeItem(i){
+let cart = JSON.parse(localStorage.getItem("cart")) || [];
+cart.splice(i,1);
+localStorage.setItem("cart", JSON.stringify(cart));
+loadCart();
+}
+
+/* ACTIONS */
+function goCheckout(){
+window.location.href="checkout.html";
+}
+
+function goBack(){
+window.location.href="shop.html";
+}
+
+loadCart();
+
+</script>
+
+</body>
+</html>

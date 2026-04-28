@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Return Policy - VANTA</title>
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+
+body{
+background:#000;
+color:#fff;
+font-family:sans-serif;
+overflow-x:hidden;
+}
+
+/* NAV */
+nav{
+display:flex;
+justify-content:space-between;
+padding:20px 60px;
+position:fixed;
+width:100%;
+top:0;
+background:rgba(0,0,0,0.6);
+backdrop-filter:blur(10px);
+z-index:10;
+}
+
+.logo{
+letter-spacing:8px;
+}
+
+nav a{
+color:#fff;
+margin-left:20px;
+text-decoration:none;
+opacity:0.7;
+transition:0.3s;
+}
+
+nav a:hover{
+opacity:1;
+}
+
+/* SECTION */
+.section{
+min-height:100vh;
+display:flex;
+align-items:center;
+justify-content:center;
+padding:120px 20px;
+text-align:center;
+}
+
+/* CARD */
+.card{
+max-width:700px;
+background:#111;
+padding:40px;
+border-radius:12px;
+line-height:1.9;
+opacity:0;
+transform:translateY(40px);
+transition:1s;
+}
+
+/* ACTIVE */
+.card.active{
+opacity:1;
+transform:translateY(0);
+}
+
+.card h1{
+margin-bottom:20px;
+letter-spacing:3px;
+}
+
+.card p{
+margin-bottom:15px;
+opacity:0.85;
+}
+
+/* BUTTON */
+.btn{
+margin-top:20px;
+display:inline-block;
+padding:12px 25px;
+background:#fff;
+color:#000;
+text-decoration:none;
+font-weight:bold;
+transition:0.3s;
+}
+
+.btn:hover{
+transform:scale(1.05);
+}
+
+/* MOBILE */
+@media(max-width:768px){
+nav{flex-direction:column;}
+}
+</style>
+</head>
+
+<body>
+
+<!-- NAV -->
+<nav>
+<div class="logo">VANTA</div>
+<div>
+<a href="index.html">Home</a>
+<a href="shop.html">Shop</a>
+<a href="about.html">About</a>
+</div>
+</nav>
+
+<!-- CONTENT -->
+<div class="section">
+
+<div class="card" id="card">
+<h1>Return Policy</h1>
+
+<p>في VANTA، نحرص على رضاك الكامل.</p>
+
+<p>
+يمكنك استرجاع أو استبدال المنتج خلال 7 أيام من تاريخ الاستلام،
+بشرط أن يكون بحالته الأصلية وغير مستخدم ومع التيكت.
+</p>
+
+<p>
+نوفّر إمكانية استبدال المقاس أو المنتج بسهولة،
+وفي حالة الاسترجاع يتم خصم تكلفة الشحن.
+</p>
+
+<p>
+لن يتم قبول أي منتج تم استخدامه أو غسله.
+</p>
+
+<a href="shop.html" class="btn">Continue Shopping</a>
+
+</div>
+
+</div>
+
+<script>
+
+// Animation
+window.onload = ()=>{
+document.getElementById("card").classList.add("active");
+};
+
+</script>
+
+</body>
+</html>
