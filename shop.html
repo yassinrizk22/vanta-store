@@ -4,6 +4,8 @@
 <meta charset="UTF-8">
 <title>VANTA Shop</title>
 
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Montserrat:wght@300;500&display=swap" rel="stylesheet">
+
 <style>
 :root{
 --bg:#000;
@@ -17,7 +19,7 @@ body{
 margin:0;
 background:var(--bg);
 color:var(--text);
-font-family:sans-serif;
+font-family:'Montserrat',sans-serif;
 }
 
 /* NAV */
@@ -32,29 +34,40 @@ nav a{
 margin-left:20px;
 text-decoration:none;
 color:var(--muted);
-transition:0.3s;
 }
-nav a:hover{color:#fff}
+
+/* TOP */
+.top{
+display:flex;
+gap:10px;
+padding:20px 60px;
+flex-wrap:wrap;
+}
+
+input,select{
+padding:10px;
+background:#0a0a0a;
+color:#fff;
+border:1px solid #1a1a1a;
+}
 
 /* GRID */
 .grid{
 display:grid;
 grid-template-columns:repeat(auto-fill,minmax(260px,1fr));
 gap:30px;
-padding:40px;
+padding:40px 60px;
 }
 
 /* CARD */
 .card{
-background:#111;
-border-radius:15px;
+background:#0a0a0a;
+border:1px solid #1a1a1a;
+border-radius:16px;
 overflow:hidden;
-transition:0.3s;
+transition:.3s;
 }
-
-.card:hover{
-transform:translateY(-10px);
-}
+.card:hover{transform:translateY(-8px);}
 
 .card img{
 width:100%;
@@ -62,75 +75,109 @@ height:300px;
 object-fit:cover;
 }
 
-.info{
-padding:15px;
+.info{padding:18px;}
+
+.stock{font-size:12px;}
+.low{color:var(--danger);}
+.ok{color:#777;}
+
+.trending{
+font-size:11px;
+opacity:.7;
 }
 
-/* STOCK */
-.stock{
-font-size:12px;
-margin-top:5px;
+/* STARS */
+.stars span{
+cursor:pointer;
+font-size:18px;
+opacity:.3;
 }
-
-.low{ color:var(--danger); }
-.ok{ color:#888; }
-
-/* SIZE */
-.size select{
-width:100%;
-margin-top:8px;
-padding:6px;
-background:#000;
-color:#fff;
-border:1px solid #333;
-}
+.stars span:hover{opacity:1;}
 
 /* BUTTONS */
 .btn{
 width:100%;
 margin-top:10px;
-padding:10px;
+padding:12px;
 border:none;
 cursor:pointer;
-transition:0.2s;
 }
 
-.add{
-background:#fff;
-color:#000;
+.add{background:#fff;color:#000;}
+.order{background:#111;color:#fff;border:1px solid #333;}
+
+.toast{
+position:fixed;
+bottom:20px;
+right:20px;
+background:#111;
+padding:15px;
+opacity:0;
+transition:.3s;
+}
+.toast.show{opacity:1;}
+
+/* ===== CINEMATIC ===== */
+#transition{
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+background:#000;
+display:flex;
+justify-content:center;
+align-items:center;
+z-index:9999;
+opacity:0;
+pointer-events:none;
+transition:.5s;
 }
 
-.add:hover{
-background:#ddd;
+#transition.active{
+opacity:1;
+pointer-events:all;
 }
 
-.order{
-background:#222;
-color:#fff;
+.logo{
+font-family:'Playfair Display',serif;
+font-size:40px;
+letter-spacing:20px;
+opacity:0;
+transform:translateY(200px) scale(.6);
+filter:blur(10px);
 }
 
-.order:hover{
-background:#444;
+#transition.active .logo{
+animation:
+in 2s forwards,
+stay 2s 2s,
+out 1s 4s forwards;
 }
 
-.btn:disabled{
-background:#333;
-color:#777;
-cursor:not-allowed;
+@keyframes in{
+to{
+opacity:1;
+transform:translateY(0) scale(1.2);
+filter:blur(0);
+}
 }
 
-/* EMPTY */
-.empty{
-text-align:center;
-padding:40px;
-color:#777;
+@keyframes stay{
+50%{transform:scale(1.25);}
+}
+
+@keyframes out{
+to{
+opacity:0;
+transform:scale(1.4);
+}
 }
 </style>
 </head>
 
 <body>
 
-<!-- NAV -->
 <nav>
 <div>VANTA</div>
 <div>
@@ -141,8 +188,25 @@ color:#777;
 </div>
 </nav>
 
-<!-- PRODUCTS -->
+<div class="top">
+<input id="search" placeholder="Search...">
+
+<select id="sort">
+<option value="default">Sort</option>
+<option value="new">Newest</option>
+<option value="high">Price High</option>
+<option value="low">Price Low</option>
+<option value="popular">Most Popular</option>
+</select>
+</div>
+
 <div id="products" class="grid"></div>
+<div id="toast" class="toast"></div>
+
+<!-- TRANSITION -->
+<div id="transition">
+<div class="logo">VANTA</div>
+</div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
 
@@ -152,26 +216,46 @@ const client = supabase.createClient(
 "sb_publishable_Qv9Pl1_DfFf4wEHS_ApMTQ_FuoR0ylh"
 );
 
-/* LOAD */
+let products=[];
+let reviewsData={};
+
+function showToast(msg){
+let t=document.getElementById("toast");
+t.innerText=msg;
+t.classList.add("show");
+setTimeout(()=>t.classList.remove("show"),2000);
+}
+
 async function load(){
 
 let {data} = await client.from("products").select("*");
+products = data || [];
 
-let c = document.getElementById("products");
-c.innerHTML="";
+let {data:reviews} = await client.from("reviews").select("*");
 
-if(!data || data.length===0){
-c.innerHTML="<div class='empty'>No products yet...</div>";
-return;
+reviewsData = {};
+
+reviews.forEach(r=>{
+if(!reviewsData[r.product_id]){
+reviewsData[r.product_id]={total:0,count:0};
+}
+reviewsData[r.product_id].total += r.rating;
+reviewsData[r.product_id].count += 1;
+});
+
+render(products);
 }
 
-data.forEach((i,index)=>{
+function render(list){
 
-let stockText = i.stock > 0
-? `<p class="stock ${i.stock <= 3 ? 'low' : 'ok'}">
-${i.stock <= 3 ? 'Only ' + i.stock + ' left 🔥' : i.stock + ' in stock'}
-</p>`
-: `<p class="stock low">Out of stock</p>`;
+let c=document.getElementById("products");
+c.innerHTML="";
+
+list.forEach((i,index)=>{
+
+let r = reviewsData[i.id];
+let avg = r ? (r.total / r.count).toFixed(1) : "No rating";
+let count = r ? r.count : 0;
 
 c.innerHTML+=`
 <div class="card">
@@ -182,79 +266,115 @@ c.innerHTML+=`
 <h3>${i.name}</h3>
 <p>${i.price} EGP</p>
 
-${stockText}
+<p>⭐ ${avg} (${count})</p>
 
-<div class="size">
-<select id="size-${index}">
-<option value="M">M</option>
-<option value="L">L</option>
-<option value="XL">XL</option>
-<option value="XXL">XXL</option>
-</select>
+<div class="stars">
+<span onclick="rate(${index},1)">★</span>
+<span onclick="rate(${index},2)">★</span>
+<span onclick="rate(${index},3)">★</span>
+<span onclick="rate(${index},4)">★</span>
+<span onclick="rate(${index},5)">★</span>
 </div>
 
-<button class="btn add"
-${i.stock <= 0 ? "disabled" : ""}
-onclick="add(${index},'${i.name}','${i.price}','${i.image}')">
-Add to Cart
-</button>
+<p class="stock ${i.stock<=3?'low':'ok'}">
+${i.stock<=0?'Out of stock':i.stock+' in stock'}
+</p>
 
-<button class="btn order"
-${i.stock <= 0 ? "disabled" : ""}
-onclick="orderNow(${index},
-'${i.name}',
-'${i.price}',
-'${i.image}',
-${i.stock},
-'${i.id}')">
-Order
-</button>
+<select id="size-${index}">
+<option value="">Size</option>
+<option>M</option>
+<option>L</option>
+<option>XL</option>
+<option>XXL</option>
+</select>
+
+<button class="btn add" onclick="add(${index})">Add</button>
+<button class="btn order" onclick="orderNow(${index})">Order</button>
 
 </div>
 </div>
 `;
-
 });
-
 }
 
-/* ADD */
-function add(index,n,p,img){
+async function rate(index,value){
+let p = products[index];
 
-let size = document.getElementById("size-"+index).value;
+await client.from("reviews").insert([
+{ product_id: p.id, rating: value }
+]);
 
-let cart = JSON.parse(localStorage.getItem("cart")) || [];
-
-cart.push({n,p,img,size,qty:1});
-
-localStorage.setItem("cart", JSON.stringify(cart));
-
-window.location.href="cart.html";
+showToast("Rated ✔");
+load();
 }
 
-/* ORDER + UPDATE STOCK */
-async function orderNow(index,n,p,img,stock,id){
+function add(index){
+let p=products[index];
+let size=document.getElementById("size-"+index).value;
 
+if(!size){ showToast("Select size"); return; }
+
+let cart=JSON.parse(localStorage.getItem("cart"))||[];
+cart.push({...p,size,qty:1});
+localStorage.setItem("cart",JSON.stringify(cart));
+
+showToast("Added ✔");
+}
+
+/* CINEMATIC ORDER */
+function orderNow(index){
+
+let p = products[index];
 let size = document.getElementById("size-"+index).value;
 
-if(stock <= 0){
-alert("Out of stock");
+if(!size){
+showToast("Select size");
 return;
 }
 
-/* تقليل المخزون */
-await client
-.from("products")
-.update({ stock: stock - 1 })
-.eq("id", id);
+if(p.stock <= 0){
+showToast("Out of stock");
+return;
+}
 
-/* حفظ الطلب */
+/* حفظ */
 localStorage.setItem("orderNow", JSON.stringify({
-n,p,img,size,qty:1
+id:p.id,
+name:p.name,
+price:p.price,
+image:p.image,
+size:size,
+qty:1
 }));
 
+/* animation */
+let t=document.getElementById("transition");
+t.classList.add("active");
+
+/* redirect */
+setTimeout(()=>{
 window.location.href="checkout.html";
+},5000);
 }
+
+/* SEARCH */
+document.getElementById("search").oninput=(e)=>{
+let v=e.target.value.toLowerCase();
+render(products.filter(p=>p.name.toLowerCase().includes(v)));
+};
+
+/* SORT */
+document.getElementById("sort").onchange=(e)=>{
+let v=e.target.value;
+let sorted=[...products];
+
+if(v==="new") sorted.reverse();
+else if(v==="high") sorted.sort((a,b)=>b.price-a.price);
+else if(v==="low") sorted.sort((a,b)=>a.price-b.price);
+else if(v==="popular") sorted.sort((a,b)=>(b.sales||0)-(a.sales||0));
+
+render(sorted);
+};
 
 load();
 </script>
