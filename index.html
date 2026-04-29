@@ -26,7 +26,7 @@ body{
   position:relative;
 }
 
-/* ===== BACKGROUND GLOW ===== */
+/* BACKGROUND */
 body::before{
   content:"";
   position:fixed;
@@ -51,7 +51,7 @@ body::after{
   z-index:0;
 }
 
-/* 🔥 GEOMETRIC CIRCLES */
+/* BG SHAPES */
 .bg{
   position:fixed;
   width:100%;
@@ -135,14 +135,18 @@ nav a:hover{color:#fff}
   background:#fff;
   color:#000;
   text-decoration:none;
+  transition:.3s;
+}
+.btn:hover{
+  transform:scale(1.05);
+  box-shadow:0 0 20px rgba(255,255,255,.3);
 }
 
-/* 🔥 MODEL ANIMATION */
+/* MODEL */
 .model{
   width:460px;
   animation:float 4s ease-in-out infinite;
   filter:drop-shadow(0 0 40px rgba(255,255,255,.15));
-  transition:.3s;
 }
 
 @keyframes float{
@@ -225,18 +229,48 @@ footer{
   position:relative;
   z-index:1;
 }
+
+/* ===== 🔥 MOBILE FIX ===== */
+@media (max-width:768px){
+
+.hero{
+flex-direction:column;
+justify-content:center;
+text-align:center;
+padding:120px 20px 40px;
+height:auto;
+}
+
+.text h1{
+font-size:52px;
+letter-spacing:6px;
+}
+
+.text h2{
+font-size:18px;
+}
+
+.model{
+width:85%;
+max-width:320px;
+margin-top:25px;
+}
+
+nav{
+padding:15px 20px;
+}
+
+}
 </style>
 </head>
 
 <body>
 
-<!-- 🔥 BACKGROUND SHAPES -->
 <div class="bg">
 <div class="circle"></div>
 <div class="circle"></div>
 </div>
 
-<!-- NAV -->
 <nav>
 <div>VANTA</div>
 <div>
@@ -246,7 +280,6 @@ footer{
 </div>
 </nav>
 
-<!-- HERO -->
 <section class="hero">
 <div class="text">
 <h1>VANTA</h1>
@@ -257,13 +290,11 @@ footer{
 <img src="model.png" class="model">
 </section>
 
-<!-- FEATURED -->
 <section class="featured">
 <h2>FEATURED</h2>
 <div id="featuredProducts" class="featured-grid"></div>
 </section>
 
-<!-- FOLLOW VANTA -->
 <section class="insta">
 <h2>FOLLOW VANTA</h2>
 
@@ -289,8 +320,19 @@ const supa = supabase.createClient(
 );
 
 async function loadFeatured(){
-let {data} = await supa.from("products").select("*").limit(4);
+let {data, error} = await supa.from("products").select("*").limit(4);
+
+if(error){
+console.log(error);
+return;
+}
+
 let container = document.getElementById("featuredProducts");
+
+if(!data || data.length === 0){
+container.innerHTML = "<p>No products yet</p>";
+return;
+}
 
 data.forEach(p=>{
 container.innerHTML += `
@@ -303,6 +345,7 @@ container.innerHTML += `
 </div>`;
 });
 }
+
 loadFeatured();
 </script>
 
