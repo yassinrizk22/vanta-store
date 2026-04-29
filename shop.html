@@ -3,8 +3,6 @@
 <head>
 <meta charset="UTF-8">
 <title>VANTA Shop</title>
-
-<!-- ✅ مهم للموبايل -->
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Montserrat:wght@300;500&display=swap" rel="stylesheet">
@@ -13,7 +11,7 @@
 :root{
 --bg:#000;
 --text:#fff;
---muted:#9a9a9a;
+--muted:#aaa;
 --line:#111;
 --danger:#ff3b3b;
 }
@@ -23,24 +21,50 @@ margin:0;
 background:var(--bg);
 color:var(--text);
 font-family:'Montserrat',sans-serif;
-overflow-x:hidden; /* ✅ منع اسكرول جانبي */
 }
 
 /* NAV */
 nav{
 display:flex;
 justify-content:space-between;
+align-items:center;
 padding:20px 60px;
 border-bottom:1px solid var(--line);
+background:rgba(0,0,0,.7);
+backdrop-filter:blur(10px);
+}
+
+.logo{
+font-family:'Playfair Display',serif;
+letter-spacing:5px;
 }
 
 nav a{
 margin-left:20px;
 text-decoration:none;
 color:var(--muted);
+position:relative;
+transition:.3s;
+font-size:14px;
 }
 
-/* TOP */
+nav a::after{
+content:"";
+position:absolute;
+bottom:-6px;
+left:0;
+width:0;
+height:2px;
+background:#fff;
+transition:.3s;
+}
+
+nav a:hover{color:#fff;}
+nav a:hover::after{width:100%;}
+nav a.active{color:#fff;}
+nav a.active::after{width:100%;}
+
+/* TOP BAR */
 .top{
 display:flex;
 gap:10px;
@@ -48,11 +72,13 @@ padding:20px 60px;
 flex-wrap:wrap;
 }
 
-input,select{
+.top input,
+.top select{
 padding:10px;
 background:#0a0a0a;
 color:#fff;
 border:1px solid #1a1a1a;
+border-radius:6px;
 }
 
 /* GRID */
@@ -63,7 +89,6 @@ gap:30px;
 padding:40px 60px;
 }
 
-/* CARD */
 .card{
 background:#0a0a0a;
 border:1px solid #1a1a1a;
@@ -77,26 +102,30 @@ transition:.3s;
 width:100%;
 height:300px;
 object-fit:cover;
+transition:.35s;
 }
 
 .info{padding:18px;}
 
-.stock{font-size:12px;}
-.low{color:var(--danger);}
-.ok{color:#777;}
+/* COLORS */
+.colors{display:flex;gap:10px;margin:10px 0;}
 
-.trending{
-font-size:11px;
-opacity:.7;
+.color{
+width:22px;height:22px;border-radius:50%;
+cursor:pointer;border:2px solid #333;
+display:flex;align-items:center;justify-content:center;
+transition:.2s;
 }
+.color::after{
+content:"";width:10px;height:10px;border-radius:50%;
+background:currentColor;
+}
+.color:hover{transform:scale(1.15);}
+.color.active{border:2px solid #fff;}
 
-/* STARS */
-.stars span{
-cursor:pointer;
-font-size:18px;
-opacity:.3;
+.color-name{
+font-size:13px;color:#aaa;margin-top:5px;
 }
-.stars span:hover{opacity:1;}
 
 /* BUTTONS */
 .btn{
@@ -105,36 +134,25 @@ margin-top:10px;
 padding:12px;
 border:none;
 cursor:pointer;
+border-radius:8px;
 }
 
 .add{background:#fff;color:#000;}
 .order{background:#111;color:#fff;border:1px solid #333;}
+.view{background:transparent;color:#fff;border:1px solid #555;}
 
-.toast{
-position:fixed;
-bottom:20px;
-right:20px;
-background:#111;
-padding:15px;
-opacity:0;
-transition:.3s;
-}
-.toast.show{opacity:1;}
-
-/* ===== CINEMATIC ===== */
+/* ANIMATION */
 #transition{
 position:fixed;
-top:0;
-left:0;
-width:100%;
-height:100%;
+top:0;left:0;
+width:100%;height:100%;
 background:#000;
 display:flex;
 justify-content:center;
 align-items:center;
-z-index:9999;
 opacity:0;
 pointer-events:none;
+z-index:9999;
 transition:.5s;
 }
 
@@ -143,7 +161,7 @@ opacity:1;
 pointer-events:all;
 }
 
-.logo{
+.logo-big{
 font-family:'Playfair Display',serif;
 font-size:40px;
 letter-spacing:20px;
@@ -152,80 +170,21 @@ transform:translateY(200px) scale(.6);
 filter:blur(10px);
 }
 
-#transition.active .logo{
+#transition.active .logo-big{
 animation:
-in 2s forwards,
-stay 2s 2s,
-out 1s 4s forwards;
+logoIn 1.5s forwards,
+logoStay 1.5s 1.5s,
+logoOut 1s 3s forwards;
 }
 
-@keyframes in{
-to{
-opacity:1;
-transform:translateY(0) scale(1.2);
-filter:blur(0);
+@keyframes logoIn{
+to{opacity:1;transform:translateY(0) scale(1.2);filter:blur(0);}
 }
-}
-
-@keyframes stay{
+@keyframes logoStay{
 50%{transform:scale(1.25);}
 }
-
-@keyframes out{
-to{
-opacity:0;
-transform:scale(1.4);
-}
-}
-
-/* ===== 📱 MOBILE RESPONSIVE ===== */
-@media (max-width:768px){
-
-nav{
-padding:15px 20px;
-flex-direction:column;
-gap:10px;
-}
-
-nav div:last-child{
-display:flex;
-flex-wrap:wrap;
-gap:10px;
-}
-
-nav a{
-margin-left:0;
-}
-
-.top{
-padding:15px 20px;
-flex-direction:column;
-}
-
-.top input,
-.top select{
-width:100%;
-}
-
-.grid{
-padding:20px;
-gap:20px;
-grid-template-columns:repeat(auto-fill,minmax(160px,1fr));
-}
-
-.card img{
-height:200px;
-}
-
-.info h3{
-font-size:16px;
-}
-
-.logo{
-font-size:28px;
-letter-spacing:10px;
-}
-
+@keyframes logoOut{
+to{opacity:0;transform:scale(1.4);}
 }
 </style>
 </head>
@@ -233,33 +192,30 @@ letter-spacing:10px;
 <body>
 
 <nav>
-<div>VANTA</div>
+<div class="logo">VANTA</div>
 <div>
 <a href="index.html">Home</a>
-<a href="shop.html">Shop</a>
-<a href="about.html">About</a>
+<a href="shop.html" class="active">Shop</a>
 <a href="cart.html">Cart</a>
 </div>
 </nav>
 
+<!-- SEARCH + SORT -->
 <div class="top">
 <input id="search" placeholder="Search...">
-
 <select id="sort">
 <option value="default">Sort</option>
 <option value="new">Newest</option>
+<option value="old">Oldest</option>
 <option value="high">Price High</option>
 <option value="low">Price Low</option>
-<option value="popular">Most Popular</option>
 </select>
 </div>
 
 <div id="products" class="grid"></div>
-<div id="toast" class="toast"></div>
 
-<!-- TRANSITION -->
 <div id="transition">
-<div class="logo">VANTA</div>
+<div class="logo-big">VANTA</div>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
@@ -271,68 +227,44 @@ const client = supabase.createClient(
 );
 
 let products=[];
-let reviewsData={};
-
-function showToast(msg){
-let t=document.getElementById("toast");
-t.innerText=msg;
-t.classList.add("show");
-setTimeout(()=>t.classList.remove("show"),2000);
-}
+let filteredProducts=[];
+let selectedColors={};
+let originalImages={};
 
 async function load(){
-
 let {data} = await client.from("products").select("*");
 products = data || [];
-
-let {data:reviews} = await client.from("reviews").select("*");
-
-reviewsData = {};
-
-reviews.forEach(r=>{
-if(!reviewsData[r.product_id]){
-reviewsData[r.product_id]={total:0,count:0};
-}
-reviewsData[r.product_id].total += r.rating;
-reviewsData[r.product_id].count += 1;
-});
-
+filteredProducts = [...products];
 render(products);
 }
 
 function render(list){
-
 let c=document.getElementById("products");
 c.innerHTML="";
 
 list.forEach((i,index)=>{
 
-let r = reviewsData[i.id];
-let avg = r ? (r.total / r.count).toFixed(1) : "No rating";
-let count = r ? r.count : 0;
+let colorsHTML = i.colors ? i.colors.map((c,ci)=>`
+<div class="color ${ci===0?'active':''}" 
+style="color:${c.hex}" 
+onmouseover="hoverColor(${index},${ci})"
+onmouseout="leaveColor(${index})"
+onclick="selectColor(${index},${ci})"></div>
+`).join("") : "";
 
 c.innerHTML+=`
 <div class="card">
 
-<img src="${i.image}">
+<img id="img-${index}" src="${i.colors?.[0]?.image || i.image}">
 
 <div class="info">
 <h3>${i.name}</h3>
 <p>${i.price} EGP</p>
 
-<p>⭐ ${avg} (${count})</p>
-
-<div class="stars">
-<span onclick="rate(${index},1)">★</span>
-<span onclick="rate(${index},2)">★</span>
-<span onclick="rate(${index},3)">★</span>
-<span onclick="rate(${index},4)">★</span>
-<span onclick="rate(${index},5)">★</span>
+<div class="colors">${colorsHTML}</div>
+<div id="color-name-${index}" class="color-name">
+${i.colors?.[0]?.name || ""}
 </div>
-
-<p class="stock ${i.stock<=3?'low':'ok'}">
-${i.stock<=0?'Out of stock':i.stock+' in stock'}
-</p>
 
 <select id="size-${index}">
 <option value="">Size</option>
@@ -344,85 +276,114 @@ ${i.stock<=0?'Out of stock':i.stock+' in stock'}
 
 <button class="btn add" onclick="add(${index})">Add</button>
 <button class="btn order" onclick="orderNow(${index})">Order</button>
+<button class="btn view" onclick="viewProduct(${i.id})">View</button>
 
 </div>
 </div>
 `;
+
+originalImages[index]=i.colors?.[0]?.image || i.image;
 });
 }
 
-async function rate(index,value){
-let p = products[index];
+/* SEARCH */
+document.getElementById("search").oninput=(e)=>{
+let v=e.target.value.toLowerCase();
 
-await client.from("reviews").insert([
-{ product_id: p.id, rating: value }
-]);
+filteredProducts = products.filter(p =>
+p.name.toLowerCase().includes(v)
+);
 
-showToast("Rated ✔");
-load();
+applySort();
+};
+
+/* SORT */
+document.getElementById("sort").onchange=applySort;
+
+function applySort(){
+let v=document.getElementById("sort").value;
+let arr=[...filteredProducts];
+
+if(v==="new") arr.reverse();
+else if(v==="old") arr.sort((a,b)=>a.id-b.id);
+else if(v==="high") arr.sort((a,b)=>b.price-a.price);
+else if(v==="low") arr.sort((a,b)=>a.price-b.price);
+
+render(arr);
 }
 
-function add(index){
-let p=products[index];
-let size=document.getElementById("size-"+index).value;
+/* باقي الكود زي ما هو */
+function hoverColor(p,c){
+let color=products[p].colors[c];
+let img=document.getElementById("img-"+p);
+img.style.opacity=.6;
+setTimeout(()=>{img.src=color.image;img.style.opacity=1;},100);
+document.getElementById("color-name-"+p).innerText=color.name;
+}
 
-if(!size){ showToast("Select size"); return; }
+function leaveColor(p){
+let selected=selectedColors[p];
+let img=document.getElementById("img-"+p);
+img.style.opacity=.6;
+setTimeout(()=>{
+img.src=selected?.image || originalImages[p];
+img.style.opacity=1;
+},100);
+document.getElementById("color-name-"+p).innerText=selected?.name || "";
+}
+
+function selectColor(p,c){
+let color=products[p].colors[c];
+selectedColors[p]=color;
+
+let img=document.getElementById("img-"+p);
+img.src=color.image;
+}
+
+function add(i){
+let size=document.getElementById("size-"+i).value;
+if(!size){alert("Select size");return;}
+
+let selected=selectedColors[i];
+let p=products[i];
 
 let cart=JSON.parse(localStorage.getItem("cart"))||[];
-cart.push({...p,size,qty:1});
+
+cart.push({...p,
+image:selected?.image||p.image,
+color:selected?.name||null,
+size,
+qty:1});
+
 localStorage.setItem("cart",JSON.stringify(cart));
-
-showToast("Added ✔");
+alert("Added ✔");
 }
 
-function orderNow(index){
+function orderNow(i){
+let size=document.getElementById("size-"+i).value;
+if(!size){alert("Select size");return;}
 
-let p = products[index];
-let size = document.getElementById("size-"+index).value;
+let p=products[i];
+let selected=selectedColors[i];
 
-if(!size){
-showToast("Select size");
-return;
-}
-
-if(p.stock <= 0){
-showToast("Out of stock");
-return;
-}
-
-localStorage.setItem("orderNow", JSON.stringify({
-id:p.id,
-name:p.name,
-price:p.price,
-image:p.image,
-size:size,
+localStorage.setItem("orderNow",JSON.stringify({
+...p,
+image:selected?.image||p.image,
+color:selected?.name||null,
+size,
 qty:1
 }));
 
-let t=document.getElementById("transition");
-t.classList.add("active");
+document.getElementById("transition").classList.add("active");
 
 setTimeout(()=>{
-window.location.href="checkout.html";
-},5000);
+location.href="checkout.html";
+},3500);
 }
 
-document.getElementById("search").oninput=(e)=>{
-let v=e.target.value.toLowerCase();
-render(products.filter(p=>p.name.toLowerCase().includes(v)));
-};
-
-document.getElementById("sort").onchange=(e)=>{
-let v=e.target.value;
-let sorted=[...products];
-
-if(v==="new") sorted.reverse();
-else if(v==="high") sorted.sort((a,b)=>b.price-a.price);
-else if(v==="low") sorted.sort((a,b)=>a.price-b.price);
-else if(v==="popular") sorted.sort((a,b)=>(b.sales||0)-(a.sales||0));
-
-render(sorted);
-};
+function viewProduct(id){
+location.href="product.html?id="+id;
+}
 
 load();
 </script>
