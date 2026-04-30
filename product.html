@@ -1,427 +1,588 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="UTF-8">
-<title>VANTA Product</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <title>VANTA Product</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Montserrat:wght@300;500&display=swap" rel="stylesheet">
 
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Montserrat:wght@300;500&display=swap" rel="stylesheet">
+    <style>
+        body {
+            margin: 0;
+            background: radial-gradient(circle at top, #0a0a0a, #000);
+            color: #fff;
+            font-family: 'Montserrat', sans-serif;
+        }
 
-<style>
-body{
-margin:0;
-background:radial-gradient(circle at top,#0a0a0a,#000);
-color:#fff;
-font-family:'Montserrat',sans-serif;
-}
+        /* NAV */
+        nav {
+            padding: 10px 30px;
+            border-bottom: 1px solid #111;
+            font-family: 'Playfair Display', serif;
+            letter-spacing: 4px;
+        }
 
-/* NAV */
-nav{
-padding:20px 60px;
-border-bottom:1px solid #111;
-font-family:'Playfair Display',serif;
-letter-spacing:6px;
-}
+        /* LAYOUT */
+        .container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 30px;
+            padding: 30px;
+            justify-content: center;
+            animation: fadeUp .8s ease;
+        }
 
-/* LAYOUT */
-.container{
-display:flex;
-flex-wrap:wrap;
-gap:50px;
-padding:50px;
-justify-content:center;
-animation:fadeUp .8s ease;
-}
-@keyframes fadeUp{
-from{opacity:0;transform:translateY(40px);}
-to{opacity:1;transform:translateY(0);}
-}
+        @keyframes fadeUp {
+            from {
+                opacity: 0;
+                transform: translateY(40px);
+            }
 
-/* IMAGE */
-.zoom-box{
-width:380px;
-height:380px;
-border-radius:16px;
-overflow:hidden;
-box-shadow:0 0 60px rgba(255,255,255,.05);
-}
-.zoom-box img{
-width:100%;
-height:100%;
-object-fit:cover;
-transition:.3s;
-cursor:zoom-in;
-}
-.zoom-box:hover img{transform:scale(1.05);}
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
 
-/* INFO */
-.info{max-width:420px;}
-h2{font-family:'Playfair Display',serif;font-size:28px;}
-#price{font-size:22px;margin:10px 0;}
+        /* IMAGE */
+        .zoom-box {
+            width: 300px;
+            height: 300px;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 0 60px rgba(255, 255, 255, .05);
+        }
 
-.line{
-width:50px;
-height:2px;
-background:#fff;
-opacity:.2;
-margin:15px 0;
-}
+        .zoom-box img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: .3s;
+            cursor: zoom-in;
+        }
 
-/* COLORS */
-.colors{display:flex;gap:12px;}
-.color{
-width:34px;height:34px;border-radius:50%;
-display:flex;align-items:center;justify-content:center;
-cursor:pointer;border:2px solid #333;
-transition:.3s;
-}
-.color::after{
-content:"";
-width:18px;height:18px;border-radius:50%;
-background:currentColor;
-}
-.color:hover{transform:scale(1.2);}
-.color.active{
-border:2px solid #fff;
-box-shadow:0 0 12px rgba(255,255,255,.4);
-}
+        .zoom-box:hover img {
+            transform: scale(1.05);
+        }
 
-/* COLOR NAME */
-#colorName{margin-top:10px;opacity:.7;}
-#colorName span{font-weight:500;}
+        /* INFO */
+        .info {
+            max-width: 380px;
+        }
 
-/* ===== SIZES PREMIUM ===== */
-.size-title{
-margin-top:15px;
-opacity:.6;
-font-size:14px;
-}
+        h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 22px;
+        }
 
-.sizes{
-display:flex;
-gap:10px;
-margin-top:10px;
-flex-wrap:wrap;
-}
+        #price {
+            font-size: 18px;
+            margin: 10px 0;
+        }
 
-.size{
-padding:10px 16px;
-border:1px solid #333;
-cursor:pointer;
-border-radius:8px;
-font-size:14px;
-transition:.3s;
-background:#0a0a0a;
-}
+        .line {
+            width: 50px;
+            height: 2px;
+            background: #fff;
+            opacity: .2;
+            margin: 15px 0;
+        }
 
-.size:hover{
-border-color:#fff;
-transform:translateY(-2px);
-}
+        /* COLORS */
+        .colors {
+            display: flex;
+            gap: 10px;
+        }
 
-.size.active{
-background:#fff;
-color:#000;
-border-color:#fff;
-box-shadow:0 0 10px rgba(255,255,255,.3);
-}
+        .color {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            border: 2px solid #333;
+            transition: .3s;
+        }
 
-.size.disabled{
-opacity:.3;
-pointer-events:none;
-}
+        .color::after {
+            content: "";
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            background: currentColor;
+        }
 
-/* BUTTONS */
-button{
-position:relative;
-width:100%;
-padding:14px;
-margin-top:14px;
-border:none;
-cursor:pointer;
-border-radius:10px;
-overflow:hidden;
-transition:.3s;
-}
+        .color:hover {
+            transform: scale(1.2);
+        }
 
-.add{
-background:linear-gradient(145deg,#fff,#e6e6e6);
-color:#000;
-}
+        .color.active {
+            border: 2px solid #fff;
+            box-shadow: 0 0 12px rgba(255, 255, 255, .4);
+        }
 
-.order{
-background:#0a0a0a;
-color:#fff;
-border:1px solid #333;
-}
+        /* SIZE */
+        .size-title {
+            margin-top: 10px;
+            opacity: .6;
+            font-size: 12px;
+        }
 
-button:hover{transform:translateY(-2px);}
+        .sizes {
+            display: flex;
+            gap: 8px;
+            margin-top: 10px;
+            flex-wrap: wrap;
+        }
 
-button::before{
-content:"";
-position:absolute;
-left:-100%;
-top:0;
-width:100%;
-height:100%;
-background:linear-gradient(120deg,transparent,rgba(255,255,255,.4),transparent);
-transition:.5s;
-}
-button:hover::before{left:100%;}
-button:active{transform:scale(.97);}
+        .size {
+            padding: 8px 12px;
+            border: 1px solid #333;
+            cursor: pointer;
+            border-radius: 8px;
+            font-size: 12px;
+            transition: .3s;
+            background: #0a0a0a;
+        }
 
-/* TOAST */
-.toast{
-position:fixed;
-bottom:20px;
-right:20px;
-background:#111;
-padding:12px;
-opacity:0;
-transition:.3s;
-}
-.toast.show{opacity:1;}
+        .size:hover {
+            border-color: #fff;
+            transform: translateY(-2px);
+        }
 
-/* FULLSCREEN */
-.fullscreen{
-position:fixed;
-top:0;left:0;width:100%;height:100%;
-background:#000;
-display:flex;justify-content:center;align-items:center;
-opacity:0;pointer-events:none;
-}
-.fullscreen.show{opacity:1;pointer-events:all;}
-.fullscreen img{width:100%;max-width:600px;}
+        .size.active {
+            background: #fff;
+            color: #000;
+            border-color: #fff;
+            box-shadow: 0 0 10px rgba(255, 255, 255, .3);
+        }
 
-/* TRANSITION */
-#transition{
-position:fixed;
-top:0;left:0;width:100%;height:100%;
-background:#000;
-display:flex;justify-content:center;align-items:center;
-opacity:0;pointer-events:none;
-z-index:9999;
-transition:.5s;
-}
-#transition.active{opacity:1;}
+        .size.disabled {
+            opacity: .3;
+            pointer-events: none;
+        }
 
-.logo{
-font-family:'Playfair Display',serif;
-font-size:42px;
-letter-spacing:22px;
-opacity:0;
-transform:scale(.7) translateY(80px);
-filter:blur(8px);
-}
+        /* BUTTONS */
+        button {
+            position: relative;
+            width: 100%;
+            padding: 10px;
+            margin-top: 10px;
+            border: none;
+            cursor: pointer;
+            border-radius: 10px;
+            overflow: hidden;
+            transition: .3s;
+        }
 
-#transition.active .logo{
-animation:
-logoIn 1.5s forwards,
-logoPulse 1.5s 1.5s,
-logoOut 1s 3s forwards;
-}
+        .add {
+            background: linear-gradient(145deg, #fff, #e6e6e6);
+            color: #000;
+        }
 
-@keyframes logoIn{
-to{opacity:1;transform:scale(1.2) translateY(0);filter:blur(0);}
-}
-@keyframes logoPulse{
-50%{transform:scale(1.3);}
-}
-@keyframes logoOut{
-to{opacity:0;transform:scale(1.5);}
-}
+        .order {
+            background: #0a0a0a;
+            color: #fff;
+            border: 1px solid #333;
+        }
 
-@media(max-width:768px){
-.container{padding:20px;}
-.zoom-box{width:260px;height:260px;}
-}
-</style>
+        button:hover {
+            transform: translateY(-2px);
+        }
+
+        button::before {
+            content: "";
+            position: absolute;
+            left: -100%;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(120deg, transparent, rgba(255, 255, 255, .4), transparent);
+            transition: .5s;
+        }
+
+        button:hover::before {
+            left: 100%;
+        }
+
+        button:active {
+            transform: scale(.97);
+        }
+
+        /* TOAST */
+        .toast {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: #111;
+            padding: 12px;
+            opacity: 0;
+            transition: .3s;
+        }
+
+        .toast.show {
+            opacity: 1;
+        }
+
+        /* REVIEWS */
+        .reviews-section {
+            width: 80%; /* Adjust width to take more space */
+            margin: 0 auto; /* Center align */
+            padding: 15px;
+            background: #222;
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(255, 255, 255, 0.1);
+            margin-top: 40px;
+        }
+
+        .reviews-section h3 {
+            font-size: 22px;
+            margin-bottom: 15px;
+        }
+
+        .reviews-list {
+            margin-bottom: 15px;
+        }
+
+        .review {
+            background: #333;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 12px;
+        }
+
+        .review p {
+            font-size: 14px;
+            color: #ddd;
+        }
+
+        .review .author {
+            font-size: 14px;
+            color: #aaa;
+            margin-top: 8px;
+        }
+
+        .review-form textarea {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            background: #333;
+            color: #fff;
+            border: 1px solid #444;
+            border-radius: 8px;
+        }
+
+        .submit-review {
+            padding: 10px 15px;
+            background-color: #555;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+            border-radius: 8px;
+        }
+
+        .submit-review:hover {
+            background-color: #666;
+        }
+
+        .stars {
+            display: flex;
+            gap: 5px;
+        }
+
+        .star {
+            font-size: 20px;
+            cursor: pointer;
+            color: #888;
+        }
+
+        .star.active {
+            color: gold;
+        }
+    </style>
 </head>
 
 <body>
 
-<nav>VANTA</nav>
+    <nav>VANTA</nav>
 
-<div class="container">
+    <div class="container">
 
-<div class="zoom-box">
-<img id="img">
-</div>
+        <div class="zoom-box">
+            <img id="img">
+        </div>
 
-<div class="info">
+        <div class="info">
+            <h2 id="name"></h2>
+            <p id="price"></p>
 
-<h2 id="name"></h2>
-<p id="price"></p>
+            <div class="line"></div>
 
-<div class="line"></div>
+            <p id="colorName">Color: -</p>
+            <div id="colors" class="colors"></div>
 
-<p id="colorName">Color: -</p>
-<div id="colors" class="colors"></div>
+            <p class="size-title">Select Size</p>
+            <div id="sizes" class="sizes"></div>
 
-<p class="size-title">Select Size</p>
-<div id="sizes" class="sizes">
-<div class="size" data-size="M">M</div>
-<div class="size" data-size="L">L</div>
-<div class="size" data-size="XL">XL</div>
-<div class="size" data-size="XXL">XXL</div>
-</div>
+            <button class="add" onclick="add()">Add to Cart</button>
+            <button class="order" onclick="orderNow()">Order Now</button>
+        </div>
 
-<button class="add" onclick="add()">Add to Cart</button>
-<button class="order" onclick="orderNow()">Order Now</button>
+    </div>
 
-</div>
+    <!-- Reviews Section -->
+    <div class="reviews-section">
+        <h3>Customer Reviews</h3>
+        <div id="reviews-list" class="reviews-list">
+            <!-- Reviews will be dynamically loaded here -->
+        </div>
+        <div class="review-form">
+            <input type="text" id="reviewer-name" placeholder="Your Name" style="width: 100%; padding: 10px; margin-bottom: 10px; background: #333; color: #fff; border: 1px solid #444; border-radius: 8px;">
+            <textarea id="review-text" placeholder="Write your review here..." rows="4"></textarea>
 
-</div>
+            <!-- Star Rating -->
+            <div class="stars">
+                <span class="star" onclick="rate(1)">★</span>
+                <span class="star" onclick="rate(2)">★</span>
+                <span class="star" onclick="rate(3)">★</span>
+                <span class="star" onclick="rate(4)">★</span>
+                <span class="star" onclick="rate(5)">★</span>
+            </div>
 
-<div id="fullscreen" class="fullscreen">
-<img id="fullImg">
-</div>
+            <button class="submit-review" onclick="submitReview()">Submit Review</button>
+        </div>
+    </div>
 
-<div id="transition">
-<div class="logo">VANTA</div>
-</div>
+    <div id="fullscreen" class="fullscreen">
+        <img id="fullImg">
+    </div>
 
-<div id="toast" class="toast"></div>
+    <div id="transition">
+        <div class="logo">VANTA</div>
+    </div>
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+    <div id="toast" class="toast"></div>
 
-<script>
-const client = supabase.createClient(
-"https://ojtrvxaptsavzmzjymci.supabase.co",
-"sb_publishable_Qv9Pl1_DfFf4wEHS_ApMTQ_FuoR0ylh"
-);
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
 
-let id=new URLSearchParams(location.search).get("id");
-let product;
-let selectedColor=null;
-let selectedSize=null;
+    <script>
+        const client = supabase.createClient(
+            "https://ojtrvxaptsavzmzjymci.supabase.co",
+            "sb_publishable_Qv9Pl1_DfFf4wEHS_ApMTQ_FuoR0ylh"
+        );
 
-function showToast(msg){
-let t=document.getElementById("toast");
-t.innerText=msg;
-t.classList.add("show");
-setTimeout(()=>t.classList.remove("show"),2000);
-}
+        let id = new URLSearchParams(location.search).get("id");
+        let product;
+        let selectedColor = null;
+        let selectedSize = null;
+        let rating = 0; // Default rating value
 
-async function load(){
-let {data}=await client.from("products").select("*").eq("id",id).single();
-product=data;
+        function showToast(msg) {
+            let t = document.getElementById("toast");
+            t.innerText = msg;
+            t.classList.add("show");
+            setTimeout(() => t.classList.remove("show"), 2000);
+        }
 
-name.innerText=product.name;
-price.innerText=product.price+" EGP";
-img.src=product.image || "";
+        async function load() {
+            let { data } = await client.from("products").select("*").eq("id", id).single();
+            product = data;
 
-if(product.colors){renderColors();}
+            name.innerText = product.name;
+            price.innerText = product.price + " EGP";
+            img.src = product.image || "";
 
-initZoom();
-initMobileZoom();
-initSizes();
-}
+            if (product.colors) {
+                renderColors();
+            }
 
-function renderColors(){
-let c=document.getElementById("colors");
-let label=document.getElementById("colorName");
+            initZoom();
+            initMobileZoom();
+            initSizes();
+            loadReviews();  // Load reviews on page load
+        }
 
-product.colors.forEach((col,i)=>{
-let el=document.createElement("div");
-el.className="color";
-el.style.color=col.hex;
+        function renderColors() {
+            let c = document.getElementById("colors");
+            let label = document.getElementById("colorName");
 
-el.onclick=()=>{
-selectedColor=col;
-img.src=col.image;
-document.querySelectorAll(".color").forEach(x=>x.classList.remove("active"));
-el.classList.add("active");
-label.innerHTML="Color: <span>"+col.name+"</span>";
-};
+            product.colors.forEach((col, i) => {
+                let el = document.createElement("div");
+                el.className = "color";
+                el.style.color = col.hex; // Set the color based on the hex code
 
-c.appendChild(el);
+                el.onclick = () => {
+                    selectedColor = col;
+                    img.src = col.image;
+                    document.querySelectorAll(".color").forEach(x => x.classList.remove("active"));
+                    el.classList.add("active");
+                    label.innerHTML = "Color: <span>" + col.name + "</span>";
+                    renderSizes(col);  // Re-render sizes based on the selected color
+                };
 
-if(i===0){
-selectedColor=col;
-img.src=col.image;
-el.classList.add("active");
-label.innerHTML="Color: <span>"+col.name+"</span>";
-}
-});
-}
+                c.appendChild(el);
 
-function initSizes(){
-document.querySelectorAll(".size").forEach(el=>{
-el.onclick=()=>{
-if(el.classList.contains("disabled")) return;
-document.querySelectorAll(".size").forEach(x=>x.classList.remove("active"));
-el.classList.add("active");
-selectedSize = el.dataset.size;
-};
-});
-}
+                if (i === 0) {
+                    selectedColor = col;
+                    img.src = col.image;
+                    el.classList.add("active");
+                    label.innerHTML = "Color: <span>" + col.name + "</span>";
+                    renderSizes(col); // Default to first color
+                }
+            });
+        }
 
-/* ZOOM */
-function initZoom(){
-let box=document.querySelector(".zoom-box");
-box.onmousemove=(e)=>{
-let r=box.getBoundingClientRect();
-let x=(e.clientX-r.left)/r.width;
-let y=(e.clientY-r.top)/r.height;
-img.style.transformOrigin=`${x*100}% ${y*100}%`;
-img.style.transform="scale(2)";
-};
-box.onmouseleave=()=>img.style.transform="scale(1)";
-}
+        function renderSizes(color) {
+            let sizesContainer = document.getElementById("sizes");
+            sizesContainer.innerHTML = ''; // Clear previous sizes
 
-/* MOBILE */
-function initMobileZoom(){
-img.onclick=()=>{
-fullscreen.classList.add("show");
-fullImg.src=img.src;
-};
-fullscreen.onclick=()=>fullscreen.classList.remove("show");
-}
+            Object.keys(color.sizes).forEach(size => {
+                let sizeEl = document.createElement("div");
+                sizeEl.className = "size";
+                sizeEl.innerText = size;
+                sizeEl.dataset.size = size;
 
-/* ADD */
-function add(){
-if(!selectedSize){showToast("Select size");return;}
+                // Disable size if it's not available
+                if (color.sizes[size] === 0) {
+                    sizeEl.classList.add("disabled");
+                } else {
+                    sizeEl.onclick = () => {
+                        if (sizeEl.classList.contains("disabled")) return;
+                        document.querySelectorAll(".size").forEach(x => x.classList.remove("active"));
+                        sizeEl.classList.add("active");
+                        selectedSize = size;
+                    };
+                }
 
-let cart=JSON.parse(localStorage.getItem("cart"))||[];
+                sizesContainer.appendChild(sizeEl);
+            });
+        }
 
-cart.push({
-...product,
-image:selectedColor?.image,
-color:selectedColor?.name,
-size:selectedSize,
-qty:1
-});
+        function rate(star) {
+            rating = star; // Update the rating
+            let stars = document.querySelectorAll('.star');
+            stars.forEach((el, idx) => {
+                if (idx < star) {
+                    el.classList.add('active');
+                } else {
+                    el.classList.remove('active');
+                }
+            });
+        }
 
-localStorage.setItem("cart",JSON.stringify(cart));
-showToast("Added ✔");
-}
+        async function loadReviews() {
+            let { data: reviews, error } = await client
+                .from("reviews")
+                .select("*")
+                .eq("product_id", id);
 
-/* ORDER */
-function orderNow(){
-if(!selectedSize){showToast("Select size");return;}
+            if (error) {
+                console.error("Error fetching reviews:", error);
+                return;
+            }
 
-localStorage.setItem("orderNow",JSON.stringify({
-...product,
-image:selectedColor?.image,
-color:selectedColor?.name,
-size:selectedSize,
-qty:1
-}));
+            const reviewsList = document.getElementById("reviews-list");
+            reviewsList.innerHTML = ""; // Clear the existing reviews
 
-transition.classList.add("active");
+            reviews.forEach(review => {
+                const reviewElement = document.createElement("div");
+                reviewElement.classList.add("review");
+                reviewElement.innerHTML = `
 
-setTimeout(()=>{
-location.href="checkout.html";
-},3500);
-}
+                    <p>${review.content}</p>
+                    <p class="author">By ${review.author_name} | Rating: ${review.rating} ★</p>
+                `;
+                reviewsList.appendChild(reviewElement);
+            });
+        }
 
-let fullscreen=document.getElementById("fullscreen");
-let fullImg=document.getElementById("fullImg");
-let transition=document.getElementById("transition");
+        async function submitReview() {
+            const reviewText = document.getElementById("review-text").value;
+            const reviewerName = document.getElementById("reviewer-name").value;
 
-load();
-</script>
+            if (!reviewText.trim()) {
+                showToast("Please write a review before submitting.");
+                return;
+            }
+
+            if (rating === 0) {
+                showToast("Please select a rating.");
+                return;
+            }
+
+            const reviewData = {
+                product_id: id, // Ensure it's linked to the current product
+                content: reviewText,
+                author_name: reviewerName || "Anonymous", // Use provided name or "Anonymous"
+                rating: rating,
+                created_at: new Date().toISOString(),
+            };
+
+            let { error } = await client.from("reviews").insert([reviewData]);
+
+            if (error) {
+                console.error("Error submitting review:", error);
+                showToast("Failed to submit review. Try again.");
+            } else {
+                showToast("Review submitted successfully!");
+                loadReviews(); // Reload the reviews
+                document.getElementById("review-text").value = ""; // Clear the textarea
+                document.getElementById("reviewer-name").value = ""; // Clear the name input
+                rating = 0; // Reset rating
+                rate(0); // Clear selected stars
+            }
+        }
+
+        function add() {
+            if (!selectedSize) {
+                showToast("Select size");
+                return;
+            }
+
+            let cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+            cart.push({
+                ...product,
+                image: selectedColor?.image,
+                color: selectedColor?.name,
+                size: selectedSize,
+                qty: 1
+            });
+
+            localStorage.setItem("cart", JSON.stringify(cart));
+            showToast("Added ✔");
+        }
+
+        function orderNow() {
+            if (!selectedSize) {
+                showToast("Select size");
+                return;
+            }
+
+            localStorage.setItem("orderNow", JSON.stringify({
+                ...product,
+                image: selectedColor?.image,
+                color: selectedColor?.name,
+                size: selectedSize,
+                qty: 1
+            }));
+
+            transition.classList.add("active");
+
+            setTimeout(() => {
+                location.href = "checkout.html";
+            }, 3500);
+        }
+
+        let fullscreen = document.getElementById("fullscreen");
+        let fullImg = document.getElementById("fullImg");
+        let transition = document.getElementById("transition");
+
+        load();
+    </script>
 
 </body>
 </html>
