@@ -1,21 +1,33 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>VANTA</title>
 
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Montserrat:wght@300;500&display=swap" rel="stylesheet">
+<title>VANTA — Stand Out Always</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
 
 <style>
+
 :root{
   --bg:#000;
   --text:#fff;
   --muted:#9a9a9a;
-  --line:#121212;
+  --soft:#666;
+  --line:#171717;
+  --card:#090909;
+  --gold:#d7b56d;
 }
 
-*{box-sizing:border-box}
+*{
+  box-sizing:border-box;
+}
+
+html{
+  scroll-behavior:smooth;
+}
 
 body{
   margin:0;
@@ -26,17 +38,25 @@ body{
   position:relative;
 }
 
-/* BACKGROUND */
+/* =====================================================
+BACKGROUND
+===================================================== */
+
 body::before{
   content:"";
   position:fixed;
   width:500px;
   height:500px;
-  background:radial-gradient(circle, rgba(255,255,255,0.06), transparent);
+  background:radial-gradient(
+    circle,
+    rgba(255,255,255,.06),
+    transparent
+  );
   top:-150px;
   left:-150px;
   filter:blur(120px);
   z-index:0;
+  pointer-events:none;
 }
 
 body::after{
@@ -44,25 +64,34 @@ body::after{
   position:fixed;
   width:400px;
   height:400px;
-  background:radial-gradient(circle, rgba(255,255,255,0.04), transparent);
+  background:radial-gradient(
+    circle,
+    rgba(255,255,255,.04),
+    transparent
+  );
   bottom:-150px;
   right:-150px;
   filter:blur(120px);
   z-index:0;
+  pointer-events:none;
 }
 
-/* BG SHAPES */
+/* =====================================================
+BG SHAPES
+===================================================== */
+
 .bg{
   position:fixed;
   width:100%;
   height:100%;
   z-index:0;
   overflow:hidden;
+  pointer-events:none;
 }
 
 .circle{
   position:absolute;
-  border:1px solid rgba(255,255,255,0.08);
+  border:1px solid rgba(255,255,255,.08);
   border-radius:50%;
   animation:rotate 25s linear infinite;
 }
@@ -83,96 +112,342 @@ body::after{
 }
 
 @keyframes rotate{
-  from{transform:rotate(0);}
-  to{transform:rotate(360deg);}
+  from{
+    transform:rotate(0);
+  }
+
+  to{
+    transform:rotate(360deg);
+  }
 }
 
-/* NAV */
+/* =====================================================
+NAV
+===================================================== */
+
 nav{
   display:flex;
   justify-content:space-between;
+  align-items:center;
   padding:20px 60px;
   position:fixed;
   width:100%;
-  z-index:10;
+  z-index:1000;
   background:rgba(0,0,0,.55);
-  backdrop-filter:blur(10px);
+  backdrop-filter:blur(14px);
   border-bottom:1px solid var(--line);
+  transition:.35s;
+}
+
+nav.scrolled{
+  padding-top:14px;
+  padding-bottom:14px;
+  background:rgba(0,0,0,.88);
+}
+
+.logo{
+  font-family:'Playfair Display',serif;
+  letter-spacing:7px;
+  font-size:22px;
+}
+
+.nav-right{
+  display:flex;
+  align-items:center;
 }
 
 nav a{
-  margin-left:22px;
+  margin-left:25px;
   color:var(--muted);
   text-decoration:none;
+  font-size:13px;
+  position:relative;
+  transition:.3s;
 }
-nav a:hover{color:#fff}
 
-/* HERO */
+nav a::after{
+  content:"";
+  position:absolute;
+  left:0;
+  bottom:-7px;
+  width:0;
+  height:1px;
+  background:#fff;
+  transition:.3s;
+}
+
+nav a:hover{
+  color:#fff;
+}
+
+nav a:hover::after,
+nav a.active::after{
+  width:100%;
+}
+
+nav a.active{
+  color:#fff;
+}
+
+/* =====================================================
+MOBILE MENU
+===================================================== */
+
+.menu-toggle{
+  display:none;
+  width:42px;
+  height:42px;
+  border:1px solid #333;
+  background:#080808;
+  color:#fff;
+  cursor:pointer;
+  border-radius:6px;
+  font-size:18px;
+}
+
+.mobile-menu{
+  display:none;
+}
+
+/* =====================================================
+HERO
+===================================================== */
+
 .hero{
-  height:100vh;
+  min-height:100vh;
   display:flex;
   justify-content:space-between;
   align-items:center;
-  padding:0 80px;
+  padding:120px 80px 70px;
   position:relative;
   z-index:1;
+  overflow:hidden;
+}
+
+.hero::before{
+  content:"";
+  position:absolute;
+  width:650px;
+  height:650px;
+  right:-150px;
+  top:50%;
+  transform:translateY(-50%);
+  background:radial-gradient(
+    circle,
+    rgba(255,255,255,.08),
+    transparent 68%
+  );
+  filter:blur(30px);
+  pointer-events:none;
+}
+
+.text{
+  position:relative;
+  z-index:2;
+  max-width:700px;
+}
+
+.eyebrow{
+  font-size:11px;
+  letter-spacing:5px;
+  color:#888;
+  margin-bottom:20px;
+  text-transform:uppercase;
+  animation:heroReveal .9s ease forwards;
 }
 
 .text h1{
+  margin:0;
   font-size:90px;
+  line-height:.95;
   font-family:'Playfair Display',serif;
   letter-spacing:12px;
+  animation:heroReveal 1s .1s ease both;
 }
+
 .text h2{
+  margin:25px 0 0;
   font-size:24px;
+  font-weight:300;
+  letter-spacing:7px;
   opacity:.6;
+  animation:heroReveal 1s .2s ease both;
+}
+
+.hero-copy{
+  max-width:450px;
+  color:#777;
+  line-height:1.8;
+  font-size:13px;
+  margin-top:25px;
+  animation:heroReveal 1s .3s ease both;
+}
+
+.hero-buttons{
+  display:flex;
+  gap:12px;
+  margin-top:30px;
+  animation:heroReveal 1s .4s ease both;
 }
 
 .btn{
-  margin-top:20px;
-  display:inline-block;
+  display:inline-flex;
+  justify-content:center;
+  align-items:center;
   padding:14px 30px;
   background:#fff;
   color:#000;
   text-decoration:none;
   transition:.3s;
-}
-.btn:hover{
-  transform:scale(1.05);
-  box-shadow:0 0 20px rgba(255,255,255,.3);
+  border:1px solid #fff;
+  font-size:11px;
+  letter-spacing:2px;
+  text-transform:uppercase;
 }
 
-/* MODEL */
+.btn:hover{
+  transform:translateY(-3px);
+  box-shadow:0 0 25px rgba(255,255,255,.25);
+}
+
+.btn-outline{
+  background:transparent;
+  color:#fff;
+  border-color:#444;
+}
+
+.btn-outline:hover{
+  background:#fff;
+  color:#000;
+  border-color:#fff;
+}
+
+.model-wrap{
+  position:relative;
+  z-index:2;
+  width:48%;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  animation:modelReveal 1.3s .2s ease both;
+}
+
 .model{
   width:460px;
+  max-width:100%;
   animation:float 4s ease-in-out infinite;
-  filter:drop-shadow(0 0 40px rgba(255,255,255,.15));
+  filter:drop-shadow(0 0 45px rgba(255,255,255,.15));
 }
 
 @keyframes float{
-  0%{transform:translateY(0);}
-  50%{transform:translateY(-20px);}
-  100%{transform:translateY(0);}
+  0%{
+    transform:translateY(0);
+  }
+
+  50%{
+    transform:translateY(-20px);
+  }
+
+  100%{
+    transform:translateY(0);
+  }
 }
 
-/* FEATURED */
-.featured{
-  padding:100px 60px;
-  text-align:center;
+@keyframes heroReveal{
+  from{
+    opacity:0;
+    transform:translateY(30px);
+  }
+
+  to{
+    opacity:1;
+    transform:translateY(0);
+  }
+}
+
+@keyframes modelReveal{
+  from{
+    opacity:0;
+    transform:translateX(50px) scale(.96);
+  }
+
+  to{
+    opacity:1;
+    transform:translateX(0) scale(1);
+  }
+}
+
+.scroll-indicator{
+  position:absolute;
+  bottom:30px;
+  left:80px;
+  color:#555;
+  font-size:9px;
+  letter-spacing:3px;
+  text-transform:uppercase;
+  display:flex;
+  align-items:center;
+  gap:12px;
+}
+
+.scroll-line{
+  width:45px;
+  height:1px;
+  background:#444;
+}
+
+/* =====================================================
+SECTION COMMON
+===================================================== */
+
+.section{
   position:relative;
   z-index:1;
+  padding:110px 60px;
 }
 
-.featured h2{
+.section-heading{
+  text-align:center;
+  margin-bottom:50px;
+}
+
+.section-eyebrow{
+  color:#666;
+  font-size:10px;
+  letter-spacing:4px;
+  text-transform:uppercase;
+  margin-bottom:12px;
+}
+
+.section-heading h2{
+  margin:0;
   font-family:'Playfair Display',serif;
-  letter-spacing:8px;
-  margin-bottom:40px;
+  letter-spacing:7px;
+  font-size:34px;
+}
+
+.section-heading p{
+  color:#666;
+  font-size:12px;
+  max-width:500px;
+  line-height:1.8;
+  margin:18px auto 0;
+}
+
+/* =====================================================
+FEATURED
+===================================================== */
+
+.featured{
+  text-align:center;
 }
 
 .featured-grid{
   display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
-  gap:30px;
+  grid-template-columns:repeat(4,1fr);
+  gap:22px;
+  max-width:1400px;
+  margin:auto;
 }
 
 .f-card{
@@ -181,172 +456,1723 @@ nav a:hover{color:#fff}
   border-radius:14px;
   overflow:hidden;
   cursor:pointer;
-  transition:.3s;
+  transition:.4s;
+  position:relative;
+  text-align:left;
 }
 
 .f-card:hover{
   transform:translateY(-10px);
+  border-color:#333;
+  box-shadow:0 20px 50px rgba(0,0,0,.5);
+}
+
+.f-image{
+  position:relative;
+  overflow:hidden;
 }
 
 .f-card img{
   width:100%;
-  height:260px;
+  height:300px;
   object-fit:cover;
+  display:block;
+  transition:.5s;
 }
 
-.f-info{padding:15px}
+.f-card:hover img{
+  transform:scale(1.05);
+}
 
-/* INSTAGRAM */
-.insta{
-  padding:100px 60px;
+.f-badge{
+  position:absolute;
+  top:12px;
+  left:12px;
+  background:#fff;
+  color:#000;
+  padding:6px 9px;
+  border-radius:20px;
+  font-size:8px;
+  letter-spacing:1px;
+}
+
+.f-info{
+  padding:18px;
+}
+
+.f-info h4{
+  margin:0;
+  font-family:'Playfair Display',serif;
+  font-size:17px;
+}
+
+.f-brand{
+  color:#666;
+  font-size:9px;
+  margin-top:5px;
+}
+
+.f-price{
+  margin-top:12px;
+  font-size:13px;
+}
+
+.view-all{
+  margin-top:40px;
+}
+
+/* =====================================================
+CATEGORIES
+===================================================== */
+
+.categories-section{
   text-align:center;
+}
+
+.category-grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:18px;
+  max-width:1400px;
+  margin:auto;
+}
+
+.category-card{
+  height:380px;
+  position:relative;
+  overflow:hidden;
+  border:1px solid #1b1b1b;
+  cursor:pointer;
+  background:#080808;
+}
+
+.category-card img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  opacity:.68;
+  transition:.6s;
+}
+
+.category-card::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:linear-gradient(
+    to top,
+    rgba(0,0,0,.9),
+    rgba(0,0,0,.05)
+  );
+}
+
+.category-card:hover img{
+  transform:scale(1.07);
+  opacity:.85;
+}
+
+.category-content{
+  position:absolute;
+  bottom:28px;
+  left:28px;
+  z-index:2;
+  text-align:left;
+}
+
+.category-content span{
+  color:#888;
+  font-size:9px;
+  letter-spacing:3px;
+}
+
+.category-content h3{
+  margin:8px 0 0;
+  font-family:'Playfair Display',serif;
+  font-size:26px;
+  letter-spacing:2px;
+}
+
+/* =====================================================
+COLLECTION
+===================================================== */
+
+.collection{
+  padding:0 60px 110px;
   position:relative;
   z-index:1;
+}
+
+.collection-inner{
+  min-height:550px;
+  max-width:1400px;
+  margin:auto;
+  position:relative;
+  overflow:hidden;
+  border:1px solid #1b1b1b;
+  display:flex;
+  align-items:center;
+  background:#050505;
+}
+
+.collection-image{
+  position:absolute;
+  inset:0;
+}
+
+.collection-image img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  opacity:.48;
+}
+
+.collection-image::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:
+    linear-gradient(
+      90deg,
+      rgba(0,0,0,.95),
+      rgba(0,0,0,.3),
+      rgba(0,0,0,.75)
+    );
+}
+
+.collection-content{
+  position:relative;
+  z-index:2;
+  padding:70px;
+  max-width:650px;
+}
+
+.collection-label{
+  color:#777;
+  font-size:10px;
+  letter-spacing:4px;
+}
+
+.collection-content h2{
+  font-family:'Playfair Display',serif;
+  font-size:55px;
+  line-height:1.05;
+  margin:18px 0;
+}
+
+.collection-content p{
+  color:#999;
+  line-height:1.8;
+  font-size:13px;
+  max-width:480px;
+}
+
+/* =====================================================
+INSTAGRAM
+===================================================== */
+
+.insta{
+  text-align:center;
 }
 
 .insta-grid{
   display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
-  gap:15px;
+  grid-template-columns:repeat(4,1fr);
+  gap:12px;
+  max-width:1400px;
+  margin:auto;
+}
+
+.insta-item{
+  position:relative;
+  overflow:hidden;
 }
 
 .insta-grid img{
   width:100%;
-  height:220px;
+  height:300px;
   object-fit:cover;
-  transition:.4s;
+  display:block;
+  transition:.5s;
 }
 
-.insta-grid img:hover{
-  transform:scale(1.05);
+.insta-item:hover img{
+  transform:scale(1.06);
 }
 
-/* FOOTER */
-footer{
-  text-align:center;
-  padding:60px 20px;
-  border-top:1px solid var(--line);
+.insta-overlay{
+  position:absolute;
+  inset:0;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:rgba(0,0,0,.45);
+  opacity:0;
+  transition:.3s;
+  color:#fff;
+  font-size:11px;
+  letter-spacing:2px;
+}
+
+.insta-item:hover .insta-overlay{
+  opacity:1;
+}
+
+/* =====================================================
+NEWSLETTER
+===================================================== */
+
+.newsletter{
   position:relative;
   z-index:1;
+  padding:100px 30px;
+  border-top:1px solid #151515;
+  border-bottom:1px solid #151515;
+  text-align:center;
+  background:
+    radial-gradient(
+      circle at center,
+      rgba(255,255,255,.045),
+      transparent 60%
+    );
 }
 
-/* ===== 🔥 MOBILE FIX ===== */
-@media (max-width:768px){
-
-.hero{
-flex-direction:column;
-justify-content:center;
-text-align:center;
-padding:120px 20px 40px;
-height:auto;
+.newsletter h2{
+  font-family:'Playfair Display',serif;
+  letter-spacing:5px;
+  font-size:32px;
+  margin:0;
 }
 
-.text h1{
-font-size:52px;
-letter-spacing:6px;
+.newsletter p{
+  color:#777;
+  font-size:12px;
+  line-height:1.8;
+  max-width:500px;
+  margin:18px auto 30px;
 }
 
-.text h2{
-font-size:18px;
+.newsletter-form{
+  display:flex;
+  max-width:520px;
+  margin:auto;
 }
 
-.model{
-width:85%;
-max-width:320px;
-margin-top:25px;
+.newsletter-form input{
+  flex:1;
+  min-width:0;
+  background:#080808;
+  border:1px solid #292929;
+  color:#fff;
+  padding:15px;
+  outline:none;
+  font-family:'Montserrat',sans-serif;
 }
 
-nav{
-padding:15px 20px;
+.newsletter-form input:focus{
+  border-color:#555;
 }
 
+.newsletter-form button{
+  padding:15px 25px;
+  border:1px solid #fff;
+  background:#fff;
+  color:#000;
+  cursor:pointer;
+  font-family:'Montserrat',sans-serif;
+  letter-spacing:1px;
+  transition:.3s;
 }
+
+.newsletter-form button:hover{
+  background:#000;
+  color:#fff;
+}
+
+/* =====================================================
+FOOTER
+===================================================== */
+
+footer{
+  position:relative;
+  z-index:1;
+  padding:80px 60px 30px;
+  border-top:1px solid var(--line);
+}
+
+.footer-grid{
+  max-width:1400px;
+  margin:auto;
+  display:grid;
+  grid-template-columns:2fr 1fr 1fr 1fr;
+  gap:50px;
+}
+
+.footer-brand h3{
+  font-family:'Playfair Display',serif;
+  letter-spacing:7px;
+  font-size:25px;
+  margin:0;
+}
+
+.footer-brand p{
+  color:#666;
+  max-width:300px;
+  line-height:1.8;
+  font-size:11px;
+  margin-top:15px;
+}
+
+.footer-column h4{
+  font-size:10px;
+  letter-spacing:3px;
+  color:#777;
+  margin:0 0 18px;
+}
+
+.footer-column a{
+  display:block;
+  text-decoration:none;
+  color:#888;
+  font-size:11px;
+  margin:10px 0;
+  transition:.25s;
+}
+
+.footer-column a:hover{
+  color:#fff;
+  transform:translateX(3px);
+}
+
+.footer-bottom{
+  max-width:1400px;
+  margin:60px auto 0;
+  padding-top:20px;
+  border-top:1px solid #151515;
+  display:flex;
+  justify-content:space-between;
+  color:#555;
+  font-size:9px;
+  letter-spacing:1px;
+}
+
+/* =====================================================
+REVEAL ANIMATION
+===================================================== */
+
+.reveal{
+  opacity:0;
+  transform:translateY(35px);
+  transition:
+    opacity .8s ease,
+    transform .8s ease;
+}
+
+.reveal.visible{
+  opacity:1;
+  transform:translateY(0);
+}
+
+/* =====================================================
+TOAST
+===================================================== */
+
+.toast{
+  position:fixed;
+  bottom:25px;
+  right:25px;
+  background:#111;
+  color:#fff;
+  border:1px solid #333;
+  padding:13px 18px;
+  border-radius:7px;
+  opacity:0;
+  transform:translateY(15px);
+  pointer-events:none;
+  transition:.3s;
+  z-index:5000;
+  font-size:11px;
+}
+
+.toast.show{
+  opacity:1;
+  transform:translateY(0);
+}
+
+/* =====================================================
+MOBILE
+===================================================== */
+
+@media(max-width:1000px){
+
+  nav{
+    padding:18px 30px;
+  }
+
+  .hero{
+    padding-left:50px;
+    padding-right:50px;
+  }
+
+  .text h1{
+    font-size:70px;
+  }
+
+  .featured-grid{
+    grid-template-columns:repeat(2,1fr);
+  }
+
+  .category-grid{
+    grid-template-columns:repeat(2,1fr);
+  }
+
+  .insta-grid{
+    grid-template-columns:repeat(2,1fr);
+  }
+
+  .footer-grid{
+    grid-template-columns:repeat(2,1fr);
+  }
+
+}
+
+@media(max-width:768px){
+
+  nav{
+    padding:15px 20px;
+  }
+
+  .nav-right{
+    display:none;
+  }
+
+  .menu-toggle{
+    display:block;
+  }
+
+  .mobile-menu{
+    position:fixed;
+    top:72px;
+    left:15px;
+    right:15px;
+    background:rgba(8,8,8,.97);
+    border:1px solid #292929;
+    padding:20px;
+    z-index:999;
+    border-radius:10px;
+  }
+
+  .mobile-menu.open{
+    display:block;
+  }
+
+  .mobile-menu a{
+    display:block;
+    color:#aaa;
+    text-decoration:none;
+    padding:15px 5px;
+    border-bottom:1px solid #181818;
+    font-size:12px;
+  }
+
+  .mobile-menu a:last-child{
+    border-bottom:0;
+  }
+
+  .hero{
+    flex-direction:column;
+    justify-content:center;
+    text-align:center;
+    padding:120px 20px 80px;
+    min-height:100vh;
+  }
+
+  .text{
+    max-width:100%;
+  }
+
+  .eyebrow{
+    font-size:9px;
+    letter-spacing:3px;
+  }
+
+  .text h1{
+    font-size:52px;
+    letter-spacing:6px;
+  }
+
+  .text h2{
+    font-size:17px;
+    letter-spacing:4px;
+  }
+
+  .hero-copy{
+    font-size:11px;
+    margin:20px auto 0;
+  }
+
+  .hero-buttons{
+    justify-content:center;
+    flex-wrap:wrap;
+  }
+
+  .model-wrap{
+    width:100%;
+    margin-top:35px;
+  }
+
+  .model{
+    width:85%;
+    max-width:320px;
+  }
+
+  .scroll-indicator{
+    display:none;
+  }
+
+  .section{
+    padding:80px 20px;
+  }
+
+  .section-heading h2{
+    font-size:27px;
+    letter-spacing:4px;
+  }
+
+  .featured-grid{
+    grid-template-columns:repeat(2,1fr);
+    gap:12px;
+  }
+
+  .f-card{
+    border-radius:10px;
+  }
+
+  .f-card img{
+    height:220px;
+  }
+
+  .f-info{
+    padding:12px;
+  }
+
+  .f-info h4{
+    font-size:14px;
+  }
+
+  .category-grid{
+    grid-template-columns:1fr;
+    gap:12px;
+  }
+
+  .category-card{
+    height:330px;
+  }
+
+  .collection{
+    padding:0 20px 80px;
+  }
+
+  .collection-inner{
+    min-height:500px;
+  }
+
+  .collection-content{
+    padding:35px;
+  }
+
+  .collection-content h2{
+    font-size:40px;
+  }
+
+  .insta-grid{
+    grid-template-columns:repeat(2,1fr);
+    gap:8px;
+  }
+
+  .insta-grid img{
+    height:210px;
+  }
+
+  .newsletter{
+    padding:80px 20px;
+  }
+
+  .newsletter h2{
+    font-size:26px;
+  }
+
+  .newsletter-form{
+    flex-direction:column;
+    gap:8px;
+  }
+
+  .newsletter-form button{
+    width:100%;
+  }
+
+  footer{
+    padding:60px 25px 25px;
+  }
+
+  .footer-grid{
+    grid-template-columns:1fr 1fr;
+    gap:35px 20px;
+  }
+
+  .footer-brand{
+    grid-column:1/-1;
+  }
+
+  .footer-bottom{
+    flex-direction:column;
+    gap:10px;
+  }
+
+}
+
+@media(max-width:450px){
+
+  .featured-grid{
+    grid-template-columns:1fr 1fr;
+  }
+
+  .f-card img{
+    height:190px;
+  }
+
+  .text h1{
+    font-size:45px;
+  }
+
+  .collection-content h2{
+    font-size:34px;
+  }
+
+}
+
+/* =====================================================
+REDUCED MOTION
+===================================================== */
+
+@media(prefers-reduced-motion:reduce){
+
+  *,
+  *::before,
+  *::after{
+    animation-duration:.01ms !important;
+    animation-iteration-count:1 !important;
+    scroll-behavior:auto !important;
+    transition-duration:.01ms !important;
+  }
+
+}
+
 </style>
 </head>
 
 <body>
 
+<!-- =====================================================
+BACKGROUND
+===================================================== -->
+
 <div class="bg">
-<div class="circle"></div>
-<div class="circle"></div>
+  <div class="circle"></div>
+  <div class="circle"></div>
 </div>
 
-<nav>
-<div>VANTA</div>
-<div>
-<a href="index.html">Home</a>
-<a href="shop.html">Shop</a>
-<a href="about.html">About</a>
-</div>
+<!-- =====================================================
+NAV
+===================================================== -->
+
+<nav id="navbar">
+
+  <div class="logo">
+    VANTA
+  </div>
+
+  <div class="nav-right">
+
+    <a href="index.html" class="active">
+      Home
+    </a>
+
+    <a href="shop.html">
+      Shop
+    </a>
+
+    <a href="about.html">
+      About
+    </a>
+
+  </div>
+
+  <button
+    class="menu-toggle"
+    id="menuToggle"
+    type="button"
+    aria-label="Open Menu"
+  >
+    ☰
+  </button>
+
 </nav>
 
+<!-- =====================================================
+MOBILE NAV
+===================================================== -->
+
+<div class="mobile-menu" id="mobileMenu">
+
+  <a href="index.html">
+    Home
+  </a>
+
+  <a href="shop.html">
+    Shop
+  </a>
+
+  <a href="about.html">
+    About
+  </a>
+
+</div>
+
+<!-- =====================================================
+HERO
+===================================================== -->
+
 <section class="hero">
-<div class="text">
-<h1>VANTA</h1>
-<h2>STAND OUT ALWAYS</h2>
-<a href="shop.html" class="btn">Shop Now</a>
-</div>
 
-<img src="model.png" class="model">
+  <div class="text">
+
+    <div class="eyebrow">
+      New Collection — 2026
+    </div>
+
+    <h1>
+      VANTA
+    </h1>
+
+    <h2>
+      STAND OUT ALWAYS
+    </h2>
+
+    <p class="hero-copy">
+      Contemporary essentials designed with a dark,
+      refined perspective. Discover a collection built
+      for those who choose their own identity.
+    </p>
+
+    <div class="hero-buttons">
+
+      <a
+        href="shop.html"
+        class="btn"
+      >
+        Shop Collection
+      </a>
+
+      <a
+        href="#featured"
+        class="btn btn-outline"
+      >
+        Explore
+      </a>
+
+    </div>
+
+  </div>
+
+  <div class="model-wrap">
+
+    <img
+      src="model.png"
+      class="model"
+      alt="VANTA Collection Model"
+    >
+
+  </div>
+
+  <div class="scroll-indicator">
+    <span class="scroll-line"></span>
+    Scroll to discover
+  </div>
+
 </section>
 
-<section class="featured">
-<h2>FEATURED</h2>
-<div id="featuredProducts" class="featured-grid"></div>
+<!-- =====================================================
+FEATURED / NEW ARRIVALS
+===================================================== -->
+
+<section
+  class="section featured reveal"
+  id="featured"
+>
+
+  <div class="section-heading">
+
+    <div class="section-eyebrow">
+      Discover VANTA
+    </div>
+
+    <h2>
+      NEW ARRIVALS
+    </h2>
+
+    <p>
+      Explore the latest pieces from the VANTA collection,
+      selected for those who never blend in.
+    </p>
+
+  </div>
+
+  <div
+    id="featuredProducts"
+    class="featured-grid"
+  ></div>
+
+  <div class="view-all">
+
+    <a
+      href="shop.html"
+      class="btn btn-outline"
+    >
+      View All Products
+    </a>
+
+  </div>
+
 </section>
 
-<section class="insta">
-<h2>FOLLOW VANTA</h2>
+<!-- =====================================================
+SHOP BY CATEGORY
+===================================================== -->
 
-<div class="insta-grid">
-<img src="vanta/vanta1.png">
-<img src="vanta/vanta2.png">
-<img src="vanta/vanta3.png">
-<img src="vanta/vanta4.png">
-</div>
+<section
+  class="section categories-section reveal"
+>
+
+  <div class="section-heading">
+
+    <div class="section-eyebrow">
+      Explore
+    </div>
+
+    <h2>
+      SHOP BY CATEGORY
+    </h2>
+
+    <p>
+      Find your signature pieces across the VANTA collection.
+    </p>
+
+  </div>
+
+  <div class="category-grid">
+
+    <div
+      class="category-card"
+      onclick="goCategory('Men')"
+    >
+
+      <img
+        src="vanta/men.png"
+        alt="VANTA Men"
+        onerror="this.style.display='none'"
+      >
+
+      <div class="category-content">
+
+        <span>
+          COLLECTION
+        </span>
+
+        <h3>
+          MEN
+        </h3>
+
+      </div>
+
+    </div>
+
+    <div
+      class="category-card"
+      onclick="goCategory('T-Shirts')"
+    >
+
+      <img
+        src="vanta/tshirts.png"
+        alt="VANTA T-Shirts"
+        onerror="this.style.display='none'"
+      >
+
+      <div class="category-content">
+
+        <span>
+          ESSENTIALS
+        </span>
+
+        <h3>
+          T-SHIRTS
+        </h3>
+
+      </div>
+
+    </div>
+
+    <div
+      class="category-card"
+      onclick="goCategory('Shirts')"
+    >
+
+      <img
+        src="vanta/shirts.png"
+        alt="VANTA Shirts"
+        onerror="this.style.display='none'"
+      >
+
+      <div class="category-content">
+
+        <span>
+          COLLECTION
+        </span>
+
+        <h3>
+          SHIRTS
+        </h3>
+
+      </div>
+
+    </div>
+
+    <div
+      class="category-card"
+      onclick="goCategory('Pants')"
+    >
+
+      <img
+        src="vanta/pants.png"
+        alt="VANTA Pants"
+        onerror="this.style.display='none'"
+      >
+
+      <div class="category-content">
+
+        <span>
+          ESSENTIALS
+        </span>
+
+        <h3>
+          PANTS
+        </h3>
+
+      </div>
+
+    </div>
+
+    <div
+      class="category-card"
+      onclick="goCategory('Jeans')"
+    >
+
+      <img
+        src="vanta/jeans.png"
+        alt="VANTA Jeans"
+        onerror="this.style.display='none'"
+      >
+
+      <div class="category-content">
+
+        <span>
+          DENIM
+        </span>
+
+        <h3>
+          JEANS
+        </h3>
+
+      </div>
+
+    </div>
+
+    <div
+      class="category-card"
+      onclick="goCategory('Jackets')"
+    >
+
+      <img
+        src="vanta/jackets.png"
+        alt="VANTA Jackets"
+        onerror="this.style.display='none'"
+      >
+
+      <div class="category-content">
+
+        <span>
+          OUTERWEAR
+        </span>
+
+        <h3>
+          JACKETS
+        </h3>
+
+      </div>
+
+    </div>
+
+  </div>
 
 </section>
+
+<!-- =====================================================
+COLLECTION
+===================================================== -->
+
+<section class="collection reveal">
+
+  <div class="collection-inner">
+
+    <div class="collection-image">
+
+      <img
+        src="vanta/collection.png"
+        alt="VANTA Collection"
+        onerror="this.style.display='none'"
+      >
+
+    </div>
+
+    <div class="collection-content">
+
+      <div class="collection-label">
+        THE VANTA COLLECTION
+      </div>
+
+      <h2>
+        DARK.
+        <br>
+        REFINED.
+        <br>
+        DISTINCT.
+      </h2>
+
+      <p>
+        A contemporary expression of confidence and
+        individuality. Clean silhouettes, considered
+        details and a timeless monochrome attitude.
+      </p>
+
+      <a
+        href="shop.html"
+        class="btn"
+      >
+        Explore Collection
+      </a>
+
+    </div>
+
+  </div>
+
+</section>
+
+<!-- =====================================================
+INSTAGRAM
+===================================================== -->
+
+<section class="section insta reveal">
+
+  <div class="section-heading">
+
+    <div class="section-eyebrow">
+      The VANTA World
+    </div>
+
+    <h2>
+      FOLLOW VANTA
+    </h2>
+
+    <p>
+      Discover VANTA through the people who wear it.
+    </p>
+
+  </div>
+
+  <div class="insta-grid">
+
+    <div class="insta-item">
+
+      <img
+        src="vanta/vanta1.png"
+        alt="VANTA"
+      >
+
+      <div class="insta-overlay">
+        VANTA
+      </div>
+
+    </div>
+
+    <div class="insta-item">
+
+      <img
+        src="vanta/vanta2.png"
+        alt="VANTA"
+      >
+
+      <div class="insta-overlay">
+        VANTA
+      </div>
+
+    </div>
+
+    <div class="insta-item">
+
+      <img
+        src="vanta/vanta3.png"
+        alt="VANTA"
+      >
+
+      <div class="insta-overlay">
+        VANTA
+      </div>
+
+    </div>
+
+    <div class="insta-item">
+
+      <img
+        src="vanta/vanta4.png"
+        alt="VANTA"
+      >
+
+      <div class="insta-overlay">
+        VANTA
+      </div>
+
+    </div>
+
+  </div>
+
+</section>
+
+<!-- =====================================================
+NEWSLETTER
+===================================================== -->
+
+<section class="newsletter reveal">
+
+  <div class="section-eyebrow">
+    VANTA PRIVATE ACCESS
+  </div>
+
+  <h2>
+    JOIN THE VANTA WORLD
+  </h2>
+
+  <p>
+    Get early access to new collections, exclusive drops,
+    special releases and selected offers.
+  </p>
+
+  <form
+    class="newsletter-form"
+    id="newsletterForm"
+  >
+
+    <input
+      type="email"
+      id="newsletterEmail"
+      placeholder="Enter your email"
+      required
+    >
+
+    <button type="submit">
+      Join
+    </button>
+
+  </form>
+
+</section>
+
+<!-- =====================================================
+FOOTER
+===================================================== -->
 
 <footer>
-<h3>VANTA STAND OUT ALWAYS</h3>
-<p>VANTA is more than clothing — it's identity.</p>
+
+  <div class="footer-grid">
+
+    <div class="footer-brand">
+
+      <h3>
+        VANTA
+      </h3>
+
+      <p>
+        VANTA is more than clothing — it's identity.
+        Designed for those who stand out always.
+      </p>
+
+    </div>
+
+    <div class="footer-column">
+
+      <h4>
+        SHOP
+      </h4>
+
+      <a href="shop.html">
+        New Arrivals
+      </a>
+
+      <a href="shop.html">
+        Men
+      </a>
+
+      <a href="shop.html">
+        T-Shirts
+      </a>
+
+      <a href="shop.html">
+        Shirts
+      </a>
+
+      <a href="shop.html">
+        Pants
+      </a>
+
+      <a href="shop.html">
+        Jackets
+      </a>
+
+    </div>
+
+    <div class="footer-column">
+
+      <h4>
+        VANTA
+      </h4>
+
+      <a href="about.html">
+        About
+      </a>
+
+      <a href="shop.html">
+        Collection
+      </a>
+
+      <a href="#">
+        Contact
+      </a>
+
+      <a href="#">
+        Shipping
+      </a>
+
+      <a href="#">
+        Returns
+      </a>
+
+    </div>
+
+    <div class="footer-column">
+
+      <h4>
+        FOLLOW
+      </h4>
+
+      <a href="#" target="_blank">
+        Instagram
+      </a>
+
+      <a href="#" target="_blank">
+        TikTok
+      </a>
+
+      <a href="#">
+        Contact Us
+      </a>
+
+    </div>
+
+  </div>
+
+  <div class="footer-bottom">
+
+    <span>
+      © 2026 VANTA. ALL RIGHTS RESERVED.
+    </span>
+
+    <span>
+      STAND OUT ALWAYS.
+    </span>
+
+  </div>
+
 </footer>
 
+<!-- =====================================================
+TOAST
+===================================================== -->
+
+<div
+  id="toast"
+  class="toast"
+></div>
+
+<!-- =====================================================
+SUPABASE
+===================================================== -->
+
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+
 <script>
+
+/* =====================================================
+SUPABASE
+===================================================== */
+
 const supa = supabase.createClient(
-"https://ojtrvxaptsavzmzjymci.supabase.co",
-"sb_publishable_Qv9Pl1_DfFf4wEHS_ApMTQ_FuoR0ylh"
+  "https://ojtrvxaptsavzmzjymci.supabase.co",
+  "sb_publishable_Qv9Pl1_DfFf4wEHS_ApMTQ_FuoR0ylh"
 );
 
+/* =====================================================
+HELPER
+===================================================== */
+
+function escapeHTML(value){
+
+  if(
+    value === null ||
+    value === undefined
+  ){
+    return "";
+  }
+
+  return String(value)
+    .replace(/&/g,"&amp;")
+    .replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;")
+    .replace(/"/g,"&quot;")
+    .replace(/'/g,"&#039;");
+
+}
+
+/* =====================================================
+LOAD FEATURED
+===================================================== */
+
 async function loadFeatured(){
-let {data, error} = await supa.from("products").select("*").limit(4);
 
-if(error){
-console.log(error);
-return;
+  const {
+    data,
+    error
+  } = await supa
+    .from("products")
+    .select("*")
+    .order(
+      "created_at",
+      {
+        ascending:false
+      }
+    )
+    .limit(4);
+
+  if(error){
+
+    console.log(error);
+
+    return;
+
+  }
+
+  const container =
+    document.getElementById(
+      "featuredProducts"
+    );
+
+  if(
+    !data ||
+    data.length === 0
+  ){
+
+    container.innerHTML = `
+      <p style="
+        grid-column:1/-1;
+        color:#666;
+      ">
+        No products yet
+      </p>
+    `;
+
+    return;
+
+  }
+
+  container.innerHTML = "";
+
+  data.forEach(p => {
+
+    const card =
+      document.createElement("div");
+
+    card.className =
+      "f-card";
+
+    card.onclick = () => {
+
+      location.href =
+        "product.html?id=" +
+        encodeURIComponent(p.id);
+
+    };
+
+    const image =
+      p.image ||
+      p.colors?.[0]?.image ||
+      "";
+
+    card.innerHTML = `
+
+      <div class="f-image">
+
+        <img
+          src="${escapeHTML(image)}"
+          alt="${escapeHTML(p.name)}"
+          loading="lazy"
+        >
+
+        <div class="f-badge">
+          NEW
+        </div>
+
+      </div>
+
+      <div class="f-info">
+
+        <h4>
+          ${escapeHTML(p.name)}
+        </h4>
+
+        ${
+          p.brand
+          ? `
+            <div class="f-brand">
+              ${escapeHTML(p.brand)}
+            </div>
+          `
+          : ""
+        }
+
+        <div class="f-price">
+          ${escapeHTML(p.price)} EGP
+        </div>
+
+      </div>
+
+    `;
+
+    container.appendChild(card);
+
+  });
+
 }
 
-let container = document.getElementById("featuredProducts");
+/* =====================================================
+CATEGORY NAVIGATION
+===================================================== */
 
-if(!data || data.length === 0){
-container.innerHTML = "<p>No products yet</p>";
-return;
+function goCategory(category){
+
+  location.href =
+    "shop.html?category=" +
+    encodeURIComponent(category);
+
 }
 
-data.forEach(p=>{
-container.innerHTML += `
-<div class="f-card" onclick="location.href='product.html?id=${p.id}'">
-<img src="${p.image}">
-<div class="f-info">
-<h4>${p.name}</h4>
-<p>${p.price} EGP</p>
-</div>
-</div>`;
-});
-}
+/* =====================================================
+NAV SCROLL
+===================================================== */
+
+const navbar =
+  document.getElementById("navbar");
+
+window.addEventListener(
+  "scroll",
+  () => {
+
+    if(window.scrollY > 40){
+
+      navbar.classList.add(
+        "scrolled"
+      );
+
+    }else{
+
+      navbar.classList.remove(
+        "scrolled"
+      );
+
+    }
+
+  },
+  {
+    passive:true
+  }
+);
+
+/* =====================================================
+MOBILE MENU
+===================================================== */
+
+const menuToggle =
+  document.getElementById(
+    "menuToggle"
+  );
+
+const mobileMenu =
+  document.getElementById(
+    "mobileMenu"
+  );
+
+menuToggle.addEventListener(
+  "click",
+  () => {
+
+    mobileMenu.classList.toggle(
+      "open"
+    );
+
+  }
+);
+
+document
+  .querySelectorAll(
+    ".mobile-menu a"
+  )
+  .forEach(link => {
+
+    link.addEventListener(
+      "click",
+      () => {
+
+        mobileMenu.classList.remove(
+          "open"
+        );
+
+      }
+    );
+
+  });
+
+/* =====================================================
+SCROLL REVEAL
+===================================================== */
+
+const revealObserver =
+  new IntersectionObserver(
+    entries => {
+
+      entries.forEach(entry => {
+
+        if(entry.isIntersecting){
+
+          entry.target.classList.add(
+            "visible"
+          );
+
+          revealObserver.unobserve(
+            entry.target
+          );
+
+        }
+
+      });
+
+    },
+    {
+      threshold:.12
+    }
+  );
+
+document
+  .querySelectorAll(".reveal")
+  .forEach(element => {
+
+    revealObserver.observe(
+      element
+    );
+
+  });
+
+/* =====================================================
+NEWSLETTER
+===================================================== */
+
+document
+  .getElementById(
+    "newsletterForm"
+  )
+  .addEventListener(
+    "submit",
+    event => {
+
+      event.preventDefault();
+
+      const email =
+        document
+          .getElementById(
+            "newsletterEmail"
+          )
+          .value
+          .trim();
+
+      if(!email){
+
+        return;
+
+      }
+
+      const toast =
+        document.getElementById(
+          "toast"
+        );
+
+      toast.innerText =
+        "Welcome to VANTA.";
+
+      toast.classList.add(
+        "show"
+      );
+
+      clearTimeout(
+        window.toastTimer
+      );
+
+      window.toastTimer =
+        setTimeout(
+          () => {
+
+            toast.classList.remove(
+              "show"
+            );
+
+          },
+          2500
+        );
+
+      event.target.reset();
+
+    }
+  );
+
+/* =====================================================
+INITIALIZE
+===================================================== */
 
 loadFeatured();
+
 </script>
 
 </body>

@@ -1,588 +1,4629 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>VANTA Product</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Montserrat:wght@300;500&display=swap" rel="stylesheet">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <style>
-        body {
-            margin: 0;
-            background: radial-gradient(circle at top, #0a0a0a, #000);
-            color: #fff;
-            font-family: 'Montserrat', sans-serif;
-        }
+<title>VANTA Product</title>
 
-        /* NAV */
-        nav {
-            padding: 10px 30px;
-            border-bottom: 1px solid #111;
-            font-family: 'Playfair Display', serif;
-            letter-spacing: 4px;
-        }
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
 
-        /* LAYOUT */
-        .container {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 30px;
-            padding: 30px;
-            justify-content: center;
-            animation: fadeUp .8s ease;
-        }
+<style>
+:root{
+    --bg:#000;
+    --card:#0b0b0b;
+    --card2:#101010;
+    --text:#fff;
+    --muted:#999;
+    --line:#202020;
+    --gold:#d7b56d;
+    --danger:#ff4d4d;
+    --success:#49d17d;
+}
 
-        @keyframes fadeUp {
-            from {
-                opacity: 0;
-                transform: translateY(40px);
-            }
+*{
+    box-sizing:border-box;
+}
 
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
+html{
+    scroll-behavior:smooth;
+}
 
-        /* IMAGE */
-        .zoom-box {
-            width: 300px;
-            height: 300px;
-            border-radius: 16px;
-            overflow: hidden;
-            box-shadow: 0 0 60px rgba(255, 255, 255, .05);
-        }
+body{
+    margin:0;
+    background:
+        radial-gradient(circle at top,#0d0d0d 0,#000 45%);
+    color:var(--text);
+    font-family:'Montserrat',sans-serif;
+    overflow-x:hidden;
+}
 
-        .zoom-box img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            transition: .3s;
-            cursor: zoom-in;
-        }
+/* =========================
+NAV
+========================= */
 
-        .zoom-box:hover img {
-            transform: scale(1.05);
-        }
+nav{
+    position:sticky;
+    top:0;
+    z-index:1000;
 
-        /* INFO */
-        .info {
-            max-width: 380px;
-        }
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
 
-        h2 {
-            font-family: 'Playfair Display', serif;
-            font-size: 22px;
-        }
+    padding:18px 50px;
 
-        #price {
-            font-size: 18px;
-            margin: 10px 0;
-        }
+    background:rgba(0,0,0,.78);
+    backdrop-filter:blur(15px);
 
-        .line {
-            width: 50px;
-            height: 2px;
-            background: #fff;
-            opacity: .2;
-            margin: 15px 0;
-        }
+    border-bottom:1px solid var(--line);
+}
 
-        /* COLORS */
-        .colors {
-            display: flex;
-            gap: 10px;
-        }
+.logo{
+    font-family:'Playfair Display',serif;
+    font-size:22px;
+    letter-spacing:7px;
+}
 
-        .color {
-            width: 30px;
-            height: 30px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            border: 2px solid #333;
-            transition: .3s;
-        }
+.nav-links{
+    display:flex;
+    gap:24px;
+    align-items:center;
+}
 
-        .color::after {
-            content: "";
-            width: 14px;
-            height: 14px;
-            border-radius: 50%;
-            background: currentColor;
-        }
+.nav-links a{
+    color:#888;
+    text-decoration:none;
+    font-size:12px;
+    transition:.25s;
+}
 
-        .color:hover {
-            transform: scale(1.2);
-        }
+.nav-links a:hover{
+    color:#fff;
+}
 
-        .color.active {
-            border: 2px solid #fff;
-            box-shadow: 0 0 12px rgba(255, 255, 255, .4);
-        }
+.cart-badge{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
 
-        /* SIZE */
-        .size-title {
-            margin-top: 10px;
-            opacity: .6;
-            font-size: 12px;
-        }
+    min-width:18px;
+    height:18px;
 
-        .sizes {
-            display: flex;
-            gap: 8px;
-            margin-top: 10px;
-            flex-wrap: wrap;
-        }
+    padding:0 5px;
 
-        .size {
-            padding: 8px 12px;
-            border: 1px solid #333;
-            cursor: pointer;
-            border-radius: 8px;
-            font-size: 12px;
-            transition: .3s;
-            background: #0a0a0a;
-        }
+    margin-left:4px;
 
-        .size:hover {
-            border-color: #fff;
-            transform: translateY(-2px);
-        }
+    background:#fff;
+    color:#000;
 
-        .size.active {
-            background: #fff;
-            color: #000;
-            border-color: #fff;
-            box-shadow: 0 0 10px rgba(255, 255, 255, .3);
-        }
+    border-radius:20px;
 
-        .size.disabled {
-            opacity: .3;
-            pointer-events: none;
-        }
+    font-size:9px;
+}
 
-        /* BUTTONS */
-        button {
-            position: relative;
-            width: 100%;
-            padding: 10px;
-            margin-top: 10px;
-            border: none;
-            cursor: pointer;
-            border-radius: 10px;
-            overflow: hidden;
-            transition: .3s;
-        }
+/* =========================
+BREADCRUMB
+========================= */
 
-        .add {
-            background: linear-gradient(145deg, #fff, #e6e6e6);
-            color: #000;
-        }
+.breadcrumb{
+    max-width:1200px;
+    margin:0 auto;
+    padding:25px 30px 5px;
 
-        .order {
-            background: #0a0a0a;
-            color: #fff;
-            border: 1px solid #333;
-        }
+    color:#666;
+    font-size:11px;
+}
 
-        button:hover {
-            transform: translateY(-2px);
-        }
+.breadcrumb span{
+    color:#aaa;
+}
 
-        button::before {
-            content: "";
-            position: absolute;
-            left: -100%;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(120deg, transparent, rgba(255, 255, 255, .4), transparent);
-            transition: .5s;
-        }
+/* =========================
+PRODUCT
+========================= */
 
-        button:hover::before {
-            left: 100%;
-        }
+.product-container{
+    max-width:1200px;
+    margin:0 auto;
 
-        button:active {
-            transform: scale(.97);
-        }
+    padding:30px;
 
-        /* TOAST */
-        .toast {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            background: #111;
-            padding: 12px;
-            opacity: 0;
-            transition: .3s;
-        }
+    display:grid;
+    grid-template-columns:minmax(0,1.05fr) minmax(350px,.95fr);
 
-        .toast.show {
-            opacity: 1;
-        }
+    gap:65px;
 
-        /* REVIEWS */
-        .reviews-section {
-            width: 80%; /* Adjust width to take more space */
-            margin: 0 auto; /* Center align */
-            padding: 15px;
-            background: #222;
-            border-radius: 10px;
-            box-shadow: 0 0 15px rgba(255, 255, 255, 0.1);
-            margin-top: 40px;
-        }
+    animation:fadeUp .7s ease;
+}
 
-        .reviews-section h3 {
-            font-size: 22px;
-            margin-bottom: 15px;
-        }
+@keyframes fadeUp{
+    from{
+        opacity:0;
+        transform:translateY(25px);
+    }
 
-        .reviews-list {
-            margin-bottom: 15px;
-        }
+    to{
+        opacity:1;
+        transform:translateY(0);
+    }
+}
 
-        .review {
-            background: #333;
-            padding: 12px;
-            border-radius: 8px;
-            margin-bottom: 12px;
-        }
+/* =========================
+GALLERY
+========================= */
 
-        .review p {
-            font-size: 14px;
-            color: #ddd;
-        }
+.gallery{
+    min-width:0;
+}
 
-        .review .author {
-            font-size: 14px;
-            color: #aaa;
-            margin-top: 8px;
-        }
+.main-image-wrap{
+    position:relative;
 
-        .review-form textarea {
-            width: 100%;
-            padding: 10px;
-            margin-bottom: 10px;
-            background: #333;
-            color: #fff;
-            border: 1px solid #444;
-            border-radius: 8px;
-        }
+    width:100%;
+    aspect-ratio:1/1;
 
-        .submit-review {
-            padding: 10px 15px;
-            background-color: #555;
-            color: #fff;
-            border: none;
-            cursor: pointer;
-            border-radius: 8px;
-        }
+    overflow:hidden;
 
-        .submit-review:hover {
-            background-color: #666;
-        }
+    background:#080808;
 
-        .stars {
-            display: flex;
-            gap: 5px;
-        }
+    border:1px solid var(--line);
+    border-radius:20px;
 
-        .star {
-            font-size: 20px;
-            cursor: pointer;
-            color: #888;
-        }
+    cursor:zoom-in;
+}
 
-        .star.active {
-            color: gold;
-        }
-    </style>
+.main-image-wrap img{
+    width:100%;
+    height:100%;
+
+    object-fit:cover;
+
+    transition:
+        transform .45s ease,
+        opacity .25s ease;
+}
+
+.main-image-wrap:hover img{
+    transform:scale(1.04);
+}
+
+.gallery-badge{
+    position:absolute;
+
+    top:18px;
+    left:18px;
+
+    z-index:3;
+
+    padding:7px 11px;
+
+    background:#fff;
+    color:#000;
+
+    border-radius:30px;
+
+    font-size:9px;
+    letter-spacing:1px;
+}
+
+.wishlist-btn{
+    position:absolute;
+
+    top:18px;
+    right:18px;
+
+    z-index:3;
+
+    width:42px;
+    height:42px;
+
+    border:1px solid #333;
+
+    border-radius:50%;
+
+    background:rgba(0,0,0,.72);
+    color:#fff;
+
+    cursor:pointer;
+
+    font-size:19px;
+
+    transition:.25s;
+}
+
+.wishlist-btn:hover,
+.wishlist-btn.active{
+    background:#fff;
+    color:#000;
+}
+
+.thumbnails{
+    display:flex;
+    gap:10px;
+
+    margin-top:12px;
+
+    overflow-x:auto;
+
+    scrollbar-width:none;
+}
+
+.thumbnails::-webkit-scrollbar{
+    display:none;
+}
+
+.thumbnail{
+    flex:none;
+
+    width:75px;
+    height:75px;
+
+    border-radius:10px;
+
+    overflow:hidden;
+
+    border:1px solid #222;
+
+    cursor:pointer;
+
+    opacity:.55;
+
+    transition:.25s;
+}
+
+.thumbnail:hover{
+    opacity:1;
+}
+
+.thumbnail.active{
+    opacity:1;
+    border-color:#fff;
+}
+
+.thumbnail img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+}
+
+/* =========================
+INFO
+========================= */
+
+.info{
+    min-width:0;
+}
+
+.brand{
+    color:#666;
+    font-size:10px;
+    letter-spacing:2px;
+    text-transform:uppercase;
+    margin-bottom:8px;
+}
+
+.product-name{
+    margin:0;
+
+    font-family:'Playfair Display',serif;
+
+    font-size:38px;
+    line-height:1.1;
+}
+
+.rating-summary{
+    display:flex;
+    align-items:center;
+    gap:10px;
+
+    margin-top:14px;
+
+    font-size:12px;
+}
+
+.stars-display{
+    color:var(--gold);
+    letter-spacing:2px;
+}
+
+.rating-link{
+    color:#888;
+    cursor:pointer;
+}
+
+.rating-link:hover{
+    color:#fff;
+}
+
+.price{
+    margin-top:18px;
+
+    font-size:23px;
+    font-weight:500;
+}
+
+.old-price{
+    margin-left:8px;
+    color:#555;
+    text-decoration:line-through;
+    font-size:14px;
+}
+
+.line{
+    width:55px;
+    height:1px;
+
+    margin:22px 0;
+
+    background:#fff;
+    opacity:.18;
+}
+
+/* =========================
+DESCRIPTION
+========================= */
+
+.description{
+    color:#999;
+    font-size:13px;
+    line-height:1.8;
+
+    margin-bottom:22px;
+}
+
+/* =========================
+META
+========================= */
+
+.meta-grid{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:10px;
+
+    margin-bottom:20px;
+}
+
+.meta-box{
+    padding:13px;
+
+    background:#080808;
+
+    border:1px solid #181818;
+
+    border-radius:9px;
+}
+
+.meta-box span{
+    display:block;
+
+    color:#555;
+
+    font-size:9px;
+
+    text-transform:uppercase;
+
+    letter-spacing:1px;
+
+    margin-bottom:5px;
+}
+
+.meta-box strong{
+    font-size:12px;
+    font-weight:400;
+}
+
+/* =========================
+STOCK
+========================= */
+
+.stock{
+    display:flex;
+    align-items:center;
+    gap:8px;
+
+    margin:15px 0;
+
+    font-size:11px;
+}
+
+.stock-dot{
+    width:8px;
+    height:8px;
+    border-radius:50%;
+    background:var(--success);
+}
+
+.stock.low .stock-dot{
+    background:#f2b84b;
+}
+
+.stock.out{
+    color:var(--danger);
+}
+
+.stock.out .stock-dot{
+    background:var(--danger);
+}
+
+/* =========================
+COLOR
+========================= */
+
+.option-label{
+    margin-top:20px;
+    margin-bottom:10px;
+
+    color:#888;
+
+    font-size:11px;
+}
+
+.option-label strong{
+    color:#fff;
+}
+
+.colors{
+    display:flex;
+    flex-wrap:wrap;
+    gap:10px;
+}
+
+.color{
+    position:relative;
+
+    width:32px;
+    height:32px;
+
+    border-radius:50%;
+
+    border:2px solid #333;
+
+    cursor:pointer;
+
+    transition:.25s;
+}
+
+.color::after{
+    content:"";
+
+    position:absolute;
+
+    width:13px;
+    height:13px;
+
+    border-radius:50%;
+
+    background:currentColor;
+
+    top:50%;
+    left:50%;
+
+    transform:translate(-50%,-50%);
+}
+
+.color:hover{
+    transform:scale(1.1);
+}
+
+.color.active{
+    border-color:#fff;
+
+    box-shadow:
+        0 0 0 2px #000,
+        0 0 0 3px #fff;
+}
+
+/* =========================
+SIZES
+========================= */
+
+.size-guide{
+    float:right;
+
+    color:#888;
+
+    cursor:pointer;
+
+    text-decoration:underline;
+
+    text-underline-offset:3px;
+}
+
+.size-guide:hover{
+    color:#fff;
+}
+
+.sizes{
+    display:flex;
+    flex-wrap:wrap;
+    gap:8px;
+
+    clear:both;
+}
+
+.size{
+    min-width:48px;
+
+    padding:10px 14px;
+
+    text-align:center;
+
+    background:#080808;
+
+    border:1px solid #292929;
+
+    border-radius:7px;
+
+    color:#aaa;
+
+    font-size:11px;
+
+    cursor:pointer;
+
+    transition:.25s;
+}
+
+.size:hover:not(.disabled){
+    color:#fff;
+    border-color:#777;
+}
+
+.size.active{
+    background:#fff;
+    color:#000;
+    border-color:#fff;
+}
+
+.size.disabled{
+    opacity:.25;
+    cursor:not-allowed;
+
+    text-decoration:line-through;
+}
+
+/* =========================
+QUANTITY
+========================= */
+
+.quantity-wrap{
+    margin-top:20px;
+}
+
+.quantity{
+    display:flex;
+
+    width:135px;
+    height:43px;
+
+    border:1px solid #292929;
+    border-radius:8px;
+
+    overflow:hidden;
+}
+
+.quantity button{
+    width:42px;
+
+    background:#0b0b0b;
+    color:#fff;
+
+    border:0;
+
+    cursor:pointer;
+
+    font-size:17px;
+}
+
+.quantity button:hover{
+    background:#fff;
+    color:#000;
+}
+
+.quantity span{
+    flex:1;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    font-size:12px;
+}
+
+/* =========================
+BUTTONS
+========================= */
+
+.action-buttons{
+    margin-top:20px;
+}
+
+.btn{
+    position:relative;
+
+    width:100%;
+
+    padding:14px;
+
+    margin-top:10px;
+
+    border-radius:9px;
+
+    cursor:pointer;
+
+    overflow:hidden;
+
+    font-family:'Montserrat',sans-serif;
+
+    transition:.25s;
+}
+
+.btn:hover{
+    transform:translateY(-2px);
+}
+
+.btn:active{
+    transform:scale(.98);
+}
+
+.add{
+    background:#fff;
+    color:#000;
+
+    border:1px solid #fff;
+}
+
+.order{
+    background:#0a0a0a;
+    color:#fff;
+
+    border:1px solid #333;
+}
+
+.share{
+    background:transparent;
+    color:#aaa;
+
+    border:1px solid #222;
+}
+
+.btn::before{
+    content:"";
+
+    position:absolute;
+
+    top:0;
+    left:-120%;
+
+    width:100%;
+    height:100%;
+
+    background:
+        linear-gradient(
+            120deg,
+            transparent,
+            rgba(255,255,255,.35),
+            transparent
+        );
+
+    transition:.5s;
+}
+
+.btn:hover::before{
+    left:120%;
+}
+
+/* =========================
+DELIVERY
+========================= */
+
+.service-box{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+
+    gap:8px;
+
+    margin-top:18px;
+}
+
+.service{
+    padding:12px 8px;
+
+    text-align:center;
+
+    background:#080808;
+
+    border:1px solid #171717;
+
+    border-radius:9px;
+
+    font-size:9px;
+
+    color:#777;
+}
+
+.service strong{
+    display:block;
+
+    color:#ccc;
+
+    margin-bottom:4px;
+
+    font-size:10px;
+}
+
+/* =========================
+DETAILS
+========================= */
+
+.details{
+    max-width:1200px;
+
+    margin:20px auto 0;
+
+    padding:0 30px;
+}
+
+.details-grid{
+    display:grid;
+
+    grid-template-columns:1fr 1fr;
+
+    gap:15px;
+}
+
+.detail-card{
+    padding:22px;
+
+    background:#080808;
+
+    border:1px solid #181818;
+
+    border-radius:13px;
+}
+
+.detail-card h3{
+    margin-top:0;
+
+    font-family:'Playfair Display',serif;
+
+    font-size:18px;
+}
+
+.detail-card p{
+    color:#888;
+
+    font-size:12px;
+
+    line-height:1.8;
+}
+
+/* =========================
+REVIEWS
+========================= */
+
+.reviews-section{
+    max-width:1200px;
+
+    margin:70px auto 0;
+
+    padding:0 30px;
+}
+
+.reviews-head{
+    display:flex;
+
+    justify-content:space-between;
+    align-items:end;
+
+    gap:20px;
+
+    margin-bottom:25px;
+}
+
+.reviews-head h2{
+    margin:0;
+
+    font-family:'Playfair Display',serif;
+
+    font-size:30px;
+}
+
+.review-summary{
+    display:flex;
+
+    align-items:center;
+
+    gap:10px;
+
+    color:#aaa;
+
+    font-size:12px;
+}
+
+.average-rating{
+    color:var(--gold);
+
+    font-size:20px;
+}
+
+.reviews-grid{
+    display:grid;
+
+    grid-template-columns:1fr 1fr;
+
+    gap:15px;
+}
+
+.review{
+    padding:18px;
+
+    background:#090909;
+
+    border:1px solid #191919;
+
+    border-radius:12px;
+}
+
+.review-top{
+    display:flex;
+
+    justify-content:space-between;
+
+    gap:10px;
+
+    margin-bottom:10px;
+}
+
+.review-author{
+    font-size:12px;
+}
+
+.review-date{
+    color:#555;
+
+    font-size:10px;
+}
+
+.review-stars{
+    color:var(--gold);
+
+    font-size:11px;
+
+    margin-bottom:8px;
+}
+
+.review-content{
+    color:#aaa;
+
+    font-size:12px;
+
+    line-height:1.7;
+}
+
+.verified{
+    display:inline-block;
+
+    margin-left:6px;
+
+    color:var(--success);
+
+    font-size:9px;
+}
+
+.review-form{
+    margin-top:25px;
+
+    padding:22px;
+
+    background:#080808;
+
+    border:1px solid #191919;
+
+    border-radius:13px;
+}
+
+.review-form h3{
+    margin-top:0;
+
+    font-family:'Playfair Display',serif;
+}
+
+.form-row{
+    display:grid;
+
+    grid-template-columns:1fr 1fr;
+
+    gap:10px;
+}
+
+.input,
+.textarea{
+    width:100%;
+
+    padding:12px;
+
+    background:#000;
+
+    color:#fff;
+
+    border:1px solid #292929;
+
+    border-radius:8px;
+
+    outline:none;
+
+    font-family:'Montserrat',sans-serif;
+}
+
+.textarea{
+    min-height:110px;
+
+    resize:vertical;
+
+    margin-top:10px;
+}
+
+.input:focus,
+.textarea:focus{
+    border-color:#666;
+}
+
+.star-picker{
+    display:flex;
+
+    gap:5px;
+
+    margin-top:14px;
+}
+
+.star{
+    color:#555;
+
+    font-size:22px;
+
+    cursor:pointer;
+
+    transition:.2s;
+}
+
+.star.active,
+.star:hover{
+    color:var(--gold);
+}
+
+.submit-review{
+    width:auto;
+
+    padding:11px 18px;
+
+    margin-top:14px;
+
+    background:#fff;
+
+    color:#000;
+
+    border:0;
+
+    border-radius:7px;
+
+    cursor:pointer;
+}
+
+/* =========================
+RELATED
+========================= */
+
+.section{
+    max-width:1200px;
+
+    margin:75px auto 0;
+
+    padding:0 30px;
+}
+
+.section-title{
+    margin-bottom:25px;
+
+    font-family:'Playfair Display',serif;
+
+    font-size:28px;
+
+    letter-spacing:2px;
+}
+
+.product-grid{
+    display:grid;
+
+    grid-template-columns:
+        repeat(auto-fill,minmax(210px,1fr));
+
+    gap:18px;
+}
+
+.product-card{
+    background:#090909;
+
+    border:1px solid #191919;
+
+    border-radius:13px;
+
+    overflow:hidden;
+
+    cursor:pointer;
+
+    transition:.3s;
+}
+
+.product-card:hover{
+    transform:translateY(-6px);
+
+    border-color:#333;
+}
+
+.product-card img{
+    width:100%;
+    height:240px;
+
+    object-fit:cover;
+}
+
+.product-card-info{
+    padding:14px;
+}
+
+.product-card-name{
+    font-family:'Playfair Display',serif;
+
+    font-size:15px;
+
+    margin-bottom:7px;
+}
+
+.product-card-price{
+    color:#aaa;
+
+    font-size:12px;
+}
+
+/* =========================
+MODALS
+========================= */
+
+.modal{
+    position:fixed;
+
+    inset:0;
+
+    z-index:5000;
+
+    display:none;
+
+    align-items:center;
+    justify-content:center;
+
+    padding:20px;
+
+    background:rgba(0,0,0,.88);
+
+    backdrop-filter:blur(12px);
+}
+
+.modal.show{
+    display:flex;
+}
+
+.modal-box{
+    position:relative;
+
+    width:min(520px,100%);
+
+    max-height:90vh;
+
+    overflow:auto;
+
+    padding:28px;
+
+    background:#0b0b0b;
+
+    border:1px solid #292929;
+
+    border-radius:16px;
+}
+
+.modal-close{
+    position:absolute;
+
+    top:12px;
+    right:15px;
+
+    background:none;
+
+    border:0;
+
+    color:#888;
+
+    font-size:22px;
+
+    cursor:pointer;
+}
+
+.modal-box h2{
+    margin-top:0;
+
+    font-family:'Playfair Display',serif;
+}
+
+.size-table{
+    width:100%;
+
+    border-collapse:collapse;
+
+    margin-top:15px;
+}
+
+.size-table th,
+.size-table td{
+    padding:11px;
+
+    text-align:center;
+
+    border-bottom:1px solid #222;
+
+    font-size:11px;
+}
+
+.size-table th{
+    color:#888;
+}
+
+/* FULLSCREEN IMAGE */
+
+.image-modal{
+    padding:15px;
+}
+
+.image-modal img{
+    max-width:95vw;
+    max-height:90vh;
+
+    object-fit:contain;
+
+    border-radius:12px;
+}
+
+.image-close{
+    position:absolute;
+
+    top:20px;
+    right:25px;
+
+    z-index:2;
+
+    border:0;
+
+    background:rgba(0,0,0,.7);
+
+    color:#fff;
+
+    width:40px;
+    height:40px;
+
+    border-radius:50%;
+
+    cursor:pointer;
+
+    font-size:20px;
+}
+
+/* =========================
+TOAST
+========================= */
+
+.toast{
+    position:fixed;
+
+    right:22px;
+    bottom:22px;
+
+    z-index:10000;
+
+    padding:13px 17px;
+
+    background:#111;
+
+    color:#fff;
+
+    border:1px solid #333;
+
+    border-radius:8px;
+
+    font-size:11px;
+
+    opacity:0;
+
+    transform:translateY(15px);
+
+    pointer-events:none;
+
+    transition:.3s;
+}
+
+.toast.show{
+    opacity:1;
+
+    transform:translateY(0);
+}
+
+/* =========================
+TRANSITION
+========================= */
+
+#transition{
+    position:fixed;
+
+    inset:0;
+
+    z-index:9999;
+
+    display:flex;
+
+    justify-content:center;
+    align-items:center;
+
+    background:#000;
+
+    opacity:0;
+
+    pointer-events:none;
+
+    transition:.4s;
+}
+
+#transition.active{
+    opacity:1;
+
+    pointer-events:all;
+}
+
+.transition-logo{
+    font-family:'Playfair Display',serif;
+
+    font-size:42px;
+
+    letter-spacing:15px;
+
+    animation:pulse 1.4s infinite;
+}
+
+@keyframes pulse{
+    50%{
+        transform:scale(1.12);
+
+        opacity:.5;
+    }
+}
+
+/* =========================
+MOBILE BAR
+========================= */
+
+.mobile-buy{
+    display:none;
+}
+
+/* =========================
+RESPONSIVE
+========================= */
+
+@media(max-width:900px){
+
+    nav{
+        padding:16px 22px;
+    }
+
+    .nav-links{
+        gap:13px;
+    }
+
+    .product-container{
+        grid-template-columns:1fr;
+
+        gap:30px;
+
+        padding:20px;
+    }
+
+    .product-name{
+        font-size:32px;
+    }
+
+    .details,
+    .reviews-section,
+    .section{
+        padding-left:20px;
+        padding-right:20px;
+    }
+
+}
+
+@media(max-width:600px){
+
+    nav{
+        position:relative;
+
+        padding:15px 18px;
+    }
+
+    .nav-links a:nth-child(2){
+        display:none;
+    }
+
+    .breadcrumb{
+        padding:18px 20px 0;
+    }
+
+    .product-container{
+        padding:15px;
+
+        gap:25px;
+    }
+
+    .main-image-wrap{
+        border-radius:14px;
+    }
+
+    .product-name{
+        font-size:29px;
+    }
+
+    .price{
+        font-size:21px;
+    }
+
+    .meta-grid{
+        grid-template-columns:1fr 1fr;
+    }
+
+    .service-box{
+        grid-template-columns:1fr;
+    }
+
+    .details{
+        padding:0 15px;
+    }
+
+    .details-grid{
+        grid-template-columns:1fr;
+    }
+
+    .reviews-section{
+        padding:0 15px;
+    }
+
+    .reviews-head{
+        align-items:flex-start;
+
+        flex-direction:column;
+    }
+
+    .reviews-grid{
+        grid-template-columns:1fr;
+    }
+
+    .form-row{
+        grid-template-columns:1fr;
+    }
+
+    .section{
+        padding:0 15px;
+    }
+
+    .product-grid{
+        grid-template-columns:repeat(2,minmax(0,1fr));
+
+        gap:10px;
+    }
+
+    .product-card img{
+        height:190px;
+    }
+
+    .product-card-info{
+        padding:10px;
+    }
+
+    .product-card-name{
+        font-size:13px;
+    }
+
+    .mobile-buy{
+        position:fixed;
+
+        display:flex;
+
+        left:0;
+        right:0;
+        bottom:0;
+
+        z-index:1500;
+
+        gap:8px;
+
+        padding:10px;
+
+        background:rgba(0,0,0,.92);
+
+        backdrop-filter:blur(12px);
+
+        border-top:1px solid #222;
+    }
+
+    .mobile-buy button{
+        flex:1;
+
+        padding:12px;
+
+        border-radius:7px;
+
+        border:0;
+
+        cursor:pointer;
+    }
+
+    .mobile-buy .mobile-add{
+        background:#fff;
+        color:#000;
+    }
+
+    .mobile-buy .mobile-order{
+        background:#111;
+        color:#fff;
+
+        border:1px solid #333;
+    }
+
+    body{
+        padding-bottom:65px;
+    }
+
+    .toast{
+        bottom:82px;
+    }
+
+}
+
+@media(max-width:380px){
+
+    .nav-links{
+        gap:8px;
+    }
+
+    .nav-links a{
+        font-size:10px;
+    }
+
+    .product-name{
+        font-size:25px;
+    }
+
+}
+</style>
 </head>
 
 <body>
 
-    <nav>VANTA</nav>
+<!-- =========================
+NAV
+========================= -->
 
-    <div class="container">
+<nav>
 
-        <div class="zoom-box">
-            <img id="img">
-        </div>
+    <div class="logo">
+        VANTA
+    </div>
 
-        <div class="info">
-            <h2 id="name"></h2>
-            <p id="price"></p>
+    <div class="nav-links">
 
-            <div class="line"></div>
+        <a href="index.html">
+            Home
+        </a>
 
-            <p id="colorName">Color: -</p>
-            <div id="colors" class="colors"></div>
+        <a href="shop.html">
+            Shop
+        </a>
 
-            <p class="size-title">Select Size</p>
-            <div id="sizes" class="sizes"></div>
-
-            <button class="add" onclick="add()">Add to Cart</button>
-            <button class="order" onclick="orderNow()">Order Now</button>
-        </div>
+        <a href="cart.html">
+            Cart
+            <span
+                id="cartCount"
+                class="cart-badge"
+            >
+                0
+            </span>
+        </a>
 
     </div>
 
-    <!-- Reviews Section -->
-    <div class="reviews-section">
-        <h3>Customer Reviews</h3>
-        <div id="reviews-list" class="reviews-list">
-            <!-- Reviews will be dynamically loaded here -->
-        </div>
-        <div class="review-form">
-            <input type="text" id="reviewer-name" placeholder="Your Name" style="width: 100%; padding: 10px; margin-bottom: 10px; background: #333; color: #fff; border: 1px solid #444; border-radius: 8px;">
-            <textarea id="review-text" placeholder="Write your review here..." rows="4"></textarea>
+</nav>
 
-            <!-- Star Rating -->
-            <div class="stars">
-                <span class="star" onclick="rate(1)">★</span>
-                <span class="star" onclick="rate(2)">★</span>
-                <span class="star" onclick="rate(3)">★</span>
-                <span class="star" onclick="rate(4)">★</span>
-                <span class="star" onclick="rate(5)">★</span>
+
+<!-- =========================
+BREADCRUMB
+========================= -->
+
+<div class="breadcrumb">
+
+    Home /
+    <span id="breadcrumbCategory">
+        Product
+    </span>
+    /
+    <span id="breadcrumbName">
+        Loading...
+    </span>
+
+</div>
+
+
+<!-- =========================
+PRODUCT
+========================= -->
+
+<main class="product-container">
+
+    <!-- GALLERY -->
+
+    <section class="gallery">
+
+        <div
+            class="main-image-wrap"
+            id="mainImageWrap"
+        >
+
+            <div
+                id="galleryBadge"
+                class="gallery-badge"
+                style="display:none;"
+            >
+                POPULAR
             </div>
 
-            <button class="submit-review" onclick="submitReview()">Submit Review</button>
+            <button
+                id="wishlistBtn"
+                class="wishlist-btn"
+                type="button"
+                title="Wishlist"
+            >
+                ♡
+            </button>
+
+            <img
+                id="img"
+                src=""
+                alt="VANTA Product"
+            >
+
         </div>
+
+        <div
+            id="thumbnails"
+            class="thumbnails"
+        ></div>
+
+    </section>
+
+
+    <!-- INFO -->
+
+    <section class="info">
+
+        <div
+            id="brand"
+            class="brand"
+        ></div>
+
+        <h1
+            id="name"
+            class="product-name"
+        >
+            Loading...
+        </h1>
+
+        <div class="rating-summary">
+
+            <span
+                id="starsDisplay"
+                class="stars-display"
+            >
+                ☆☆☆☆☆
+            </span>
+
+            <span
+                id="ratingText"
+                class="rating-link"
+            >
+                No reviews
+            </span>
+
+        </div>
+
+        <div
+            id="price"
+            class="price"
+        >
+            --
+        </div>
+
+        <div class="line"></div>
+
+        <p
+            id="description"
+            class="description"
+        ></p>
+
+
+        <!-- META -->
+
+        <div class="meta-grid">
+
+            <div class="meta-box">
+
+                <span>
+                    Material
+                </span>
+
+                <strong id="material">
+                    —
+                </strong>
+
+            </div>
+
+            <div class="meta-box">
+
+                <span>
+                    Category
+                </span>
+
+                <strong id="category">
+                    —
+                </strong>
+
+            </div>
+
+        </div>
+
+
+        <!-- STOCK -->
+
+        <div
+            id="stock"
+            class="stock"
+        >
+
+            <span class="stock-dot"></span>
+
+            <span id="stockText">
+                Checking availability...
+            </span>
+
+        </div>
+
+
+        <!-- COLOR -->
+
+        <div class="option-label">
+
+            Color:
+            <strong id="colorName">
+                —
+            </strong>
+
+        </div>
+
+        <div
+            id="colors"
+            class="colors"
+        ></div>
+
+
+        <!-- SIZE -->
+
+        <div class="option-label">
+
+            <span>
+                Select Size
+            </span>
+
+            <span
+                id="sizeGuideBtn"
+                class="size-guide"
+            >
+                Size Guide
+            </span>
+
+        </div>
+
+        <div
+            id="sizes"
+            class="sizes"
+        ></div>
+
+
+        <!-- QUANTITY -->
+
+        <div class="quantity-wrap">
+
+            <div class="option-label">
+                Quantity
+            </div>
+
+            <div class="quantity">
+
+                <button
+                    type="button"
+                    onclick="changeQuantity(-1)"
+                >
+                    −
+                </button>
+
+                <span id="quantity">
+                    1
+                </span>
+
+                <button
+                    type="button"
+                    onclick="changeQuantity(1)"
+                >
+                    +
+                </button>
+
+            </div>
+
+        </div>
+
+
+        <!-- BUTTONS -->
+
+        <div class="action-buttons">
+
+            <button
+                class="btn add"
+                type="button"
+                onclick="add()"
+            >
+                Add to Cart
+            </button>
+
+            <button
+                class="btn order"
+                type="button"
+                onclick="orderNow()"
+            >
+                Order Now
+            </button>
+
+            <button
+    class="btn share"
+    type="button"
+    onclick="shareProduct()"
+    style="display:none;"
+>
+    Share Product
+</button>
+
+
+        </div>
+
+
+        <!-- SERVICE -->
+
+        <div class="service-box">
+
+            <div class="service">
+
+                <strong>
+                    DELIVERY
+                </strong>
+
+                Available across Egypt
+
+            </div>
+
+            <div class="service">
+
+                <strong>
+                    RETURNS
+                </strong>
+
+                Easy returns
+
+            </div>
+
+            <div class="service">
+
+                <strong>
+                    SECURE
+                </strong>
+
+                Safe checkout
+
+            </div>
+
+        </div>
+
+    </section>
+
+</main>
+
+
+<!-- =========================
+DETAILS
+========================= -->
+
+<section class="details">
+
+    <div class="details-grid">
+
+        <div class="detail-card">
+
+            <h3>
+                Product Details
+            </h3>
+
+            <p id="detailsDescription">
+                —
+            </p>
+
+        </div>
+
+        <div class="detail-card">
+
+            <h3>
+                Care & Fit
+            </h3>
+
+            <p>
+                Please check the available size
+                before adding the item to your cart.
+                Follow the care instructions shown
+                on the product label.
+            </p>
+
+        </div>
+
     </div>
 
-    <div id="fullscreen" class="fullscreen">
-        <img id="fullImg">
+</section>
+
+
+<!-- =========================
+REVIEWS
+========================= -->
+
+<section
+    id="reviewsSection"
+    class="reviews-section"
+>
+
+    <div class="reviews-head">
+
+        <h2>
+            Customer Reviews
+        </h2>
+
+        <div class="review-summary">
+
+            <span
+                id="averageRating"
+                class="average-rating"
+            >
+                0.0
+            </span>
+
+            <span>
+                / 5
+            </span>
+
+            <span id="reviewCount">
+                0 reviews
+            </span>
+
+        </div>
+
     </div>
 
-    <div id="transition">
-        <div class="logo">VANTA</div>
+
+    <div
+        id="reviews-list"
+        class="reviews-grid"
+    ></div>
+
+
+    <!-- REVIEW FORM -->
+
+    <div class="review-form">
+
+        <h3>
+            Share Your Experience
+        </h3>
+
+        <div class="form-row">
+
+            <input
+                id="reviewer-name"
+                class="input"
+                type="text"
+                maxlength="60"
+                placeholder="Your Name"
+            >
+
+            <input
+                id="reviewer-email"
+                class="input"
+                type="email"
+                maxlength="100"
+                placeholder="Email (optional)"
+            >
+
+        </div>
+
+        <textarea
+            id="review-text"
+            class="textarea"
+            maxlength="1000"
+            placeholder="Write your review..."
+        ></textarea>
+
+
+        <div
+            id="starPicker"
+            class="star-picker"
+        >
+
+            <span
+                class="star"
+                data-star="1"
+            >
+                ★
+            </span>
+
+            <span
+                class="star"
+                data-star="2"
+            >
+                ★
+            </span>
+
+            <span
+                class="star"
+                data-star="3"
+            >
+                ★
+            </span>
+
+            <span
+                class="star"
+                data-star="4"
+            >
+                ★
+            </span>
+
+            <span
+                class="star"
+                data-star="5"
+            >
+                ★
+            </span>
+
+        </div>
+
+        <button
+            class="submit-review"
+            type="button"
+            onclick="submitReview()"
+        >
+            Submit Review
+        </button>
+
     </div>
 
-    <div id="toast" class="toast"></div>
+</section>
 
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
 
-    <script>
-        const client = supabase.createClient(
-            "https://ojtrvxaptsavzmzjymci.supabase.co",
-            "sb_publishable_Qv9Pl1_DfFf4wEHS_ApMTQ_FuoR0ylh"
+<!-- =========================
+RELATED PRODUCTS
+========================= -->
+
+<section class="section">
+
+    <h2 class="section-title">
+        You May Also Like
+    </h2>
+
+    <div
+        id="relatedProducts"
+        class="product-grid"
+    ></div>
+
+</section>
+
+
+<!-- =========================
+RECENTLY VIEWED
+========================= -->
+
+<section class="section">
+
+    <h2 class="section-title">
+        Recently Viewed
+    </h2>
+
+    <div
+        id="recentProducts"
+        class="product-grid"
+    ></div>
+
+</section>
+
+
+<!-- =========================
+SIZE GUIDE MODAL
+========================= -->
+
+<div
+    id="sizeModal"
+    class="modal"
+>
+
+    <div class="modal-box">
+
+        <button
+            class="modal-close"
+            onclick="closeSizeGuide()"
+        >
+            ×
+        </button>
+
+        <h2>
+            Size Guide
+        </h2>
+
+        <p style="color:#888;font-size:12px;line-height:1.7;">
+            Use this guide as a general reference.
+            For the best fit, compare your measurements
+            with the product's sizing information.
+        </p>
+
+        <table class="size-table">
+
+            <thead>
+
+                <tr>
+                    <th>Size</th>
+                    <th>Chest</th>
+                    <th>Length</th>
+                </tr>
+
+            </thead>
+
+            <tbody>
+
+                <tr>
+                    <td>S</td>
+                    <td>92–96 cm</td>
+                    <td>68 cm</td>
+                </tr>
+
+                <tr>
+                    <td>M</td>
+                    <td>97–101 cm</td>
+                    <td>70 cm</td>
+                </tr>
+
+                <tr>
+                    <td>L</td>
+                    <td>102–106 cm</td>
+                    <td>72 cm</td>
+                </tr>
+
+                <tr>
+                    <td>XL</td>
+                    <td>107–112 cm</td>
+                    <td>74 cm</td>
+                </tr>
+
+                <tr>
+                    <td>XXL</td>
+                    <td>113–118 cm</td>
+                    <td>76 cm</td>
+                </tr>
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</div>
+
+
+<!-- =========================
+IMAGE MODAL
+========================= -->
+
+<div
+    id="imageModal"
+    class="modal image-modal"
+    onclick="closeImageModal(event)"
+>
+
+    <button
+        class="image-close"
+        type="button"
+        onclick="closeImageModal()"
+    >
+        ×
+    </button>
+
+    <img
+        id="fullImg"
+        src=""
+        alt="Product image"
+    >
+
+</div>
+
+
+<!-- =========================
+TOAST
+========================= -->
+
+<div
+    id="toast"
+    class="toast"
+></div>
+
+
+<!-- =========================
+TRANSITION
+========================= -->
+
+<div id="transition">
+
+    <div class="transition-logo">
+        VANTA
+    </div>
+
+</div>
+
+
+<!-- =========================
+MOBILE BUY BAR
+========================= -->
+
+<div class="mobile-buy">
+
+    <button
+        class="mobile-add"
+        onclick="add()"
+    >
+        Add to Cart
+    </button>
+
+    <button
+        class="mobile-order"
+        onclick="orderNow()"
+    >
+        Order Now
+    </button>
+
+</div>
+
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+
+<script>
+
+/* =====================================================
+SUPABASE
+===================================================== */
+
+const client = supabase.createClient(
+    "https://ojtrvxaptsavzmzjymci.supabase.co",
+    "sb_publishable_Qv9Pl1_DfFf4wEHS_ApMTQ_FuoR0ylh"
+);
+
+
+/* =====================================================
+GLOBAL
+===================================================== */
+
+const productId =
+    new URLSearchParams(location.search).get("id");
+
+let product = null;
+
+let selectedColor = null;
+
+let selectedSize = null;
+
+let quantity = 1;
+
+let rating = 0;
+
+let reviews = [];
+
+let galleryImages = [];
+
+let wishlist =
+    JSON.parse(
+        localStorage.getItem("vantaWishlist")
+    ) || [];
+
+
+/* =====================================================
+HELPERS
+===================================================== */
+
+function escapeHTML(value){
+
+    if(
+        value === null ||
+        value === undefined
+    ){
+
+        return "";
+
+    }
+
+    return String(value)
+        .replace(/&/g,"&amp;")
+        .replace(/</g,"&lt;")
+        .replace(/>/g,"&gt;")
+        .replace(/"/g,"&quot;")
+        .replace(/'/g,"&#039;");
+
+}
+
+
+function showToast(message){
+
+    const toast =
+        document.getElementById("toast");
+
+    toast.innerText = message;
+
+    toast.classList.add("show");
+
+    clearTimeout(
+        window.toastTimer
+    );
+
+    window.toastTimer =
+        setTimeout(() => {
+
+            toast.classList.remove("show");
+
+        },2200);
+
+}
+
+
+function getProductColors(){
+
+    return Array.isArray(product?.colors)
+        ? product.colors
+        : [];
+
+}
+
+
+function getTotalStock(){
+
+    let total = 0;
+
+    getProductColors().forEach(color => {
+
+        if(!color.sizes){
+
+            return;
+
+        }
+
+        Object.values(color.sizes)
+            .forEach(qty => {
+
+                total +=
+                    Number(qty) || 0;
+
+            });
+
+    });
+
+    return total;
+
+}
+
+
+function getFirstImage(){
+
+    const colors =
+        getProductColors();
+
+    return (
+        colors[0]?.image ||
+        product?.image ||
+        ""
+    );
+
+}
+
+
+/* =====================================================
+LOAD PRODUCT
+===================================================== */
+
+async function loadProduct(){
+
+    if(!productId){
+
+        showProductError(
+            "Product not found"
         );
 
-        let id = new URLSearchParams(location.search).get("id");
-        let product;
-        let selectedColor = null;
-        let selectedSize = null;
-        let rating = 0; // Default rating value
+        return;
 
-        function showToast(msg) {
-            let t = document.getElementById("toast");
-            t.innerText = msg;
-            t.classList.add("show");
-            setTimeout(() => t.classList.remove("show"), 2000);
+    }
+
+    const {
+        data,
+        error
+    } = await client
+        .from("product_2")
+        .select("*")
+        .eq("id",productId)
+        .single();
+
+
+    if(error || !data){
+
+        console.error(error);
+
+        showProductError(
+            "This product is no longer available."
+        );
+
+        return;
+
+    }
+
+
+    product = data;
+
+    buildGalleryImages();
+
+    renderProduct();
+
+    renderColors();
+
+    renderSizes(
+        selectedColor
+    );
+
+    updateStock();
+
+    updateCartCount();
+
+    updateWishlistButton();
+
+    addRecentlyViewed();
+
+    await loadReviews();
+
+    await loadRelatedProducts();
+
+    loadRecentlyViewed();
+
+}
+
+
+/* =====================================================
+ERROR
+===================================================== */
+
+function showProductError(message){
+
+    document.querySelector(
+        ".product-container"
+    ).innerHTML = `
+
+        <div style="
+            grid-column:1/-1;
+            text-align:center;
+            padding:100px 20px;
+        ">
+
+            <h2 style="
+                font-family:'Playfair Display',serif;
+            ">
+                ${escapeHTML(message)}
+            </h2>
+
+            <p style="
+                color:#666;
+                margin-top:10px;
+            ">
+                Please return to the shop.
+            </p>
+
+            <a
+                href="shop.html"
+                style="
+                    display:inline-block;
+                    margin-top:20px;
+                    padding:12px 20px;
+                    background:#fff;
+                    color:#000;
+                    text-decoration:none;
+                    border-radius:7px;
+                "
+            >
+                Back to Shop
+            </a>
+
+        </div>
+
+    `;
+
+}
+
+
+/* =====================================================
+PRODUCT RENDER
+===================================================== */
+
+function renderProduct(){
+
+    document.getElementById(
+        "name"
+    ).innerText =
+        product.name || "VANTA Product";
+
+
+    document.getElementById(
+        "brand"
+    ).innerText =
+        product.brand || "";
+
+
+    document.getElementById(
+        "price"
+    ).innerHTML =
+        `${escapeHTML(product.price)} EGP`;
+
+
+    document.getElementById(
+        "material"
+    ).innerText =
+        product.material || "Premium";
+
+
+    document.getElementById(
+        "category"
+    ).innerText =
+        product.category || "Fashion";
+
+
+    const description =
+        product.description ||
+        "A refined VANTA piece designed with a clean silhouette and premium everyday style.";
+
+
+    document.getElementById(
+        "description"
+    ).innerText =
+        description;
+
+
+    document.getElementById(
+        "detailsDescription"
+    ).innerText =
+        description;
+
+
+    document.getElementById(
+        "breadcrumbCategory"
+    ).innerText =
+        product.category || "Product";
+
+
+    document.getElementById(
+        "breadcrumbName"
+    ).innerText =
+        product.name || "Product";
+
+
+    if(
+        Number(product.sales_count || 0) > 0 ||
+        Number(product.popularity || 0) > 0
+    ){
+
+        document.getElementById(
+            "galleryBadge"
+        ).style.display = "block";
+
+    }
+
+
+    const image =
+        getFirstImage();
+
+    setMainImage(image);
+
+
+    if(
+        product.rating &&
+        Number(product.rating) > 0
+    ){
+
+        updateRatingDisplay(
+            Number(product.rating),
+            0
+        );
+
+    }
+
+}
+
+
+/* =====================================================
+GALLERY
+===================================================== */
+
+function buildGalleryImages(){
+
+    galleryImages = [];
+
+    const colors =
+        getProductColors();
+
+    colors.forEach(color => {
+
+        if(color.image){
+
+            galleryImages.push({
+                image:color.image,
+                color:color.name || ""
+            });
+
         }
 
-        async function load() {
-            let { data } = await client.from("products").select("*").eq("id", id).single();
-            product = data;
+        if(Array.isArray(color.images)){
 
-            name.innerText = product.name;
-            price.innerText = product.price + " EGP";
-            img.src = product.image || "";
+            color.images.forEach(image => {
 
-            if (product.colors) {
-                renderColors();
-            }
+                if(image){
 
-            initZoom();
-            initMobileZoom();
-            initSizes();
-            loadReviews();  // Load reviews on page load
-        }
+                    galleryImages.push({
+                        image,
+                        color:color.name || ""
+                    });
 
-        function renderColors() {
-            let c = document.getElementById("colors");
-            let label = document.getElementById("colorName");
-
-            product.colors.forEach((col, i) => {
-                let el = document.createElement("div");
-                el.className = "color";
-                el.style.color = col.hex; // Set the color based on the hex code
-
-                el.onclick = () => {
-                    selectedColor = col;
-                    img.src = col.image;
-                    document.querySelectorAll(".color").forEach(x => x.classList.remove("active"));
-                    el.classList.add("active");
-                    label.innerHTML = "Color: <span>" + col.name + "</span>";
-                    renderSizes(col);  // Re-render sizes based on the selected color
-                };
-
-                c.appendChild(el);
-
-                if (i === 0) {
-                    selectedColor = col;
-                    img.src = col.image;
-                    el.classList.add("active");
-                    label.innerHTML = "Color: <span>" + col.name + "</span>";
-                    renderSizes(col); // Default to first color
                 }
+
             });
+
         }
 
-        function renderSizes(color) {
-            let sizesContainer = document.getElementById("sizes");
-            sizesContainer.innerHTML = ''; // Clear previous sizes
+    });
 
-            Object.keys(color.sizes).forEach(size => {
-                let sizeEl = document.createElement("div");
-                sizeEl.className = "size";
-                sizeEl.innerText = size;
-                sizeEl.dataset.size = size;
 
-                // Disable size if it's not available
-                if (color.sizes[size] === 0) {
-                    sizeEl.classList.add("disabled");
-                } else {
-                    sizeEl.onclick = () => {
-                        if (sizeEl.classList.contains("disabled")) return;
-                        document.querySelectorAll(".size").forEach(x => x.classList.remove("active"));
-                        sizeEl.classList.add("active");
-                        selectedSize = size;
-                    };
-                }
+    if(product.image){
 
-                sizesContainer.appendChild(sizeEl);
-            });
+        galleryImages.unshift({
+            image:product.image,
+            color:""
+        });
+
+    }
+
+
+    const unique = [];
+
+    const used = new Set();
+
+    galleryImages.forEach(item => {
+
+        if(
+            item.image &&
+            !used.has(item.image)
+        ){
+
+            used.add(item.image);
+
+            unique.push(item);
+
         }
 
-        function rate(star) {
-            rating = star; // Update the rating
-            let stars = document.querySelectorAll('.star');
-            stars.forEach((el, idx) => {
-                if (idx < star) {
-                    el.classList.add('active');
-                } else {
-                    el.classList.remove('active');
-                }
-            });
-        }
+    });
 
-        async function loadReviews() {
-            let { data: reviews, error } = await client
-                .from("reviews")
-                .select("*")
-                .eq("product_id", id);
+    galleryImages = unique;
 
-            if (error) {
-                console.error("Error fetching reviews:", error);
-                return;
-            }
+    renderThumbnails();
 
-            const reviewsList = document.getElementById("reviews-list");
-            reviewsList.innerHTML = ""; // Clear the existing reviews
+}
 
-            reviews.forEach(review => {
-                const reviewElement = document.createElement("div");
-                reviewElement.classList.add("review");
-                reviewElement.innerHTML = `
 
-                    <p>${review.content}</p>
-                    <p class="author">By ${review.author_name} | Rating: ${review.rating} ★</p>
-                `;
-                reviewsList.appendChild(reviewElement);
-            });
-        }
+function renderThumbnails(){
 
-        async function submitReview() {
-            const reviewText = document.getElementById("review-text").value;
-            const reviewerName = document.getElementById("reviewer-name").value;
+    const container =
+        document.getElementById(
+            "thumbnails"
+        );
 
-            if (!reviewText.trim()) {
-                showToast("Please write a review before submitting.");
-                return;
-            }
+    container.innerHTML = "";
 
-            if (rating === 0) {
-                showToast("Please select a rating.");
-                return;
-            }
+    galleryImages.forEach(
+        (item,index) => {
 
-            const reviewData = {
-                product_id: id, // Ensure it's linked to the current product
-                content: reviewText,
-                author_name: reviewerName || "Anonymous", // Use provided name or "Anonymous"
-                rating: rating,
-                created_at: new Date().toISOString(),
+            const thumb =
+                document.createElement("div");
+
+            thumb.className =
+                "thumbnail" +
+                (index === 0
+                    ? " active"
+                    : "");
+
+            thumb.innerHTML = `
+                <img
+                    src="${escapeHTML(item.image)}"
+                    alt="${escapeHTML(product.name || "")}"
+                >
+            `;
+
+            thumb.onclick = () => {
+
+                setMainImage(
+                    item.image
+                );
+
+                document
+                    .querySelectorAll(
+                        ".thumbnail"
+                    )
+                    .forEach(
+                        x =>
+                            x.classList.remove(
+                                "active"
+                            )
+                    );
+
+                thumb.classList.add(
+                    "active"
+                );
+
             };
 
-            let { error } = await client.from("reviews").insert([reviewData]);
+            container.appendChild(
+                thumb
+            );
 
-            if (error) {
-                console.error("Error submitting review:", error);
-                showToast("Failed to submit review. Try again.");
-            } else {
-                showToast("Review submitted successfully!");
-                loadReviews(); // Reload the reviews
-                document.getElementById("review-text").value = ""; // Clear the textarea
-                document.getElementById("reviewer-name").value = ""; // Clear the name input
-                rating = 0; // Reset rating
-                rate(0); // Clear selected stars
+        }
+    );
+
+}
+
+
+function setMainImage(image){
+
+    const main =
+        document.getElementById("img");
+
+    if(!main){
+
+        return;
+
+    }
+
+    main.style.opacity = ".4";
+
+    setTimeout(() => {
+
+        main.src = image || "";
+
+        main.style.opacity = "1";
+
+    },120);
+
+}
+
+
+/* =====================================================
+COLOR
+===================================================== */
+
+/* =====================================================
+COLOR
+===================================================== */
+
+function renderColors(){
+
+    const container =
+        document.getElementById("colors");
+
+    const label =
+        document.getElementById("colorName");
+
+    container.innerHTML = "";
+
+    const colors =
+        getProductColors();
+
+    if(!colors.length){
+
+        label.innerText = "Default";
+
+        selectedColor = null;
+
+        renderSizes(null);
+
+        return;
+
+    }
+
+    colors.forEach((color,index)=>{
+
+        const el =
+            document.createElement("div");
+
+        el.className = "color";
+
+        el.style.color =
+            color.hex || "#fff";
+
+        el.title =
+            color.name || "Color";
+
+        el.onclick = ()=>{
+
+            selectedColor = color;
+
+            label.innerText =
+                color.name || "Selected";
+
+            document
+                .querySelectorAll(".color")
+                .forEach(x =>
+                    x.classList.remove("active")
+                );
+
+            el.classList.add("active");
+
+            if(color.image){
+
+                setMainImage(color.image);
+
+                syncActiveThumbnail(
+                    color.image
+                );
+
             }
+
+            selectedSize = null;
+
+            renderSizes(color);
+
+            updateStock();
+
+        };
+
+        container.appendChild(el);
+
+        if(index === 0){
+
+            selectedColor = color;
+
+            label.innerText =
+                color.name || "Selected";
+
+            el.classList.add("active");
+
         }
 
-        function add() {
-            if (!selectedSize) {
-                showToast("Select size");
+    });
+
+}
+
+
+/* =====================================================
+THUMBNAIL SYNC
+===================================================== */
+
+function syncActiveThumbnail(image){
+
+    document
+        .querySelectorAll(".thumbnail")
+        .forEach(thumb => {
+
+            const img =
+                thumb.querySelector("img");
+
+            if(
+                img &&
+                img.src === image
+            ){
+
+                document
+                    .querySelectorAll(".thumbnail")
+                    .forEach(x =>
+                        x.classList.remove("active")
+                    );
+
+                thumb.classList.add("active");
+
+            }
+
+        });
+
+}
+
+
+/* =====================================================
+SIZES
+===================================================== */
+
+function renderSizes(color){
+
+    const container =
+        document.getElementById("sizes");
+
+    container.innerHTML = "";
+
+    selectedSize = null;
+
+    let sizes = {};
+
+    if(color && color.sizes){
+
+        sizes = color.sizes;
+
+    }else if(product && product.sizes){
+
+        sizes =
+            typeof product.sizes === "object"
+                ? product.sizes
+                : {};
+
+    }
+
+    const defaultSizes =
+        ["S","M","L","XL","XXL"];
+
+    const keys =
+        Object.keys(sizes).length
+            ? Object.keys(sizes)
+            : defaultSizes;
+
+
+    keys.forEach(size=>{
+
+        const el =
+            document.createElement("div");
+
+        el.className = "size";
+
+        el.innerText = size;
+
+        const stock =
+            Number(sizes[size] || 0);
+
+        if(
+            Object.keys(sizes).length &&
+            stock <= 0
+        ){
+
+            el.classList.add("disabled");
+
+        }else{
+
+            el.onclick = ()=>{
+
+                document
+                    .querySelectorAll(".size")
+                    .forEach(x =>
+                        x.classList.remove("active")
+                    );
+
+                el.classList.add("active");
+
+                selectedSize = size;
+
+                updateStock();
+
+            };
+
+        }
+
+        container.appendChild(el);
+
+    });
+
+}
+
+
+/* =====================================================
+STOCK
+===================================================== */
+
+function getSelectedSizeStock(){
+
+    if(!selectedColor || !selectedSize){
+
+        return getTotalStock();
+
+    }
+
+    if(!selectedColor.sizes){
+
+        return 0;
+
+    }
+
+    return Number(
+        selectedColor.sizes[selectedSize] || 0
+    );
+
+}
+
+
+function updateStock(){
+
+    const stock =
+        document.getElementById("stock");
+
+    const text =
+        document.getElementById("stockText");
+
+    if(!stock || !text){
+
+        return;
+
+    }
+
+    stock.classList.remove(
+        "low",
+        "out"
+    );
+
+
+    let available;
+
+    if(selectedColor && selectedSize){
+
+        available =
+            getSelectedSizeStock();
+
+    }else{
+
+        available =
+            getTotalStock();
+
+    }
+
+
+    if(available <= 0){
+
+        stock.classList.add("out");
+
+        text.innerText =
+            selectedSize
+                ? "Out of stock"
+                : "Select a size";
+
+        return;
+
+    }
+
+
+    if(available <= 3){
+
+        stock.classList.add("low");
+
+        text.innerText =
+            `${available} left in stock`;
+
+        return;
+
+    }
+
+
+    text.innerText =
+        "In stock — ready to ship";
+
+}
+
+
+/* =====================================================
+QUANTITY
+===================================================== */
+
+function changeQuantity(delta){
+
+    let next =
+        quantity + delta;
+
+    if(next < 1){
+
+        next = 1;
+
+    }
+
+
+    let max =
+        getSelectedSizeStock();
+
+    if(
+        selectedColor &&
+        selectedSize &&
+        max > 0 &&
+        next > max
+    ){
+
+        next = max;
+
+        showToast(
+            `Only ${max} available`
+        );
+
+    }
+
+
+    quantity = next;
+
+    document.getElementById(
+        "quantity"
+    ).innerText = quantity;
+
+}
+
+
+/* =====================================================
+VALIDATE SELECTION
+===================================================== */
+
+function validateSelection(){
+
+    if(!product){
+
+        showToast(
+            "Product is still loading"
+        );
+
+        return false;
+
+    }
+
+
+    const colors =
+        getProductColors();
+
+    if(
+        colors.length &&
+        !selectedColor
+    ){
+
+        showToast(
+            "Please select a color"
+        );
+
+        return false;
+
+    }
+
+
+    if(!selectedSize){
+
+        showToast(
+            "Please select a size"
+        );
+
+        return false;
+
+    }
+
+
+    const stock =
+        getSelectedSizeStock();
+
+
+    if(
+        selectedColor &&
+        selectedSize &&
+        stock <= 0
+    ){
+
+        showToast(
+            "This size is out of stock"
+        );
+
+        return false;
+
+    }
+
+
+    if(
+        selectedColor &&
+        selectedSize &&
+        quantity > stock
+    ){
+
+        quantity = stock;
+
+        document.getElementById(
+            "quantity"
+        ).innerText = quantity;
+
+        showToast(
+            "Quantity adjusted to available stock"
+        );
+
+        return false;
+
+    }
+
+
+    return true;
+
+}
+
+
+/* =====================================================
+CART COUNT
+===================================================== */
+
+function updateCartCount(){
+
+    const cart =
+        JSON.parse(
+            localStorage.getItem("cart")
+        ) || [];
+
+    const count =
+        cart.reduce(
+            (sum,item)=>
+                sum + Number(item.qty || 1),
+            0
+        );
+
+
+    const badge =
+        document.getElementById(
+            "cartCount"
+        );
+
+    if(badge){
+
+        badge.innerText =
+            count;
+
+    }
+
+}
+
+
+/* =====================================================
+CREATE CART ITEM
+===================================================== */
+
+function createCartItem(){
+
+    return {
+
+        ...product,
+
+        image:
+            selectedColor?.image ||
+            product.image ||
+            "",
+
+        color:
+            selectedColor?.name ||
+            "",
+
+        colorHex:
+            selectedColor?.hex ||
+            "",
+
+        size:
+            selectedSize,
+
+        qty:
+            quantity
+
+    };
+
+}
+
+
+/* =====================================================
+ADD TO CART
+===================================================== */
+
+function add(){
+
+    if(!validateSelection()){
+
+        return;
+
+    }
+
+
+    let cart =
+        JSON.parse(
+            localStorage.getItem("cart")
+        ) || [];
+
+
+    const item =
+        createCartItem();
+
+
+    const existingIndex =
+        cart.findIndex(existing =>
+
+            String(existing.id) ===
+            String(item.id) &&
+
+            String(existing.size || "") ===
+            String(item.size || "") &&
+
+            String(existing.color || "") ===
+            String(item.color || "")
+
+        );
+
+
+    if(existingIndex >= 0){
+
+        cart[existingIndex].qty =
+            Number(
+                cart[existingIndex].qty || 0
+            ) +
+            Number(item.qty || 1);
+
+    }else{
+
+        cart.push(item);
+
+    }
+
+
+    localStorage.setItem(
+        "cart",
+        JSON.stringify(cart)
+    );
+
+
+    updateCartCount();
+
+    showToast(
+        "Added to cart ✓"
+    );
+
+}
+
+
+/* =====================================================
+ORDER NOW
+===================================================== */
+
+function orderNow(){
+
+    if(!validateSelection()){
+
+        return;
+
+    }
+
+
+    const item =
+        createCartItem();
+
+
+    localStorage.setItem(
+        "orderNow",
+        JSON.stringify(item)
+    );
+
+
+    const transition =
+        document.getElementById(
+            "transition"
+        );
+
+
+    if(transition){
+
+        transition.classList.add(
+            "active"
+        );
+
+    }
+
+
+    setTimeout(()=>{
+
+        window.location.href =
+            "checkout.html";
+
+    },650);
+
+}
+
+
+/* =====================================================
+WISHLIST
+===================================================== */
+
+function updateWishlistButton(){
+
+    const button =
+        document.getElementById(
+            "wishlistBtn"
+        );
+
+    if(!button){
+
+        return;
+
+    }
+
+
+    const exists =
+        wishlist.some(
+            id =>
+                String(id) ===
+                String(productId)
+        );
+
+
+    if(exists){
+
+        button.classList.add(
+            "active"
+        );
+
+        button.innerText =
+            "♥";
+
+    }else{
+
+        button.classList.remove(
+            "active"
+        );
+
+        button.innerText =
+            "♡";
+
+    }
+
+}
+
+
+function toggleWishlist(){
+
+    const index =
+        wishlist.findIndex(
+            id =>
+                String(id) ===
+                String(productId)
+        );
+
+
+    if(index >= 0){
+
+        wishlist.splice(
+            index,
+            1
+        );
+
+        showToast(
+            "Removed from wishlist"
+        );
+
+    }else{
+
+        wishlist.push(
+            productId
+        );
+
+        showToast(
+            "Added to wishlist ♥"
+        );
+
+    }
+
+
+    localStorage.setItem(
+        "vantaWishlist",
+        JSON.stringify(wishlist)
+    );
+
+
+    updateWishlistButton();
+
+}
+
+
+/* =====================================================
+REVIEWS
+===================================================== */
+
+async function loadReviews(){
+
+    const {
+        data,
+        error
+    } = await client
+        .from("reviews")
+        .select("*")
+        .eq("product_id",productId)
+        .order(
+            "created_at",
+            {
+                ascending:false
+            }
+        );
+
+
+    if(error){
+
+        console.error(
+            "Reviews error:",
+            error
+        );
+
+        reviews = [];
+
+    }else{
+
+        reviews =
+            data || [];
+
+    }
+
+
+    renderReviews();
+
+}
+
+
+function renderStars(value){
+
+    const rounded =
+        Math.round(
+            Number(value) || 0
+        );
+
+    let result = "";
+
+    for(
+        let i = 1;
+        i <= 5;
+        i++
+    ){
+
+        result +=
+            i <= rounded
+                ? "★"
+                : "☆";
+
+    }
+
+    return result;
+
+}
+
+
+function updateRatingDisplay(
+    average,
+    count
+){
+
+    const stars =
+        document.getElementById(
+            "starsDisplay"
+        );
+
+    const text =
+        document.getElementById(
+            "ratingText"
+        );
+
+
+    if(stars){
+
+        stars.innerText =
+            renderStars(average);
+
+    }
+
+
+    if(text){
+
+        text.innerText =
+            count
+                ? `${average.toFixed(1)} (${count} reviews)`
+                : "No reviews";
+
+    }
+
+}
+
+
+function renderReviews(){
+
+    const container =
+        document.getElementById(
+            "reviews-list"
+        );
+
+
+    if(!container){
+
+        return;
+
+    }
+
+
+    container.innerHTML = "";
+
+
+    const count =
+        reviews.length;
+
+
+    let average = 0;
+
+
+    if(count){
+
+        average =
+            reviews.reduce(
+                (sum,review)=>
+                    sum +
+                    Number(
+                        review.rating || 0
+                    ),
+                0
+            ) / count;
+
+    }else if(
+        product &&
+        Number(product.rating || 0) > 0
+    ){
+
+        average =
+            Number(product.rating);
+
+    }
+
+
+    const averageElement =
+        document.getElementById(
+            "averageRating"
+        );
+
+    const countElement =
+        document.getElementById(
+            "reviewCount"
+        );
+
+
+    if(averageElement){
+
+        averageElement.innerText =
+            average.toFixed(1);
+
+    }
+
+
+    if(countElement){
+
+        countElement.innerText =
+            `${count} ${
+                count === 1
+                    ? "review"
+                    : "reviews"
+            }`;
+
+    }
+
+
+    updateRatingDisplay(
+        average,
+        count
+    );
+
+
+    if(!count){
+
+        container.innerHTML = `
+
+            <div
+                style="
+                    grid-column:1/-1;
+                    padding:25px;
+                    text-align:center;
+                    color:#666;
+                    border:1px solid #191919;
+                    border-radius:12px;
+                    background:#090909;
+                "
+            >
+                No reviews yet.
+                Be the first to share your experience.
+            </div>
+
+        `;
+
+        return;
+
+    }
+
+
+    reviews.forEach(review=>{
+
+        const card =
+            document.createElement("div");
+
+        card.className =
+            "review";
+
+
+        const date =
+            review.created_at
+                ? new Date(
+                    review.created_at
+                ).toLocaleDateString(
+                    "en-US",
+                    {
+                        year:"numeric",
+                        month:"short",
+                        day:"numeric"
+                    }
+                )
+                : "";
+
+
+        const author =
+            escapeHTML(
+                review.author_name ||
+                "Anonymous"
+            );
+
+
+        const content =
+            escapeHTML(
+                review.content ||
+                ""
+            );
+
+
+        card.innerHTML = `
+
+            <div class="review-top">
+
+                <div class="review-author">
+
+                    ${author}
+
+                    <span class="verified">
+                        ✓ Verified
+                    </span>
+
+                </div>
+
+                <div class="review-date">
+                    ${date}
+                </div>
+
+            </div>
+
+            <div class="review-stars">
+                ${renderStars(review.rating)}
+            </div>
+
+            <div class="review-content">
+                ${content}
+            </div>
+
+        `;
+
+
+        container.appendChild(
+            card
+        );
+
+    });
+
+}
+
+
+/* =====================================================
+STAR PICKER
+===================================================== */
+
+function setRating(value){
+
+    rating =
+        Number(value) || 0;
+
+
+    document
+        .querySelectorAll(
+            "#starPicker .star"
+        )
+        .forEach(star=>{
+
+            const starValue =
+                Number(
+                    star.dataset.star
+                );
+
+
+            if(
+                starValue <= rating
+            ){
+
+                star.classList.add(
+                    "active"
+                );
+
+            }else{
+
+                star.classList.remove(
+                    "active"
+                );
+
+            }
+
+        });
+
+}
+
+
+/* =====================================================
+SUBMIT REVIEW
+===================================================== */
+
+async function submitReview(){
+
+    const name =
+        document.getElementById(
+            "reviewer-name"
+        ).value.trim();
+
+
+    const email =
+        document.getElementById(
+            "reviewer-email"
+        ).value.trim();
+
+
+    const content =
+        document.getElementById(
+            "review-text"
+        ).value.trim();
+
+
+    if(!name){
+
+        showToast(
+            "Please enter your name"
+        );
+
+        return;
+
+    }
+
+
+    if(!content){
+
+        showToast(
+            "Please write your review"
+        );
+
+        return;
+
+    }
+
+
+    if(rating < 1){
+
+        showToast(
+            "Please select a rating"
+        );
+
+        return;
+
+    }
+
+
+    const button =
+        document.querySelector(
+            ".submit-review"
+        );
+
+
+    if(button){
+
+        button.disabled = true;
+
+        button.innerText =
+            "Submitting...";
+
+    }
+
+
+    const reviewData = {
+
+        product_id:
+            productId,
+
+        content:
+            content,
+
+        author_name:
+            name,
+
+        rating:
+            rating,
+
+        created_at:
+            new Date().toISOString()
+
+    };
+
+
+    if(email){
+
+        reviewData.email =
+            email;
+
+    }
+
+
+    const {
+        error
+    } = await client
+        .from("reviews")
+        .insert([
+            reviewData
+        ]);
+
+
+    if(error){
+
+        console.error(
+            "Review submit error:",
+            error
+        );
+
+        showToast(
+            "Could not submit review"
+        );
+
+    }else{
+
+        showToast(
+            "Review submitted successfully ✓"
+        );
+
+
+        document.getElementById(
+            "reviewer-name"
+        ).value = "";
+
+
+        document.getElementById(
+            "reviewer-email"
+        ).value = "";
+
+
+        document.getElementById(
+            "review-text"
+        ).value = "";
+
+
+        setRating(0);
+
+
+        await loadReviews();
+
+    }
+
+
+    if(button){
+
+        button.disabled = false;
+
+        button.innerText =
+            "Submit Review";
+
+    }
+
+}
+
+
+/* =====================================================
+RELATED PRODUCTS
+===================================================== */
+
+async function loadRelatedProducts(){
+
+    const container =
+        document.getElementById(
+            "relatedProducts"
+        );
+
+
+    if(!container){
+
+        return;
+
+    }
+
+
+    container.innerHTML = `
+
+        <div
+            style="
+                grid-column:1/-1;
+                color:#555;
+                font-size:12px;
+            "
+        >
+            Loading products...
+        </div>
+
+    `;
+
+
+    let query =
+        client
+            .from("product_2")
+            .select("*")
+            .neq("id",productId)
+            .limit(8);
+
+
+    if(product?.category){
+
+        query =
+            client
+                .from("product_2")
+                .select("*")
+                .neq("id",productId)
+                .eq(
+                    "category",
+                    product.category
+                )
+                .limit(8);
+
+    }
+
+
+    const {
+        data,
+        error
+    } =
+        await query;
+
+
+    if(error){
+
+        console.error(
+            "Related products:",
+            error
+        );
+
+        container.innerHTML = "";
+
+        return;
+
+    }
+
+
+    container.innerHTML = "";
+
+
+    if(!data || !data.length){
+
+        container.innerHTML = `
+
+            <div
+                style="
+                    grid-column:1/-1;
+                    color:#555;
+                    font-size:12px;
+                "
+            >
+                No related products available.
+            </div>
+
+        `;
+
+        return;
+
+    }
+
+
+    data.forEach(item=>{
+
+        container.appendChild(
+            createProductCard(item)
+        );
+
+    });
+
+}
+
+
+function createProductCard(item){
+
+    const card =
+        document.createElement("div");
+
+    card.className =
+        "product-card";
+
+
+    const image =
+        item.image || "";
+
+
+    card.innerHTML = `
+
+        <img
+            src="${escapeHTML(image)}"
+            alt="${escapeHTML(item.name || "Product")}"
+            loading="lazy"
+        >
+
+        <div class="product-card-info">
+
+            <div class="product-card-name">
+                ${escapeHTML(
+                    item.name ||
+                    "VANTA Product"
+                )}
+            </div>
+
+            <div class="product-card-price">
+                ${escapeHTML(
+                    item.price || "0"
+                )} EGP
+            </div>
+
+        </div>
+
+    `;
+
+
+    card.onclick = ()=>{
+
+        window.location.href =
+            `product.html?id=${encodeURIComponent(item.id)}`;
+
+    };
+
+
+    return card;
+
+}
+
+
+/* =====================================================
+RECENTLY VIEWED
+===================================================== */
+
+function addRecentlyViewed(){
+
+    if(!product){
+
+        return;
+
+    }
+
+
+    let recent =
+        JSON.parse(
+            localStorage.getItem(
+                "vantaRecentlyViewed"
+            )
+        ) || [];
+
+
+    recent =
+        recent.filter(
+            id =>
+                String(id) !==
+                String(product.id)
+        );
+
+
+    recent.unshift(
+        product.id
+    );
+
+
+    recent =
+        recent.slice(
+            0,
+            8
+        );
+
+
+    localStorage.setItem(
+        "vantaRecentlyViewed",
+        JSON.stringify(recent)
+    );
+
+}
+
+
+async function loadRecentlyViewed(){
+
+    const container =
+        document.getElementById(
+            "recentProducts"
+        );
+
+
+    if(!container){
+
+        return;
+
+    }
+
+
+    let ids =
+        JSON.parse(
+            localStorage.getItem(
+                "vantaRecentlyViewed"
+            )
+        ) || [];
+
+
+    ids =
+        ids.filter(
+            id =>
+                String(id) !==
+                String(productId)
+        );
+
+
+    if(!ids.length){
+
+        container.innerHTML = `
+
+            <div
+                style="
+                    grid-column:1/-1;
+                    color:#555;
+                    font-size:12px;
+                "
+            >
+                Your recently viewed products
+                will appear here.
+            </div>
+
+        `;
+
+        return;
+
+    }
+
+
+    const {
+        data,
+        error
+    } =
+        await client
+            .from("product_2")
+            .select("*")
+            .in("id",ids);
+
+
+    if(error){
+
+        console.error(
+            "Recently viewed:",
+            error
+        );
+
+        return;
+
+    }
+
+
+    container.innerHTML = "";
+
+
+    const sorted =
+        ids
+            .map(id =>
+                data.find(
+                    item =>
+                        String(item.id) ===
+                        String(id)
+                )
+            )
+            .filter(Boolean);
+
+
+    sorted.forEach(item=>{
+
+        container.appendChild(
+            createProductCard(item)
+        );
+
+    });
+
+}
+
+
+/* =====================================================
+IMAGE MODAL
+===================================================== */
+
+function openImageModal(){
+
+    const modal =
+        document.getElementById(
+            "imageModal"
+        );
+
+    const fullImg =
+        document.getElementById(
+            "fullImg"
+        );
+
+    const main =
+        document.getElementById(
+            "img"
+        );
+
+
+    if(!modal || !fullImg || !main){
+
+        return;
+
+    }
+
+
+    fullImg.src =
+        main.src;
+
+
+    modal.classList.add(
+        "show"
+    );
+
+
+    document.body.style.overflow =
+        "hidden";
+
+}
+
+
+function closeImageModal(event){
+
+    if(
+        event &&
+        event.target &&
+        event.target.id !==
+            "imageModal"
+    ){
+
+        return;
+
+    }
+
+
+    const modal =
+        document.getElementById(
+            "imageModal"
+        );
+
+
+    if(modal){
+
+        modal.classList.remove(
+            "show"
+        );
+
+    }
+
+
+    document.body.style.overflow =
+        "";
+
+}
+
+
+/* =====================================================
+SIZE GUIDE
+===================================================== */
+
+function openSizeGuide(){
+
+    const modal =
+        document.getElementById(
+            "sizeModal"
+        );
+
+
+    if(modal){
+
+        modal.classList.add(
+            "show"
+        );
+
+        document.body.style.overflow =
+            "hidden";
+
+    }
+
+}
+
+
+function closeSizeGuide(){
+
+    const modal =
+        document.getElementById(
+            "sizeModal"
+        );
+
+
+    if(modal){
+
+        modal.classList.remove(
+            "show"
+        );
+
+    }
+
+
+    document.body.style.overflow =
+        "";
+
+}
+
+
+/* =====================================================
+SHARE PRODUCT
+===================================================== */
+
+async function shareProduct(){
+
+    if(!product){
+
+        return;
+
+    }
+
+
+    const shareData = {
+
+        title:
+            product.name ||
+            "VANTA Product",
+
+        text:
+            `Check out ${product.name || "this product"} on VANTA.`,
+
+        url:
+            window.location.href
+
+    };
+
+
+    if(
+        navigator.share
+    ){
+
+        try{
+
+            await navigator.share(
+                shareData
+            );
+
+            return;
+
+        }catch(error){
+
+            if(
+                error.name ===
+                "AbortError"
+            ){
+
                 return;
+
             }
 
-            let cart = JSON.parse(localStorage.getItem("cart")) || [];
-
-            cart.push({
-                ...product,
-                image: selectedColor?.image,
-                color: selectedColor?.name,
-                size: selectedSize,
-                qty: 1
-            });
-
-            localStorage.setItem("cart", JSON.stringify(cart));
-            showToast("Added ✔");
         }
 
-        function orderNow() {
-            if (!selectedSize) {
-                showToast("Select size");
+    }
+
+
+    try{
+
+        await navigator.clipboard.writeText(
+            window.location.href
+        );
+
+        showToast(
+            "Product link copied ✓"
+        );
+
+    }catch(error){
+
+        showToast(
+            "Copy failed"
+        );
+
+    }
+
+}
+
+
+/* =====================================================
+EVENTS
+===================================================== */
+
+document
+    .getElementById(
+        "wishlistBtn"
+    )
+    ?.addEventListener(
+        "click",
+        toggleWishlist
+    );
+
+
+document
+    .getElementById(
+        "sizeGuideBtn"
+    )
+    ?.addEventListener(
+        "click",
+        openSizeGuide
+    );
+
+
+document
+    .getElementById(
+        "mainImageWrap"
+    )
+    ?.addEventListener(
+        "click",
+        function(event){
+
+            if(
+                event.target.closest(
+                    "#wishlistBtn"
+                )
+            ){
+
                 return;
+
             }
 
-            localStorage.setItem("orderNow", JSON.stringify({
-                ...product,
-                image: selectedColor?.image,
-                color: selectedColor?.name,
-                size: selectedSize,
-                qty: 1
-            }));
+            openImageModal();
 
-            transition.classList.add("active");
+        }
+    );
 
-            setTimeout(() => {
-                location.href = "checkout.html";
-            }, 3500);
+
+document
+    .querySelectorAll(
+        "#starPicker .star"
+    )
+    .forEach(star=>{
+
+        star.addEventListener(
+            "click",
+            ()=>{
+
+                setRating(
+                    star.dataset.star
+                );
+
+            }
+        );
+
+
+        star.addEventListener(
+            "mouseenter",
+            ()=>{
+
+                const value =
+                    Number(
+                        star.dataset.star
+                    );
+
+
+                document
+                    .querySelectorAll(
+                        "#starPicker .star"
+                    )
+                    .forEach(item=>{
+
+                        item.classList.toggle(
+                            "active",
+                            Number(
+                                item.dataset.star
+                            ) <= value
+                        );
+
+                    });
+
+            }
+        );
+
+    });
+
+
+document
+    .getElementById(
+        "starPicker"
+    )
+    ?.addEventListener(
+        "mouseleave",
+        ()=>{
+
+            setRating(
+                rating
+            );
+
+        }
+    );
+
+
+document.addEventListener(
+    "keydown",
+    event=>{
+
+        if(
+            event.key ===
+            "Escape"
+        ){
+
+            closeSizeGuide();
+
+            closeImageModal();
+
         }
 
-        let fullscreen = document.getElementById("fullscreen");
-        let fullImg = document.getElementById("fullImg");
-        let transition = document.getElementById("transition");
+    }
+);
 
-        load();
-    </script>
+
+/* =====================================================
+INITIAL LOAD
+===================================================== */
+
+loadProduct();
+
+updateCartCount();
+
+updateWishlistButton();
+
+</script>
 
 </body>
 </html>

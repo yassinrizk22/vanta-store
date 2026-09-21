@@ -1,287 +1,2081 @@
-<!DOCTYPE html>
-<html>
-<head>
-<meta charset="UTF-8">
-<title>VANTA Checkout</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!DOCTYPE html> <html lang="en"> <head> <meta charset="UTF-8"> <meta name="viewport" content="width=device-width, initial-scale=1.0"> <title>VANTA Checkout</title> <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet"> <style>
+:root{
+--bg:#000;
+--card:#0a0a0a;
+--card2:#101010;
+--text:#fff;
+--muted:#8d8d8d;
+--line:#202020;
+--gold:#d7b56d;
+--success:#25d366;
+--danger:#ff4d4d;
+}
 
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600&family=Montserrat:wght@300;500&display=swap" rel="stylesheet">
+*{
+box-sizing:border-box;
+}
 
-<style>
+html{
+scroll-behavior:smooth;
+}
+
 body{
 margin:0;
-background:#000;
-color:#fff;
-font-family:'Montserrat';
+background:
+radial-gradient(
+circle at top left,
+rgba(255,255,255,.055),
+transparent 35%
+),
+#000;
+color:var(--text);
+font-family:'Montserrat',sans-serif;
+min-height:100vh;
 }
 
-.container{
-max-width:600px;
-margin:50px auto;
-background:#0a0a0a;
-padding:30px;
-border-radius:16px;
-border:1px solid #1a1a1a;
-}
+/* =========================
+HEADER
+========================= */
 
-h2{
-text-align:center;
-font-family:'Playfair Display';
-}
+header{
+position:sticky;
+top:0;
+z-index:1000;
 
-.item{
+height:74px;
+
 display:flex;
-gap:12px;
-margin-bottom:12px;
-border-bottom:1px solid #222;
-padding-bottom:10px;
-}
-
-.item img{
-width:70px;
-height:70px;
-border-radius:8px;
-object-fit:cover;
-}
-
-input{
-width:100%;
-padding:12px;
-margin-top:10px;
-background:#000;
-border:1px solid #333;
-color:#fff;
-border-radius:10px;
-}
-
-button{
-width:100%;
-padding:14px;
-margin-top:12px;
-border:none;
-border-radius:10px;
-cursor:pointer;
-}
-
-.main-btn{
-background:#fff;
-color:#000;
-}
-
-.wa-btn{
-background:linear-gradient(135deg,#25D366,#1ebe5d);
-color:#fff;
-}
-
-.total{
-display:flex;
+align-items:center;
 justify-content:space-between;
-margin-top:10px;
-padding-top:10px;
-border-top:1px solid #222;
+
+padding:0 60px;
+
+background:rgba(0,0,0,.82);
+backdrop-filter:blur(18px);
+
+border-bottom:1px solid var(--line);
+
 }
 
-/* ✅ SUCCESS BOX */
-#successBox{
-display:none;
-text-align:center;
-margin-top:40px;
+.logo{
+font-family:'Playfair Display',serif;
+font-size:23px;
+letter-spacing:7px;
 }
 
-#successBox h3{
-font-family:'Playfair Display';
-font-size:26px;
+.back-link{
+color:#999;
+text-decoration:none;
+font-size:12px;
+transition:.25s;
+}
+
+.back-link:hover{
+color:#fff;
+}
+
+/* =========================
+PAGE
+========================= */
+
+.page{
+width:min(1200px,calc(100% - 40px));
+margin:45px auto 80px;
+}
+
+.page-title{
+margin-bottom:35px;
+}
+
+.page-title .eyebrow{
+color:#666;
+font-size:10px;
+letter-spacing:4px;
+text-transform:uppercase;
 margin-bottom:10px;
 }
 
-#successBox p{
-opacity:.7;
+.page-title h1{
+margin:0;
+font-family:'Playfair Display',serif;
+font-size:42px;
+letter-spacing:2px;
 }
 
-#successBox button{
-margin-top:20px;
+.page-title p{
+color:#777;
+font-size:12px;
+margin-top:10px;
+}
+
+/* =========================
+LAYOUT
+========================= */
+
+.checkout-layout{
+display:grid;
+grid-template-columns:minmax(0,1.45fr) minmax(320px,.75fr);
+gap:25px;
+align-items:start;
+}
+
+.panel{
+background:
+linear-gradient(
+145deg,
+rgba(255,255,255,.025),
+transparent
+),
+var(--card);
+
+border:1px solid var(--line);
+border-radius:18px;
+
+}
+
+/* =========================
+CUSTOMER
+========================= */
+
+.customer-panel{
+padding:28px;
+}
+
+.section-head{
+display:flex;
+justify-content:space-between;
+align-items:center;
+gap:15px;
+margin-bottom:25px;
+}
+
+.section-head h2{
+margin:0;
+font-family:'Playfair Display',serif;
+font-size:23px;
+}
+
+.step{
+color:#555;
+font-size:10px;
+letter-spacing:2px;
+}
+
+.form-section{
+margin-bottom:32px;
+}
+
+.form-title{
+color:#aaa;
+font-size:11px;
+letter-spacing:2px;
+text-transform:uppercase;
+margin-bottom:15px;
+}
+
+.form-grid{
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:14px;
+}
+
+.field{
+position:relative;
+}
+
+.field.full{
+grid-column:1/-1;
+}
+
+.field label{
+display:block;
+color:#777;
+font-size:10px;
+margin-bottom:7px;
+letter-spacing:.5px;
+}
+
+.field input,
+.field select,
+.field textarea{
+width:100%;
+padding:14px 13px;
+
+background:#050505;
+border:1px solid #252525;
+border-radius:9px;
+
+color:#fff;
+outline:none;
+
+font-family:'Montserrat',sans-serif;
+font-size:12px;
+
+transition:.25s;
+
+}
+
+.field textarea{
+min-height:100px;
+resize:vertical;
+}
+
+.field input::placeholder,
+.field textarea::placeholder{
+color:#444;
+}
+
+.field input:focus,
+.field select:focus,
+.field textarea:focus{
+border-color:#666;
+background:#080808;
+}
+
+.required{
+color:#777;
+}
+
+/* =========================
+PAYMENT
+========================= */
+
+.payment-options{
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:10px;
+}
+
+.payment-option{
+position:relative;
+}
+
+.payment-option input{
+position:absolute;
+opacity:0;
+pointer-events:none;
+}
+
+.payment-label{
+display:block;
+padding:15px;
+
+background:#050505;
+border:1px solid #252525;
+border-radius:10px;
+
+cursor:pointer;
+transition:.25s;
+
+}
+
+.payment-label strong{
+display:block;
+font-size:12px;
+margin-bottom:4px;
+}
+
+.payment-label span{
+color:#666;
+font-size:10px;
+}
+
+.payment-option input:checked + .payment-label{
+border-color:#fff;
 background:#fff;
 color:#000;
 }
-</style>
-</head>
 
-<body>
+.payment-option input:checked + .payment-label span{
+color:#555;
+}
 
-<div class="container" id="mainBox">
+/* =========================
+SUMMARY
+========================= */
 
-<h2>إتمام الطلب</h2>
+.summary-panel{
+position:sticky;
+top:95px;
+padding:24px;
+}
 
-<div id="products"></div>
+.summary-title{
+font-family:'Playfair Display',serif;
+font-size:23px;
+margin:0 0 20px;
+}
 
-<input id="name" placeholder="الاسم بالكامل">
-<input id="phone" placeholder="رقم الهاتف">
-<input id="gov" placeholder="المحافظة">
+.summary-items{
+max-height:430px;
+overflow-y:auto;
+padding-right:4px;
+}
 
-<button class="main-btn" onclick="submitOrder()">تأكيد الطلب</button>
-<button class="wa-btn" onclick="orderWhatsApp()">اطلب عبر واتساب</button>
+.summary-items::-webkit-scrollbar{
+width:3px;
+}
+
+.summary-items::-webkit-scrollbar-thumb{
+background:#333;
+}
+
+.summary-item{
+display:grid;
+grid-template-columns:70px 1fr auto;
+gap:12px;
+
+padding:13px 0;
+border-bottom:1px solid #181818;
+
+}
+
+.summary-image{
+width:70px;
+height:78px;
+border-radius:9px;
+object-fit:cover;
+background:#111;
+}
+
+.summary-info{
+min-width:0;
+}
+
+.summary-name{
+font-size:12px;
+white-space:nowrap;
+overflow:hidden;
+text-overflow:ellipsis;
+}
+
+.summary-meta{
+color:#666;
+font-size:9px;
+line-height:1.8;
+margin-top:4px;
+}
+
+.summary-price{
+text-align:right;
+white-space:nowrap;
+font-size:11px;
+}
+
+.qty-badge{
+display:inline-flex;
+align-items:center;
+justify-content:center;
+
+min-width:20px;
+height:20px;
+
+margin-top:5px;
+
+padding:0 6px;
+
+border:1px solid #333;
+border-radius:5px;
+
+color:#999;
+font-size:9px;
+
+}
+
+/* =========================
+TOTALS
+========================= */
+
+.totals{
+margin-top:18px;
+}
+
+.total-row{
+display:flex;
+justify-content:space-between;
+gap:15px;
+
+color:#777;
+font-size:11px;
+
+margin-bottom:12px;
+
+}
+
+.total-row span:last-child{
+color:#aaa;
+}
+
+.total-row.shipping span:last-child{
+color:#d7b56d;
+}
+
+.grand-total{
+display:flex;
+justify-content:space-between;
+align-items:center;
+
+padding-top:17px;
+margin-top:14px;
+
+border-top:1px solid #292929;
+
+}
+
+.grand-total span:first-child{
+color:#aaa;
+font-size:12px;
+}
+
+.grand-total span:last-child{
+font-family:'Playfair Display',serif;
+font-size:23px;
+}
+
+/* =========================
+BUTTONS
+========================= */
+
+.submit-btn,
+.whatsapp-btn{
+width:100%;
+border:0;
+border-radius:9px;
+padding:15px;
+margin-top:18px;
+
+cursor:pointer;
+
+font-family:'Montserrat',sans-serif;
+font-weight:600;
+font-size:11px;
+
+transition:.25s;
+
+}
+
+.submit-btn{
+background:#fff;
+color:#000;
+}
+
+.submit-btn:hover{
+background:#ddd;
+transform:translateY(-2px);
+}
+
+.whatsapp-btn{
+background:#25d366;
+color:#fff;
+}
+
+.whatsapp-btn:hover{
+background:#1ebe5d;
+transform:translateY(-2px);
+}
+
+.submit-btn:disabled,
+.whatsapp-btn:disabled{
+opacity:.5;
+cursor:not-allowed;
+transform:none;
+}
+
+.secure-note{
+text-align:center;
+color:#555;
+font-size:9px;
+margin-top:13px;
+}
+
+/* =========================
+EMPTY
+========================= */
+
+.empty{
+text-align:center;
+padding:70px 20px;
+border:1px solid var(--line);
+border-radius:18px;
+background:#080808;
+}
+
+.empty h2{
+font-family:'Playfair Display',serif;
+}
+
+.empty p{
+color:#666;
+font-size:12px;
+}
+
+.empty button{
+margin-top:15px;
+padding:12px 22px;
+background:#fff;
+color:#000;
+border:0;
+border-radius:8px;
+cursor:pointer;
+}
+
+/* =========================
+SUCCESS
+========================= */
+
+#successScreen{
+display:none;
+min-height:70vh;
+align-items:center;
+justify-content:center;
+}
+
+.success-box{
+width:min(550px,100%);
+text-align:center;
+padding:50px 30px;
+
+background:#0a0a0a;
+border:1px solid #222;
+border-radius:20px;
+
+}
+
+.success-icon{
+width:70px;
+height:70px;
+
+margin:0 auto 25px;
+
+display:flex;
+align-items:center;
+justify-content:center;
+
+border-radius:50%;
+
+background:#fff;
+color:#000;
+
+font-size:28px;
+
+}
+
+.success-box h2{
+font-family:'Playfair Display',serif;
+font-size:30px;
+margin:0 0 12px;
+}
+
+.success-box p{
+color:#777;
+font-size:12px;
+line-height:1.8;
+}
+
+.order-number{
+display:inline-block;
+margin:20px 0;
+
+padding:12px 18px;
+
+background:#050505;
+border:1px solid #292929;
+border-radius:8px;
+
+color:#d7b56d;
+font-size:11px;
+letter-spacing:1px;
+
+}
+
+.success-actions{
+display:flex;
+gap:10px;
+}
+
+.success-actions button{
+flex:1;
+padding:13px;
+border-radius:8px;
+cursor:pointer;
+font-family:'Montserrat';
+font-size:11px;
+}
+
+.shop-btn{
+background:#fff;
+color:#000;
+border:0;
+}
+
+.success-wa{
+background:#25d366;
+color:#fff;
+border:0;
+}
+
+/* =========================
+TOAST
+========================= */
+
+.toast{
+position:fixed;
+right:25px;
+bottom:25px;
+
+padding:13px 18px;
+
+background:#111;
+border:1px solid #333;
+border-radius:8px;
+
+color:#fff;
+font-size:11px;
+
+opacity:0;
+pointer-events:none;
+transform:translateY(15px);
+
+transition:.3s;
+
+z-index:9999;
+
+}
+
+.toast.show{
+opacity:1;
+transform:translateY(0);
+}
+
+/* =========================
+LOADING
+========================= */
+
+.spinner{
+width:14px;
+height:14px;
+
+border:2px solid rgba(0,0,0,.2);
+border-top-color:#000;
+
+border-radius:50%;
+
+display:inline-block;
+vertical-align:middle;
+
+animation:spin .7s linear infinite;
+
+}
+
+@keyframes spin{
+to{
+transform:rotate(360deg);
+}
+}
+
+/* =========================
+MOBILE
+========================= */
+
+@media(max-width:850px){
+
+header{
+    padding:0 22px;
+    height:65px;
+}
+
+.logo{
+    font-size:19px;
+}
+
+.page{
+    width:calc(100% - 24px);
+    margin:25px auto 50px;
+}
+
+.page-title h1{
+    font-size:32px;
+}
+
+.checkout-layout{
+    grid-template-columns:1fr;
+}
+
+.summary-panel{
+    position:static;
+    order:-1;
+}
+
+.customer-panel{
+    padding:20px;
+}
+
+.summary-panel{
+    padding:20px;
+}
+
+}
+
+@media(max-width:550px){
+
+.form-grid{
+    grid-template-columns:1fr;
+}
+
+.field.full{
+    grid-column:auto;
+}
+
+.payment-options{
+    grid-template-columns:1fr;
+}
+
+.summary-item{
+    grid-template-columns:58px 1fr auto;
+}
+
+.summary-image{
+    width:58px;
+    height:65px;
+}
+
+.page-title{
+    margin-bottom:25px;
+}
+
+.page-title h1{
+    font-size:28px;
+}
+
+.success-actions{
+    flex-direction:column;
+}
+
+.toast{
+    left:15px;
+    right:15px;
+    bottom:15px;
+    text-align:center;
+}
+
+}
+
+</style> </head> <body> <header>
+<div class="logo">
+    VANTA
+</div>
+
+<a href="shop.html" class="back-link">
+    ← Continue Shopping
+</a>
+
+</header> <div class="page" id="checkoutPage">
+<div class="page-title">
+
+    <div class="eyebrow">
+        VANTA / CHECKOUT
+    </div>
+
+    <h1>Complete Your Order</h1>
+
+    <p>
+        Review your items and enter your delivery information.
+    </p>
 
 </div>
 
-<!-- ✅ رسالة النجاح -->
-<div id="successBox">
-<h3>شكراً لتسوقك من VANTA ❤️</h3>
-<p>نقدر ثقتك في منتجاتنا، وطلبك قيد التنفيذ حالياً.</p>
+<div class="checkout-layout">
 
-<button onclick="goShop()">الرجوع للتسوق</button>
+    <!-- =========================
+         CUSTOMER INFORMATION
+    ========================== -->
+
+    <div class="panel customer-panel">
+
+        <div class="section-head">
+
+            <h2>Delivery Details</h2>
+
+            <div class="step">
+                STEP 01
+            </div>
+
+        </div>
+
+        <!-- CUSTOMER -->
+
+        <div class="form-section">
+
+            <div class="form-title">
+                Customer Information
+            </div>
+
+            <div class="form-grid">
+
+                <div class="field">
+
+                    <label>
+                        Full Name <span class="required">*</span>
+                    </label>
+
+                    <input
+                        id="name"
+                        type="text"
+                        placeholder="Your full name"
+                        autocomplete="name"
+                    >
+
+                </div>
+
+                <div class="field">
+
+                    <label>
+                        Phone Number <span class="required">*</span>
+                    </label>
+
+                    <input
+                        id="phone"
+                        type="tel"
+                        placeholder="01XXXXXXXXX"
+                        autocomplete="tel"
+                    >
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- ADDRESS -->
+
+        <div class="form-section">
+
+            <div class="form-title">
+                Delivery Address
+            </div>
+
+            <div class="form-grid">
+
+                <div class="field">
+
+                    <label>
+                        Governorate <span class="required">*</span>
+                    </label>
+
+                    <select id="gov">
+
+                        <option value="">
+                            Select governorate
+                        </option>
+
+                        <option>Cairo</option>
+                        <option>Giza</option>
+                        <option>Alexandria</option>
+                        <option>Qalyubia</option>
+                        <option>Sharqia</option>
+                        <option>Gharbia</option>
+                        <option>Dakahlia</option>
+                        <option>Monufia</option>
+                        <option>Beheira</option>
+                        <option>Kafr El Sheikh</option>
+                        <option>Damietta</option>
+                        <option>Port Said</option>
+                        <option>Ismailia</option>
+                        <option>Suez</option>
+                        <option>Fayoum</option>
+                        <option>Beni Suef</option>
+                        <option>Minya</option>
+                        <option>Assiut</option>
+                        <option>Sohag</option>
+                        <option>Qena</option>
+                        <option>Luxor</option>
+                        <option>Aswan</option>
+                        <option>Red Sea</option>
+                        <option>New Valley</option>
+                        <option>Matrouh</option>
+                        <option>North Sinai</option>
+                        <option>South Sinai</option>
+
+                    </select>
+
+                </div>
+
+                <div class="field">
+
+                    <label>
+                        City / Area
+                    </label>
+
+                    <input
+                        id="city"
+                        type="text"
+                        placeholder="City or area"
+                    >
+
+                </div>
+
+                <div class="field full">
+
+                    <label>
+                        Detailed Address <span class="required">*</span>
+                    </label>
+
+                    <input
+                        id="address"
+                        type="text"
+                        placeholder="Street, building, apartment..."
+                        autocomplete="street-address"
+                    >
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- PAYMENT -->
+
+        <div class="form-section">
+
+            <div class="form-title">
+                Payment Method
+            </div>
+
+            <div class="payment-options">
+
+                <div class="payment-option">
+
+                    <input
+                        type="radio"
+                        id="cod"
+                        name="payment"
+                        value="Cash on Delivery"
+                        checked
+                    >
+
+                    <label
+                        class="payment-label"
+                        for="cod"
+                    >
+
+                        <strong>
+                            Cash on Delivery
+                        </strong>
+
+                        <span>
+                            Pay when your order arrives
+                        </span>
+
+                    </label>
+
+                </div>
+
+                <div class="payment-option">
+
+                    <input
+                        type="radio"
+                        id="whatsappPayment"
+                        name="payment"
+                        value="WhatsApp Confirmation"
+                    >
+
+                    <label
+                        class="payment-label"
+                        for="whatsappPayment"
+                    >
+
+                        <strong>
+                            WhatsApp Confirmation
+                        </strong>
+
+                        <span>
+                            Confirm your order via WhatsApp
+                        </span>
+
+                    </label>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- NOTES -->
+
+        <div class="form-section">
+
+            <div class="form-title">
+                Order Notes
+            </div>
+
+            <div class="field">
+
+                <textarea
+                    id="notes"
+                    placeholder="Any delivery instructions? (Optional)"
+                ></textarea>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- =========================
+         ORDER SUMMARY
+    ========================== -->
+
+    <div class="panel summary-panel">
+
+        <h2 class="summary-title">
+            Your Order
+        </h2>
+
+        <div
+            id="summaryItems"
+            class="summary-items"
+        ></div>
+
+        <div class="totals">
+
+            <div class="total-row">
+
+                <span>
+                    Subtotal
+                </span>
+
+                <span id="subtotal">
+                    0 EGP
+                </span>
+
+            </div>
+
+            <div class="total-row shipping">
+
+                <span>
+                    Delivery
+                </span>
+
+                <span id="shipping">
+                    Calculated
+                </span>
+
+            </div>
+
+            <div class="grand-total">
+
+                <span>
+                    Total
+                </span>
+
+                <span id="grandTotal">
+                    0 EGP
+                </span>
+
+            </div>
+
+        </div>
+
+        <button
+            id="submitButton"
+            class="submit-btn"
+            onclick="submitOrder()"
+        >
+            Confirm Order
+        </button>
+
+        <button
+            id="whatsappButton"
+            class="whatsapp-btn"
+            onclick="orderWhatsApp()"
+        >
+            Order via WhatsApp
+        </button>
+
+        <div class="secure-note">
+            VANTA · SECURE ORDER EXPERIENCE
+        </div>
+
+    </div>
+
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+</div> <!-- ========================= SUCCESS SCREEN ========================= --> <div id="successScreen" class="page" >
+<div class="success-box">
 
-<script>
+    <div class="success-icon">
+        ✓
+    </div>
+
+    <h2>
+        Order Confirmed
+    </h2>
+
+    <p>
+        Thank you for shopping with VANTA.
+        Your order has been received successfully.
+    </p>
+
+    <div
+        id="orderNumber"
+        class="order-number"
+    >
+        VANTA-000000
+    </div>
+
+    <p>
+        Please keep your order number for reference.
+    </p>
+
+    <div class="success-actions">
+
+        <button
+            class="shop-btn"
+            onclick="goShop()"
+        >
+            Continue Shopping
+        </button>
+
+        <button
+            class="success-wa"
+            onclick="successWhatsApp()"
+        >
+            WhatsApp VANTA
+        </button>
+
+    </div>
+
+</div>
+
+</div> <!-- TOAST --> <div id="toast" class="toast" ></div> <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script> <script>
+/* =====================================================
+SUPABASE
+===================================================== */
+
 const client = supabase.createClient(
 "https://ojtrvxaptsavzmzjymci.supabase.co",
 "sb_publishable_Qv9Pl1_DfFf4wEHS_ApMTQ_FuoR0ylh"
 );
 
-const WHATSAPP_NUMBER = "201093265201";
+/* =====================================================
+WHATSAPP
+===================================================== */
 
-/* DATA */
-let order = JSON.parse(localStorage.getItem("orderNow"));
-let cart = JSON.parse(localStorage.getItem("cart")) || [];
+const WHATSAPP_NUMBER = "201044559915";
 
-let container = document.getElementById("products");
-let total = 0;
+/* =====================================================
+DATA
+===================================================== */
 
-/* عرض المنتجات */
-function renderItem(i){
-let price = parseFloat(i.price) || 0;
-total += price;
+let order =
+JSON.parse(
+localStorage.getItem("orderNow")
+);
 
-return `
-<div class="item">
-<img src="${i.image}">
-<div>
-<b>${i.name}</b><br>
-${i.color || ''} ${i.size ? '| المقاس: '+i.size : ''}<br>
-${price} EGP
-</div>
-</div>
-`;
+let cart =
+JSON.parse(
+localStorage.getItem("cart")
+) || [];
+
+let checkoutItems = [];
+
+let subtotal = 0;
+
+let shippingCost = 0;
+
+let currentOrderNumber = "";
+
+/* =====================================================
+LOAD CUSTOMER DATA
+===================================================== */
+
+function loadSavedCustomer(){
+
+const saved =
+    JSON.parse(
+        localStorage.getItem(
+            "vantaCustomer"
+        )
+    );
+
+if(!saved){
+    return;
 }
+
+if(saved.name){
+    document.getElementById("name").value =
+        saved.name;
+}
+
+if(saved.phone){
+    document.getElementById("phone").value =
+        saved.phone;
+}
+
+if(saved.gov){
+    document.getElementById("gov").value =
+        saved.gov;
+}
+
+if(saved.city){
+    document.getElementById("city").value =
+        saved.city;
+}
+
+if(saved.address){
+    document.getElementById("address").value =
+        saved.address;
+}
+
+}
+
+/* =====================================================
+PREPARE ITEMS
+===================================================== */
+
+function prepareItems(){
 
 if(order){
-container.innerHTML = renderItem(order);
+
+    checkoutItems = [
+        {
+            ...order,
+            qty:
+                Number(order.qty || 1)
+        }
+    ];
+
 }else{
-let html="";
-cart.forEach(i=> html+=renderItem(i));
-container.innerHTML = html;
-}
 
-container.innerHTML += `
-<div class="total">
-<span>الإجمالي</span>
-<span>${total} EGP</span>
-</div>
-`;
-
-/* 🔥 ORDER */
-async function submitOrder(){
-
-let name = document.getElementById("name").value.trim();
-let phone = document.getElementById("phone").value.trim();
-let gov = document.getElementById("gov").value.trim();
-
-if(!name || !phone || !gov){
-alert("من فضلك املى كل البيانات");
-return;
-}
-
-let items = order ? [order] : cart;
-
-let ordersToInsert = items.map(i => ({
-name,
-phone,
-governorate: gov,
-product: i.name,
-price: Number(i.price) || 0,
-size: i.size || "",
-color: i.color || "",
-image: i.image || "",
-status: "pending"
-}));
-
-let { error } = await client.from("orders").insert(ordersToInsert);
-
-if(error){
-alert("حصل خطأ: " + error.message);
-return;
-}
-
-/* تنظيف */
-localStorage.removeItem("orderNow");
-localStorage.removeItem("cart");
-
-/* إخفاء الفورم */
-document.getElementById("mainBox").style.display = "none";
-
-/* إظهار رسالة النجاح */
-document.getElementById("successBox").style.display = "block";
+    checkoutItems =
+        cart.map(item => ({
+            ...item,
+            qty:
+                Number(item.qty || 1)
+        }));
 
 }
 
-/* 🔥 WHATSAPP */
-function orderWhatsApp(){
-
-let name = document.getElementById("name").value;
-let phone = document.getElementById("phone").value;
-let gov = document.getElementById("gov").value;
-
-if(!name || !phone || !gov){
-alert("من فضلك املى كل البيانات");
-return;
 }
 
-let items = order ? [order] : cart;
-let firstImage = items[0]?.image || "";
+/* =====================================================
+ESCAPE HTML
+===================================================== */
 
-let msg = `${firstImage}
+function escapeHTML(value){
 
-*VANTA ORDER*
+if(
+    value === null ||
+    value === undefined
+){
 
-------------------------
+    return "";
 
-`;
+}
 
-items.forEach((i,index)=>{
-msg += `منتج ${index+1}
-الاسم: ${i.name}
-السعر: ${i.price} EGP
-المقاس: ${i.size || "-"}
+return String(value)
+    .replace(/&/g,"&amp;")
+    .replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;")
+    .replace(/"/g,"&quot;")
+    .replace(/'/g,"&#039;");
 
-`;
+}
 
-if(i.color) msg += `اللون: ${i.color}\n`;
+/* =====================================================
+RENDER SUMMARY
+===================================================== */
 
-msg += `
-------------------------
+function renderSummary(){
 
-`;
+const container =
+    document.getElementById(
+        "summaryItems"
+    );
+
+container.innerHTML = "";
+
+subtotal = 0;
+
+if(!checkoutItems.length){
+
+    container.innerHTML = `
+        <div class="empty">
+            <h2>Your Cart Is Empty</h2>
+            <p>
+                Add some VANTA pieces before checkout.
+            </p>
+            <button onclick="goShop()">
+                Go To Shop
+            </button>
+        </div>
+    `;
+
+    document.getElementById(
+        "submitButton"
+    ).disabled = true;
+
+    document.getElementById(
+        "whatsappButton"
+    ).disabled = true;
+
+    return;
+
+}
+
+checkoutItems.forEach(item => {
+
+    const price =
+        Number(
+            item.price
+        ) || 0;
+
+    const qty =
+        Number(
+            item.qty || 1
+        );
+
+    subtotal +=
+        price * qty;
+
+    const image =
+        item.image ||
+        item.img ||
+        "";
+
+    const name =
+        item.name ||
+        item.n ||
+        "VANTA Product";
+
+    const color =
+        item.color ||
+        "";
+
+    const size =
+        item.size ||
+        "";
+
+    container.innerHTML += `
+
+        <div class="summary-item">
+
+            <img
+                class="summary-image"
+                src="${escapeHTML(image)}"
+                alt="${escapeHTML(name)}"
+            >
+
+            <div class="summary-info">
+
+                <div class="summary-name">
+                    ${escapeHTML(name)}
+                </div>
+
+                <div class="summary-meta">
+
+                    ${
+                        color
+                        ? `Color: ${escapeHTML(color)}<br>`
+                        : ""
+                    }
+
+                    ${
+                        size
+                        ? `Size: ${escapeHTML(size)}`
+                        : ""
+                    }
+
+                </div>
+
+                <div class="qty-badge">
+                    Qty: ${qty}
+                </div>
+
+            </div>
+
+            <div class="summary-price">
+
+                ${
+                    (
+                        price * qty
+                    ).toLocaleString()
+                }
+                EGP
+
+            </div>
+
+        </div>
+
+    `;
+
 });
 
-msg += `بيانات العميل
-الاسم: ${name}
-الموبايل: ${phone}
-المحافظة: ${gov}
+updateTotals();
 
-------------------------
-
-يرجى تأكيد الطلب`;
-
-let url = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(msg)}`;
-window.open(url,"_blank");
 }
 
-/* 🔥 رجوع للتسوق */
+/* =====================================================
+SHIPPING
+===================================================== */
+
+function calculateShipping(){
+
+/*
+    You can change this later
+    depending on your delivery system.
+*/
+
+if(subtotal <= 0){
+
+    return 0;
+
+}
+
+/*
+    Free delivery over 1500 EGP.
+*/
+
+if(subtotal >= 1500){
+
+    return 0;
+
+}
+
+return 60;
+
+}
+
+/* =====================================================
+TOTALS
+===================================================== */
+
+function updateTotals(){
+
+shippingCost =
+    calculateShipping();
+
+document.getElementById(
+    "subtotal"
+).innerText =
+    subtotal.toLocaleString() +
+    " EGP";
+
+document.getElementById(
+    "shipping"
+).innerText =
+    shippingCost === 0
+    ? "FREE"
+    : shippingCost.toLocaleString() +
+      " EGP";
+
+const total =
+    subtotal +
+    shippingCost;
+
+document.getElementById(
+    "grandTotal"
+).innerText =
+    total.toLocaleString() +
+    " EGP";
+
+}
+
+/* =====================================================
+VALIDATE PHONE
+===================================================== */
+
+function validPhone(phone){
+
+const clean =
+    phone.replace(
+        /[\s\-()+]/g,
+        ""
+    );
+
+return /^01[0-9]{9}$/.test(
+    clean
+);
+
+}
+
+/* =====================================================
+VALIDATE FORM
+===================================================== */
+
+function validateForm(){
+
+const name =
+    document
+        .getElementById("name")
+        .value
+        .trim();
+
+const phone =
+    document
+        .getElementById("phone")
+        .value
+        .trim();
+
+const gov =
+    document
+        .getElementById("gov")
+        .value
+        .trim();
+
+const address =
+    document
+        .getElementById("address")
+        .value
+        .trim();
+
+if(!name){
+
+    showToast(
+        "Please enter your full name."
+    );
+
+    return false;
+
+}
+
+if(!phone){
+
+    showToast(
+        "Please enter your phone number."
+    );
+
+    return false;
+
+}
+
+if(!validPhone(phone)){
+
+    showToast(
+        "Please enter a valid Egyptian phone number."
+    );
+
+    return false;
+
+}
+
+if(!gov){
+
+    showToast(
+        "Please select your governorate."
+    );
+
+    return false;
+
+}
+
+if(!address){
+
+    showToast(
+        "Please enter your delivery address."
+    );
+
+    return false;
+
+}
+
+if(!checkoutItems.length){
+
+    showToast(
+        "Your order is empty."
+    );
+
+    return false;
+
+}
+
+return true;
+
+}
+
+/* =====================================================
+SAVE CUSTOMER
+===================================================== */
+
+function saveCustomer(){
+
+const customer = {
+
+    name:
+        document
+            .getElementById("name")
+            .value
+            .trim(),
+
+    phone:
+        document
+            .getElementById("phone")
+            .value
+            .trim(),
+
+    gov:
+        document
+            .getElementById("gov")
+            .value
+            .trim(),
+
+    city:
+        document
+            .getElementById("city")
+            .value
+            .trim(),
+
+    address:
+        document
+            .getElementById("address")
+            .value
+            .trim()
+
+};
+
+localStorage.setItem(
+    "vantaCustomer",
+    JSON.stringify(customer)
+);
+
+}
+
+/* =====================================================
+ORDER NUMBER
+===================================================== */
+
+function generateOrderNumber(){
+
+const now =
+    new Date();
+
+const date =
+    now.getFullYear()
+    .toString()
+    .slice(-2) +
+
+    String(
+        now.getMonth()+1
+    ).padStart(2,"0") +
+
+    String(
+        now.getDate()
+    ).padStart(2,"0");
+
+const random =
+    Math.floor(
+        1000 +
+        Math.random() * 9000
+    );
+
+return `VANTA-${date}-${random}`;
+
+}
+
+/* =====================================================
+SUBMIT ORDER
+===================================================== */
+
+let submitting = false;
+
+async function submitOrder(){
+
+if(submitting){
+    return;
+}
+
+if(!validateForm()){
+    return;
+}
+
+submitting = true;
+
+const button =
+    document.getElementById(
+        "submitButton"
+    );
+
+button.disabled = true;
+
+button.innerHTML = `
+    <span class="spinner"></span>
+    Processing...
+`;
+
+saveCustomer();
+
+currentOrderNumber =
+    generateOrderNumber();
+
+const name =
+    document
+        .getElementById("name")
+        .value
+        .trim();
+
+const phone =
+    document
+        .getElementById("phone")
+        .value
+        .trim();
+
+const gov =
+    document
+        .getElementById("gov")
+        .value
+        .trim();
+
+/*
+    Existing Supabase structure is preserved:
+    name
+    phone
+    governorate
+    product
+    price
+    size
+    color
+    image
+    status
+
+    Additional checkout information remains
+    available to the customer and WhatsApp
+    without requiring new database columns.
+*/
+
+const ordersToInsert =
+    checkoutItems.map(item => {
+
+        const qty =
+            Number(
+                item.qty || 1
+            );
+
+        const unitPrice =
+            Number(
+                item.price
+            ) || 0;
+
+        return {
+
+            name,
+
+            phone,
+
+            governorate:gov,
+
+            product:
+                qty > 1
+                ? `${item.name} × ${qty}`
+                : item.name,
+
+            price:
+                unitPrice * qty,
+
+            size:
+                item.size || "",
+
+            color:
+                item.color || "",
+
+            image:
+                item.image ||
+                item.img ||
+                "",
+
+            status:
+                "pending"
+
+        };
+
+    });
+
+const {
+    error
+} =
+    await client
+        .from("orders")
+        .insert(
+            ordersToInsert
+        );
+
+if(error){
+
+    console.error(error);
+
+    showToast(
+        "Something went wrong. Please try again."
+    );
+
+    submitting = false;
+
+    button.disabled = false;
+
+    button.innerText =
+        "Confirm Order";
+
+    return;
+
+}
+
+/*
+    Clear order data only after
+    successful Supabase insertion.
+*/
+
+localStorage.removeItem(
+    "orderNow"
+);
+
+localStorage.removeItem(
+    "cart"
+);
+
+document.getElementById(
+    "checkoutPage"
+).style.display = "none";
+
+document.getElementById(
+    "successScreen"
+).style.display = "flex";
+
+document.getElementById(
+    "orderNumber"
+).innerText =
+    currentOrderNumber;
+
+}
+
+/* =====================================================
+WHATSAPP ORDER
+===================================================== */
+
+function orderWhatsApp(){
+
+if(!validateForm()){
+    return;
+}
+
+saveCustomer();
+
+currentOrderNumber =
+    generateOrderNumber();
+
+const name =
+    document
+        .getElementById("name")
+        .value
+        .trim();
+
+const phone =
+    document
+        .getElementById("phone")
+        .value
+        .trim();
+
+const gov =
+    document
+        .getElementById("gov")
+        .value
+        .trim();
+
+const city =
+    document
+        .getElementById("city")
+        .value
+        .trim();
+
+const address =
+    document
+        .getElementById("address")
+        .value
+        .trim();
+
+const notes =
+    document
+        .getElementById("notes")
+        .value
+        .trim();
+
+const payment =
+    document
+        .querySelector(
+            'input[name="payment"]:checked'
+        )
+        ?.value ||
+        "Cash on Delivery";
+
+const total =
+    subtotal +
+    shippingCost;
+
+let message =
+
+`VANTA ORDER
+
+Order Number: ${currentOrderNumber}
+
+PRODUCTS
+
+`;
+
+checkoutItems.forEach(
+    (item,index) => {
+
+        const qty =
+            Number(
+                item.qty || 1
+            );
+
+        const price =
+            Number(
+                item.price
+            ) || 0;
+
+        message +=
+
+`${index + 1}. ${item.name}
+Price: ${price} EGP
+Quantity: ${qty}
+Size: ${item.size || "-"}
+Color: ${item.color || "-"}
+
+`;
+
+    }
+);
+
+message +=
+
+`------------------------
+
+ORDER SUMMARY
+
+Subtotal: ${subtotal} EGP
+Delivery: ${
+shippingCost === 0
+? "FREE"
+: shippingCost + " EGP"
+}
+Total: ${total} EGP
+
+CUSTOMER DETAILS
+
+Name: ${name}
+Phone: ${phone}
+Governorate: ${gov}
+City / Area: ${city || "-"}
+Address: ${address}
+
+Payment:
+${payment}
+
+`;
+
+if(notes){
+
+    message +=
+
+`Notes:
+${notes}
+
+`;
+
+}
+
+message +=
+
+`------------------------
+
+VANTA
+STAND OUT ALWAYS`;
+
+const url =
+    `https://wa.me/${WHATSAPP_NUMBER}?text=` +
+    encodeURIComponent(message);
+
+window.open(
+    url,
+    "_blank"
+);
+
+}
+
+/* =====================================================
+SUCCESS WHATSAPP
+===================================================== */
+
+function successWhatsApp(){
+
+const url =
+    `https://wa.me/${WHATSAPP_NUMBER}?text=` +
+    encodeURIComponent(
+        `Hello VANTA, I just placed an order.
+
+Order Number: ${currentOrderNumber}`
+);
+
+window.open(
+    url,
+    "_blank"
+);
+
+}
+
+/* =====================================================
+GO SHOP
+===================================================== */
+
 function goShop(){
-window.location.href = "shop.html";
-}
-</script>
 
-</body>
-</html>
+window.location.href =
+    "shop.html";
+
+}
+
+/* =====================================================
+TOAST
+===================================================== */
+
+function showToast(message){
+
+const toast =
+    document.getElementById(
+        "toast"
+    );
+
+toast.innerText =
+    message;
+
+toast.classList.add(
+    "show"
+);
+
+clearTimeout(
+    window.toastTimer
+);
+
+window.toastTimer =
+    setTimeout(
+        () => {
+
+            toast.classList.remove(
+                "show"
+            );
+
+        },
+        2800
+    );
+
+}
+
+/* =====================================================
+INITIALIZE
+===================================================== */
+
+prepareItems();
+
+renderSummary();
+
+loadSavedCustomer();
+
+</script> </body> </html>

@@ -1,0 +1,1896 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>VANTA — Compare Products</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+<style>
+
+:root{
+--bg:#000;
+--card:#0a0a0a;
+--card2:#101010;
+--text:#fff;
+--muted:#777;
+--line:#1c1c1c;
+--gold:#d7b56d;
+--danger:#ff4b4b;
+}
+
+*{
+box-sizing:border-box;
+}
+
+html{
+scroll-behavior:smooth;
+}
+
+body{
+margin:0;
+background:
+radial-gradient(
+circle at top,
+#0d0d0d 0,
+#000 50%
+);
+color:var(--text);
+font-family:'Montserrat',sans-serif;
+min-height:100vh;
+}
+
+/* =====================================================
+NAV
+===================================================== */
+
+nav{
+
+display:flex;
+justify-content:space-between;
+align-items:center;
+
+padding:20px 60px;
+
+border-bottom:1px solid var(--line);
+
+background:rgba(0,0,0,.86);
+
+backdrop-filter:blur(16px);
+
+position:sticky;
+
+top:0;
+
+z-index:1000;
+
+}
+
+.logo{
+
+font-family:'Playfair Display',serif;
+
+font-size:22px;
+
+letter-spacing:6px;
+
+}
+
+.nav-links{
+
+display:flex;
+
+align-items:center;
+
+gap:22px;
+
+}
+
+.nav-links a{
+
+color:#777;
+
+text-decoration:none;
+
+font-size:13px;
+
+position:relative;
+
+transition:.25s;
+
+}
+
+.nav-links a:hover{
+
+color:#fff;
+
+}
+
+.nav-links a.active{
+
+color:#fff;
+
+}
+
+.nav-links a::after{
+
+content:"";
+
+position:absolute;
+
+left:0;
+
+bottom:-6px;
+
+width:0;
+
+height:1px;
+
+background:#fff;
+
+transition:.25s;
+
+}
+
+.nav-links a:hover::after,
+.nav-links a.active::after{
+
+width:100%;
+
+}
+
+.nav-badge{
+
+display:inline-flex;
+
+align-items:center;
+
+justify-content:center;
+
+min-width:18px;
+
+height:18px;
+
+padding:0 5px;
+
+border-radius:20px;
+
+background:#fff;
+
+color:#000;
+
+font-size:10px;
+
+margin-left:4px;
+
+}
+
+/* =====================================================
+PAGE
+===================================================== */
+
+.page{
+
+padding:55px 60px 80px;
+
+}
+
+.header{
+
+display:flex;
+
+justify-content:space-between;
+
+align-items:flex-end;
+
+gap:25px;
+
+margin-bottom:35px;
+
+}
+
+.eyebrow{
+
+color:#555;
+
+font-size:10px;
+
+letter-spacing:3px;
+
+text-transform:uppercase;
+
+margin-bottom:8px;
+
+}
+
+h1{
+
+margin:0;
+
+font-family:'Playfair Display',serif;
+
+font-size:44px;
+
+}
+
+.subtitle{
+
+color:#666;
+
+font-size:12px;
+
+margin-top:10px;
+
+}
+
+.header-actions{
+
+display:flex;
+
+gap:10px;
+
+flex-wrap:wrap;
+
+}
+
+/* =====================================================
+BUTTONS
+===================================================== */
+
+.btn{
+
+border:1px solid #333;
+
+background:#111;
+
+color:#fff;
+
+padding:11px 17px;
+
+border-radius:7px;
+
+cursor:pointer;
+
+font-family:'Montserrat',sans-serif;
+
+font-size:11px;
+
+transition:.25s;
+
+}
+
+.btn:hover{
+
+background:#fff;
+
+color:#000;
+
+border-color:#fff;
+
+}
+
+.btn-light{
+
+background:#fff;
+
+color:#000;
+
+border-color:#fff;
+
+}
+
+.btn-light:hover{
+
+background:#ddd;
+
+}
+
+.btn-danger{
+
+color:#ff7777;
+
+}
+
+.btn-danger:hover{
+
+background:var(--danger);
+
+color:#fff;
+
+border-color:var(--danger);
+
+}
+
+/* =====================================================
+COMPARE
+===================================================== */
+
+.compare-wrapper{
+
+width:100%;
+
+overflow-x:auto;
+
+border:1px solid var(--line);
+
+border-radius:16px;
+
+background:#050505;
+
+box-shadow:
+0 30px 80px rgba(0,0,0,.35);
+
+}
+
+.compare-table{
+
+width:100%;
+
+min-width:1000px;
+
+border-collapse:collapse;
+
+table-layout:fixed;
+
+}
+
+.compare-table th,
+.compare-table td{
+
+border-bottom:1px solid var(--line);
+
+border-right:1px solid var(--line);
+
+padding:20px;
+
+vertical-align:top;
+
+}
+
+.compare-table th:last-child,
+.compare-table td:last-child{
+
+border-right:0;
+
+}
+
+.compare-table tr:last-child td{
+
+border-bottom:0;
+
+}
+
+.feature-cell{
+
+width:180px;
+
+background:#080808;
+
+color:#666;
+
+font-size:10px;
+
+text-transform:uppercase;
+
+letter-spacing:1px;
+
+font-weight:500;
+
+vertical-align:middle !important;
+
+}
+
+.product-cell{
+
+width:280px;
+
+background:#080808;
+
+}
+
+/* =====================================================
+PRODUCT IMAGE
+===================================================== */
+
+.product-image-wrap{
+
+position:relative;
+
+height:300px;
+
+background:#0d0d0d;
+
+border-radius:12px;
+
+overflow:hidden;
+
+margin-bottom:18px;
+
+}
+
+.product-image{
+
+width:100%;
+
+height:100%;
+
+object-fit:cover;
+
+display:block;
+
+transition:.4s;
+
+}
+
+.product-image-wrap:hover .product-image{
+
+transform:scale(1.04);
+
+}
+
+.no-image{
+
+height:100%;
+
+display:flex;
+
+align-items:center;
+
+justify-content:center;
+
+color:#333;
+
+font-size:11px;
+
+letter-spacing:2px;
+
+}
+
+/* =====================================================
+PRODUCT INFO
+===================================================== */
+
+.product-name{
+
+font-family:'Playfair Display',serif;
+
+font-size:21px;
+
+margin-bottom:7px;
+
+}
+
+.product-brand{
+
+font-size:10px;
+
+color:#666;
+
+margin-bottom:10px;
+
+}
+
+.product-price{
+
+font-size:16px;
+
+color:#fff;
+
+}
+
+.product-remove{
+
+margin-top:16px;
+
+width:100%;
+
+padding:10px;
+
+background:transparent;
+
+border:1px solid #2b2b2b;
+
+color:#777;
+
+border-radius:6px;
+
+cursor:pointer;
+
+font-size:10px;
+
+transition:.25s;
+
+}
+
+.product-remove:hover{
+
+border-color:var(--danger);
+
+color:var(--danger);
+
+}
+
+/* =====================================================
+VALUES
+===================================================== */
+
+.value{
+
+font-size:13px;
+
+color:#ddd;
+
+line-height:1.7;
+
+}
+
+.value.muted{
+
+color:#444;
+
+}
+
+/* =====================================================
+RATING
+===================================================== */
+
+.rating{
+
+color:var(--gold);
+
+font-size:13px;
+
+letter-spacing:1px;
+
+}
+
+.rating-number{
+
+color:#777;
+
+margin-left:6px;
+
+letter-spacing:0;
+
+}
+
+/* =====================================================
+COLORS
+===================================================== */
+
+.color-list{
+
+display:flex;
+
+flex-wrap:wrap;
+
+gap:8px;
+
+}
+
+.color-item{
+
+display:inline-flex;
+
+align-items:center;
+
+gap:7px;
+
+padding:6px 9px;
+
+background:#0c0c0c;
+
+border:1px solid #222;
+
+border-radius:20px;
+
+font-size:10px;
+
+color:#aaa;
+
+}
+
+.color-dot{
+
+width:13px;
+
+height:13px;
+
+border-radius:50%;
+
+border:1px solid #555;
+
+display:inline-block;
+
+}
+
+/* =====================================================
+SIZES
+===================================================== */
+
+.size-list{
+
+display:flex;
+
+flex-wrap:wrap;
+
+gap:7px;
+
+}
+
+.size-item{
+
+padding:7px 10px;
+
+background:#0c0c0c;
+
+border:1px solid #292929;
+
+border-radius:6px;
+
+font-size:10px;
+
+color:#aaa;
+
+}
+
+.size-item.out{
+
+color:#444;
+
+text-decoration:line-through;
+
+}
+
+/* =====================================================
+EMPTY
+===================================================== */
+
+.empty{
+
+min-height:500px;
+
+display:flex;
+
+align-items:center;
+
+justify-content:center;
+
+text-align:center;
+
+padding:40px 20px;
+
+}
+
+.empty-box{
+
+max-width:500px;
+
+}
+
+.empty-icon{
+
+font-size:45px;
+
+color:#333;
+
+margin-bottom:15px;
+
+}
+
+.empty h2{
+
+font-family:'Playfair Display',serif;
+
+font-size:30px;
+
+margin:0 0 10px;
+
+}
+
+.empty p{
+
+color:#666;
+
+font-size:12px;
+
+line-height:1.8;
+
+margin-bottom:25px;
+
+}
+
+/* =====================================================
+NOTE
+===================================================== */
+
+.note{
+
+padding:18px 20px;
+
+color:#555;
+
+font-size:11px;
+
+border-top:1px solid var(--line);
+
+}
+
+/* =====================================================
+TOAST
+===================================================== */
+
+.toast{
+
+position:fixed;
+
+right:25px;
+
+bottom:25px;
+
+background:#111;
+
+color:#fff;
+
+border:1px solid #333;
+
+padding:13px 18px;
+
+border-radius:8px;
+
+font-size:11px;
+
+opacity:0;
+
+transform:translateY(15px);
+
+pointer-events:none;
+
+transition:.3s;
+
+z-index:5000;
+
+}
+
+.toast.show{
+
+opacity:1;
+
+transform:translateY(0);
+
+}
+
+/* =====================================================
+RESPONSIVE
+===================================================== */
+
+@media(max-width:800px){
+
+nav{
+
+padding:18px 25px;
+
+flex-direction:column;
+
+gap:15px;
+
+}
+
+.nav-links{
+
+gap:15px;
+
+flex-wrap:wrap;
+
+justify-content:center;
+
+}
+
+.page{
+
+padding:35px 20px 60px;
+
+}
+
+.header{
+
+align-items:flex-start;
+
+flex-direction:column;
+
+}
+
+h1{
+
+font-size:34px;
+
+}
+
+.compare-wrapper{
+
+border-radius:12px;
+
+}
+
+}
+
+@media(max-width:500px){
+
+.product-image-wrap{
+
+height:230px;
+
+}
+
+.header-actions{
+
+width:100%;
+
+}
+
+.header-actions .btn{
+
+flex:1;
+
+}
+
+}
+
+/* =====================================================
+SCROLLBAR
+===================================================== */
+
+::-webkit-scrollbar{
+
+width:8px;
+
+height:8px;
+
+}
+
+::-webkit-scrollbar-track{
+
+background:#050505;
+
+}
+
+::-webkit-scrollbar-thumb{
+
+background:#222;
+
+border-radius:20px;
+
+}
+
+::-webkit-scrollbar-thumb:hover{
+
+background:#333;
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<!-- =====================================================
+NAV
+===================================================== -->
+
+<nav>
+
+<div class="logo">
+VANTA
+</div>
+
+<div class="nav-links">
+
+<a href="index.html">
+Home
+</a>
+
+<a href="shop.html">
+Shop
+</a>
+
+<a href="cart.html">
+Cart
+<span id="cartCount" class="nav-badge">0</span>
+</a>
+
+<a href="compare.html" class="active">
+Compare
+</a>
+
+</div>
+
+</nav>
+
+
+<!-- =====================================================
+PAGE
+===================================================== -->
+
+<main class="page">
+
+<div class="header">
+
+<div>
+
+<div class="eyebrow">
+VANTA / COMPARISON
+</div>
+
+<h1>
+Compare Products
+</h1>
+
+<div
+class="subtitle"
+id="compareSubtitle"
+>
+Compare your selected products side by side.
+</div>
+
+</div>
+
+<div class="header-actions">
+
+<button
+class="btn"
+id="backShop"
+type="button"
+>
+← Back to Shop
+</button>
+
+<button
+class="btn btn-danger"
+id="clearAll"
+type="button"
+>
+Clear All
+</button>
+
+</div>
+
+</div>
+
+<div id="compareContent"></div>
+
+</main>
+
+
+<div
+id="toast"
+class="toast"
+></div>
+
+
+<script>
+
+/* =====================================================
+STORAGE
+===================================================== */
+
+const STORAGE_KEY = "compareProducts";
+
+let compareProducts = [];
+
+
+/* =====================================================
+HELPERS
+===================================================== */
+
+function escapeHTML(value){
+
+if(value === null || value === undefined){
+
+return "";
+
+}
+
+return String(value)
+
+.replace(/&/g,"&amp;")
+
+.replace(/</g,"&lt;")
+
+.replace(/>/g,"&gt;")
+
+.replace(/"/g,"&quot;")
+
+.replace(/'/g,"&#039;");
+
+}
+
+
+function safeNumber(value){
+
+const number = Number(value);
+
+return Number.isFinite(number)
+? number
+: 0;
+
+}
+
+
+/* =====================================================
+PRODUCT COLORS
+===================================================== */
+
+function getProductColors(product){
+
+if(!Array.isArray(product.colors)){
+
+return [];
+
+}
+
+return product.colors;
+
+}
+
+
+/* =====================================================
+GET COLOR NAMES
+===================================================== */
+
+function getColorNames(product){
+
+return getProductColors(product)
+
+.map(color => color?.name)
+
+.filter(Boolean);
+
+}
+
+
+/* =====================================================
+GET SIZES
+===================================================== */
+
+function getProductSizes(product){
+
+const sizes = new Map();
+
+getProductColors(product).forEach(color => {
+
+if(!color || !color.sizes){
+
+return;
+
+}
+
+Object.entries(color.sizes).forEach(
+([size,quantity]) => {
+
+if(!sizes.has(size)){
+
+sizes.set(
+size,
+Number(quantity) || 0
+);
+
+}else{
+
+sizes.set(
+size,
+Math.max(
+sizes.get(size),
+Number(quantity) || 0
+)
+);
+
+}
+
+});
+
+});
+
+return [...sizes.entries()];
+
+}
+
+
+/* =====================================================
+RATING
+===================================================== */
+
+function renderRating(product){
+
+const rating =
+safeNumber(product.rating);
+
+if(rating <= 0){
+
+return `
+<div class="value muted">
+No rating
+</div>
+`;
+
+}
+
+const rounded =
+Math.max(
+0,
+Math.min(
+5,
+Math.round(rating)
+)
+);
+
+return `
+
+<div class="rating">
+
+${"★".repeat(rounded)}
+${"☆".repeat(5-rounded)}
+
+<span class="rating-number">
+${rating.toFixed(1)}
+</span>
+
+</div>
+
+`;
+
+}
+
+
+/* =====================================================
+COLORS HTML
+===================================================== */
+
+function renderColors(product){
+
+const colors =
+getProductColors(product);
+
+if(!colors.length){
+
+return `
+<div class="value muted">
+—
+</div>
+`;
+
+}
+
+return `
+
+<div class="color-list">
+
+${colors.map(color => {
+
+const name =
+color?.name || "Color";
+
+const hex =
+color?.hex || "#777";
+
+return `
+
+<div class="color-item">
+
+<span
+class="color-dot"
+style="background:${escapeHTML(hex)}"
+></span>
+
+${escapeHTML(name)}
+
+</div>
+
+`;
+
+}).join("")}
+
+</div>
+
+`;
+
+}
+
+
+/* =====================================================
+SIZES HTML
+===================================================== */
+
+function renderSizes(product){
+
+const sizes =
+getProductSizes(product);
+
+if(!sizes.length){
+
+return `
+<div class="value muted">
+—
+</div>
+`;
+
+}
+
+return `
+
+<div class="size-list">
+
+${sizes.map(
+([size,quantity]) => {
+
+const out =
+quantity <= 0;
+
+return `
+
+<div
+class="size-item ${out ? "out" : ""}"
+title="${
+out
+? "Out of stock"
+: `${quantity} available`
+}"
+>
+
+${escapeHTML(size)}
+
+</div>
+
+`;
+
+}).join("")}
+
+</div>
+
+`;
+
+}
+
+
+/* =====================================================
+TOAST
+===================================================== */
+
+function showToast(message){
+
+const toast =
+document.getElementById("toast");
+
+toast.innerText =
+message;
+
+toast.classList.add("show");
+
+clearTimeout(
+window.toastTimer
+);
+
+window.toastTimer =
+setTimeout(() => {
+
+toast.classList.remove("show");
+
+},2200);
+
+}
+
+
+/* =====================================================
+LOAD
+===================================================== */
+
+function loadCompare(){
+
+try{
+
+const stored =
+localStorage.getItem(
+STORAGE_KEY
+);
+
+const parsed =
+stored
+? JSON.parse(stored)
+: [];
+
+compareProducts =
+Array.isArray(parsed)
+? parsed
+: [];
+
+}catch(error){
+
+console.error(
+"Compare loading error:",
+error
+);
+
+compareProducts = [];
+
+}
+
+renderCompare();
+
+}
+
+
+/* =====================================================
+SAVE
+===================================================== */
+
+function saveCompare(){
+
+localStorage.setItem(
+STORAGE_KEY,
+JSON.stringify(compareProducts)
+);
+
+}
+
+
+/* =====================================================
+ROW
+===================================================== */
+
+function createRow(
+label,
+renderer
+){
+
+return `
+
+<tr>
+
+<td class="feature-cell">
+
+${escapeHTML(label)}
+
+</td>
+
+${compareProducts.map(
+product => {
+
+return `
+
+<td>
+
+${renderer(product)}
+
+</td>
+
+`;
+
+}).join("")}
+
+</tr>
+
+`;
+
+}
+
+
+/* =====================================================
+RENDER
+===================================================== */
+
+function renderCompare(){
+
+const container =
+document.getElementById(
+"compareContent"
+);
+
+const subtitle =
+document.getElementById(
+"compareSubtitle"
+);
+
+
+/* EMPTY */
+
+if(!compareProducts.length){
+
+subtitle.innerText =
+"No products selected.";
+
+container.innerHTML = `
+
+<div class="empty">
+
+<div class="empty-box">
+
+<div class="empty-icon">
+⇄
+</div>
+
+<h2>
+Nothing to Compare
+</h2>
+
+<p>
+Select products from the shop using the compare button and return here.
+</p>
+
+<button
+class="btn btn-light"
+type="button"
+id="browseProducts"
+>
+Browse Products
+</button>
+
+</div>
+
+</div>
+
+`;
+
+document
+.getElementById("browseProducts")
+.onclick =
+goToShop;
+
+return;
+
+}
+
+
+/* LIMIT */
+
+if(compareProducts.length > 4){
+
+compareProducts =
+compareProducts.slice(0,4);
+
+saveCompare();
+
+}
+
+
+/* SUBTITLE */
+
+subtitle.innerText =
+`${compareProducts.length} product${
+compareProducts.length === 1
+? ""
+: "s"
+} selected`;
+
+
+/* =====================================================
+PRODUCT HEADER
+===================================================== */
+
+const productHeaders =
+compareProducts.map(product => {
+
+const image =
+product.image || "";
+
+return `
+
+<td class="product-cell">
+
+<div class="product-image-wrap">
+
+${
+image
+
+? `
+
+<img
+class="product-image"
+src="${escapeHTML(image)}"
+alt="${escapeHTML(product.name || "Product")}"
+loading="lazy"
+onerror="
+this.style.display='none';
+this.parentElement.querySelector('.no-image').style.display='flex';
+"
+>
+
+<div
+class="no-image"
+style="display:none"
+>
+NO IMAGE
+</div>
+
+`
+
+: `
+
+<div class="no-image">
+NO IMAGE
+</div>
+
+`
+
+}
+
+</div>
+
+
+<div class="product-name">
+
+${escapeHTML(
+product.name || "Unnamed Product"
+)}
+
+</div>
+
+
+${
+product.brand
+
+? `
+
+<div class="product-brand">
+
+${escapeHTML(product.brand)}
+
+</div>
+
+`
+
+: ""
+
+}
+
+
+<div class="product-price">
+
+${escapeHTML(
+product.price ?? "—"
+)}
+
+ EGP
+
+</div>
+
+
+<button
+class="product-remove"
+type="button"
+data-remove-id="${escapeHTML(product.id)}"
+>
+
+Remove
+
+</button>
+
+</td>
+
+`;
+
+}).join("");
+
+
+/* =====================================================
+TABLE
+===================================================== */
+
+container.innerHTML = `
+
+<div class="compare-wrapper">
+
+<table class="compare-table">
+
+<thead>
+
+<tr>
+
+<th class="feature-cell">
+Product
+</th>
+
+${productHeaders}
+
+</tr>
+
+</thead>
+
+
+<tbody>
+
+
+${createRow(
+"Price",
+product => `
+
+<div class="value">
+
+${escapeHTML(
+product.price ?? "—"
+)}
+ EGP
+
+</div>
+
+`
+)}
+
+
+${createRow(
+"Brand",
+product => {
+
+const value =
+product.brand || "";
+
+return `
+
+<div class="value ${
+value ? "" : "muted"
+}">
+
+${escapeHTML(
+value || "—"
+)}
+
+</div>
+
+`;
+
+}
+)}
+
+
+${createRow(
+"Category",
+product => {
+
+const value =
+product.category || "";
+
+return `
+
+<div class="value ${
+value ? "" : "muted"
+}">
+
+${escapeHTML(
+value || "—"
+)}
+
+</div>
+
+`;
+
+}
+)}
+
+
+${createRow(
+"Material",
+product => {
+
+const value =
+product.material || "";
+
+return `
+
+<div class="value ${
+value ? "" : "muted"
+}">
+
+${escapeHTML(
+value || "—"
+)}
+
+</div>
+
+`;
+
+}
+)}
+
+
+${createRow(
+"Rating",
+product =>
+renderRating(product)
+)}
+
+
+${createRow(
+"Colors",
+product =>
+renderColors(product)
+)}
+
+
+${createRow(
+"Sizes",
+product =>
+renderSizes(product)
+)}
+
+
+</tbody>
+
+</table>
+
+
+<div class="note">
+
+Product information, colors and available sizes are loaded from the product data saved by the Shop page.
+
+</div>
+
+</div>
+
+`;
+
+
+/* =====================================================
+REMOVE
+===================================================== */
+
+container
+.querySelectorAll(
+"[data-remove-id]"
+)
+.forEach(button => {
+
+button.addEventListener(
+"click",
+() => {
+
+removeProduct(
+button.dataset.removeId
+);
+
+}
+);
+
+});
+
+}
+
+
+/* =====================================================
+REMOVE PRODUCT
+===================================================== */
+
+function removeProduct(id){
+
+compareProducts =
+compareProducts.filter(
+product =>
+String(product.id) !==
+String(id)
+);
+
+saveCompare();
+
+renderCompare();
+
+showToast(
+"Product removed"
+);
+
+}
+
+
+/* =====================================================
+CLEAR ALL
+===================================================== */
+
+document
+.getElementById("clearAll")
+.addEventListener(
+"click",
+() => {
+
+if(!compareProducts.length){
+
+showToast(
+"Comparison is already empty"
+);
+
+return;
+
+}
+
+compareProducts = [];
+
+saveCompare();
+
+renderCompare();
+
+showToast(
+"Comparison cleared"
+);
+
+}
+);
+
+
+/* =====================================================
+BACK TO SHOP
+===================================================== */
+
+function goToShop(){
+
+window.location.href =
+"shop.html";
+
+}
+
+document
+.getElementById("backShop")
+.addEventListener(
+"click",
+goToShop
+);
+
+
+/* =====================================================
+CART COUNT
+===================================================== */
+
+function updateCartCount(){
+
+let cart = [];
+
+try{
+
+cart =
+JSON.parse(
+localStorage.getItem("cart")
+) || [];
+
+}catch(error){
+
+cart = [];
+
+}
+
+const count =
+cart.reduce(
+(total,item) =>
+total +
+Number(item.qty || 1),
+0
+);
+
+const badge =
+document.getElementById(
+"cartCount"
+);
+
+if(badge){
+
+badge.innerText =
+count > 99
+? "99+"
+: count;
+
+}
+
+}
+
+
+/* =====================================================
+START
+===================================================== */
+
+updateCartCount();
+
+loadCompare();
+
+</script>
+
+</body>
+
+</html>

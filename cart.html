@@ -1,333 +1,1825 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>VANTA Cart</title>
-
-<!-- ✅ مهم للموبايل -->
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600&family=Montserrat:wght@300;500&display=swap" rel="stylesheet">
+<title>VANTA Cart</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
 
 <style>
+
+:root{
+    --bg:#000;
+    --panel:#0b0b0b;
+    --panel2:#101010;
+    --line:#202020;
+    --text:#fff;
+    --muted:#888;
+    --gold:#d7b56d;
+}
+
+*{
+    box-sizing:border-box;
+}
+
 body{
-margin:0;
-background:#000;
-color:#fff;
-font-family:'Montserrat';
-overflow-x:hidden; /* ✅ منع اسكرول جانبي */
+    margin:0;
+    background:
+        radial-gradient(
+            circle at 50% -20%,
+            #181818 0,
+            #050505 35%,
+            #000 65%
+        );
+    color:var(--text);
+    font-family:'Montserrat',sans-serif;
+    min-height:100vh;
+    overflow-x:hidden;
 }
 
-/* OVERLAY */
-.overlay{
-position:fixed;
-top:0;
-left:0;
-width:100%;
-height:100%;
-background:rgba(0,0,0,0.85);
-backdrop-filter:blur(8px);
-display:flex;
-justify-content:center;
-align-items:center;
-padding:15px; /* ✅ علشان الموبايل */
+/* =========================
+BACKGROUND
+========================= */
+
+body::before{
+    content:"";
+    position:fixed;
+    width:500px;
+    height:500px;
+    left:-250px;
+    top:-250px;
+    background:radial-gradient(
+        circle,
+        rgba(255,255,255,.055),
+        transparent 70%
+    );
+    filter:blur(30px);
+    pointer-events:none;
 }
 
-/* POPUP */
-.cart-box{
-width:520px;
-max-height:85vh;
-background:#111;
-border-radius:20px;
-padding:25px;
-display:flex;
-flex-direction:column;
-animation:fadeIn 0.4s ease;
+body::after{
+    content:"";
+    position:fixed;
+    width:450px;
+    height:450px;
+    right:-250px;
+    bottom:-250px;
+    background:radial-gradient(
+        circle,
+        rgba(255,255,255,.04),
+        transparent 70%
+    );
+    filter:blur(30px);
+    pointer-events:none;
 }
 
-@keyframes fadeIn{
-from{transform:scale(0.9);opacity:0}
-to{transform:scale(1);opacity:1}
+/* =========================
+NAV
+========================= */
+
+nav{
+    height:76px;
+    padding:0 60px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    border-bottom:1px solid var(--line);
+    background:rgba(0,0,0,.72);
+    backdrop-filter:blur(16px);
+    position:sticky;
+    top:0;
+    z-index:100;
 }
 
-h2{
-font-family:'Playfair Display';
-margin-bottom:15px;
+.logo{
+    font-family:'Playfair Display',serif;
+    font-size:23px;
+    letter-spacing:7px;
 }
 
-/* ITEMS */
-.items{
-flex:1;
-overflow-y:auto;
+.nav-links{
+    display:flex;
+    align-items:center;
+    gap:25px;
 }
+
+.nav-links a{
+    color:#888;
+    text-decoration:none;
+    font-size:12px;
+    transition:.25s;
+}
+
+.nav-links a:hover{
+    color:#fff;
+}
+
+.cart-link{
+    color:#fff !important;
+}
+
+/* =========================
+PAGE
+========================= */
+
+.page{
+    width:min(1200px,calc(100% - 40px));
+    margin:auto;
+    padding:60px 0 90px;
+}
+
+.page-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:flex-end;
+    margin-bottom:35px;
+}
+
+.page-title{
+    margin:0;
+    font-family:'Playfair Display',serif;
+    font-size:42px;
+    letter-spacing:2px;
+}
+
+.page-subtitle{
+    margin:8px 0 0;
+    color:#777;
+    font-size:12px;
+}
+
+.item-count{
+    color:#777;
+    font-size:12px;
+}
+
+/* =========================
+LAYOUT
+========================= */
+
+.cart-layout{
+    display:grid;
+    grid-template-columns:minmax(0,1fr) 390px;
+    gap:30px;
+    align-items:start;
+}
+
+/* =========================
+ITEMS PANEL
+========================= */
+
+.items-panel{
+    background:rgba(10,10,10,.72);
+    border:1px solid var(--line);
+    border-radius:18px;
+    overflow:hidden;
+}
+
+.panel-head{
+    padding:20px 22px;
+    border-bottom:1px solid var(--line);
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+}
+
+.panel-head h3{
+    margin:0;
+    font-size:13px;
+    letter-spacing:1px;
+    text-transform:uppercase;
+}
+
+.panel-head span{
+    color:#666;
+    font-size:11px;
+}
+
+/* =========================
+ITEM
+========================= */
 
 .item{
-display:flex;
-gap:15px;
-margin-bottom:15px;
-border-bottom:1px solid #222;
-padding-bottom:10px;
+    display:grid;
+    grid-template-columns:115px minmax(0,1fr);
+    gap:20px;
+    padding:22px;
+    border-bottom:1px solid #181818;
+    transition:.25s;
+}
+
+.item:last-child{
+    border-bottom:0;
+}
+
+.item:hover{
+    background:#0d0d0d;
+}
+
+.item-image-wrap{
+    position:relative;
 }
 
 .item img{
-width:70px;
-height:70px;
-border-radius:10px;
-object-fit:cover;
+    width:115px;
+    height:145px;
+    object-fit:cover;
+    border-radius:12px;
+    background:#111;
+    display:block;
 }
 
-.info{
-flex:1;
+.item-info{
+    min-width:0;
 }
 
-/* SIZE */
-.size{
-margin-top:5px;
+.item-top{
+    display:flex;
+    justify-content:space-between;
+    gap:20px;
 }
 
-.size select{
-background:#000;
-color:#fff;
-border:1px solid #333;
-padding:5px;
-outline:none;
+.item-name{
+    margin:0;
+    font-family:'Playfair Display',serif;
+    font-size:19px;
 }
 
-/* QTY */
+.item-brand{
+    color:#666;
+    font-size:10px;
+    margin-top:5px;
+    letter-spacing:1px;
+    text-transform:uppercase;
+}
+
+.item-price{
+    font-size:15px;
+    white-space:nowrap;
+}
+
+.item-meta{
+    display:flex;
+    flex-wrap:wrap;
+    gap:8px;
+    margin-top:13px;
+}
+
+.meta-pill{
+    padding:6px 9px;
+    border:1px solid #252525;
+    background:#080808;
+    color:#999;
+    border-radius:5px;
+    font-size:10px;
+}
+
+.color-dot{
+    display:inline-block;
+    width:8px;
+    height:8px;
+    border-radius:50%;
+    margin-right:5px;
+    vertical-align:middle;
+    border:1px solid #555;
+}
+
+.item-actions{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-top:25px;
+}
+
+/* =========================
+QTY
+========================= */
+
 .qty{
-display:flex;
-gap:10px;
-align-items:center;
-margin-top:5px;
+    display:flex;
+    align-items:center;
+    border:1px solid #292929;
+    border-radius:7px;
+    overflow:hidden;
+    background:#050505;
 }
 
 .qty button{
-background:#222;
-border:none;
-color:#fff;
-padding:5px 10px;
-cursor:pointer;
-transition:0.2s;
+    width:34px;
+    height:32px;
+    border:0;
+    background:#111;
+    color:#fff;
+    cursor:pointer;
+    font-size:15px;
+    transition:.2s;
 }
 
 .qty button:hover{
-background:#fff;
-color:#000;
+    background:#fff;
+    color:#000;
 }
 
-/* REMOVE */
+.qty span{
+    width:35px;
+    text-align:center;
+    font-size:11px;
+    color:#ddd;
+}
+
+/* =========================
+REMOVE
+========================= */
+
 .remove{
-background:none;
-border:none;
-color:#888;
-cursor:pointer;
-font-size:12px;
-margin-top:5px;
+    border:0;
+    background:none;
+    color:#666;
+    font-size:10px;
+    cursor:pointer;
+    transition:.2s;
 }
 
 .remove:hover{
-color:#fff;
+    color:#fff;
 }
 
-/* TOTAL */
-.total{
-margin-top:10px;
-font-size:18px;
+/* =========================
+SIZE
+========================= */
+
+.size-select{
+    background:#050505;
+    color:#fff;
+    border:1px solid #292929;
+    border-radius:5px;
+    padding:6px 9px;
+    outline:none;
+    font-size:10px;
 }
 
-/* ACTIONS */
-.actions{
-display:flex;
-gap:10px;
-margin-top:15px;
+/* =========================
+SUMMARY
+========================= */
+
+.summary{
+    background:#0b0b0b;
+    border:1px solid var(--line);
+    border-radius:18px;
+    padding:25px;
+    position:sticky;
+    top:100px;
 }
 
-.actions button{
-flex:1;
-padding:12px;
-border:none;
-cursor:pointer;
-transition:0.3s;
-font-weight:bold;
+.summary-title{
+    margin:0 0 25px;
+    font-family:'Playfair Display',serif;
+    font-size:24px;
 }
+
+/* =========================
+FREE SHIPPING
+========================= */
+
+.shipping-box{
+    background:#101010;
+    border:1px solid #1d1d1d;
+    border-radius:10px;
+    padding:15px;
+    margin-bottom:22px;
+}
+
+.shipping-text{
+    color:#aaa;
+    font-size:10px;
+    line-height:1.6;
+}
+
+.shipping-text strong{
+    color:#fff;
+}
+
+.progress{
+    height:4px;
+    background:#242424;
+    border-radius:20px;
+    margin-top:12px;
+    overflow:hidden;
+}
+
+.progress-bar{
+    width:0%;
+    height:100%;
+    background:#fff;
+    transition:.4s;
+}
+
+/* =========================
+PROMO
+========================= */
+
+.promo-title{
+    color:#777;
+    font-size:10px;
+    text-transform:uppercase;
+    letter-spacing:1px;
+    margin-bottom:8px;
+}
+
+.promo{
+    display:flex;
+    gap:7px;
+    margin-bottom:25px;
+}
+
+.promo input{
+    flex:1;
+    min-width:0;
+    background:#050505;
+    border:1px solid #292929;
+    color:#fff;
+    padding:11px;
+    border-radius:6px;
+    outline:none;
+    font-family:inherit;
+    font-size:11px;
+}
+
+.promo input:focus{
+    border-color:#555;
+}
+
+.promo button{
+    background:#fff;
+    color:#000;
+    border:0;
+    padding:0 15px;
+    border-radius:6px;
+    cursor:pointer;
+    font-size:10px;
+    font-weight:600;
+}
+
+.promo-message{
+    color:#888;
+    font-size:10px;
+    margin-top:-17px;
+    margin-bottom:18px;
+    min-height:12px;
+}
+
+/* =========================
+TOTALS
+========================= */
+
+.totals{
+    border-top:1px solid #202020;
+    padding-top:18px;
+}
+
+.row{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:13px;
+    font-size:11px;
+}
+
+.row span:first-child{
+    color:#777;
+}
+
+.row.discount span:last-child{
+    color:#aaa;
+}
+
+.row.total-row{
+    margin-top:18px;
+    padding-top:17px;
+    border-top:1px solid #252525;
+}
+
+.row.total-row span{
+    color:#fff;
+}
+
+.row.total-row span:last-child{
+    font-size:18px;
+}
+
+/* =========================
+CHECKOUT
+========================= */
 
 .checkout{
-background:#fff;
-color:#000;
+    width:100%;
+    margin-top:20px;
+    padding:15px;
+    border:0;
+    border-radius:8px;
+    background:#fff;
+    color:#000;
+    cursor:pointer;
+    font-size:11px;
+    font-weight:600;
+    letter-spacing:1px;
+    transition:.25s;
 }
 
 .checkout:hover{
-background:#ccc;
+    background:#ddd;
+    transform:translateY(-2px);
 }
 
-.close{
-background:#222;
-color:#fff;
+.continue{
+    width:100%;
+    margin-top:9px;
+    padding:13px;
+    border:1px solid #292929;
+    border-radius:8px;
+    background:#111;
+    color:#fff;
+    cursor:pointer;
+    font-size:10px;
+    transition:.25s;
 }
 
-.close:hover{
-background:#444;
+.continue:hover{
+    border-color:#555;
 }
 
-/* ===== 📱 MOBILE RESPONSIVE ===== */
-@media (max-width:768px){
+/* =========================
+TRUST
+========================= */
 
-.cart-box{
-width:100%;
-max-height:90vh;
-padding:20px;
-border-radius:15px;
+.trust{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:7px;
+    margin-top:18px;
 }
 
-h2{
-font-size:20px;
-text-align:center;
+.trust-item{
+    text-align:center;
+    border:1px solid #191919;
+    background:#080808;
+    border-radius:7px;
+    padding:11px 5px;
 }
 
-.item{
-gap:10px;
+.trust-icon{
+    display:block;
+    margin-bottom:5px;
+    font-size:13px;
 }
 
-.item img{
-width:60px;
-height:60px;
+.trust-item span:last-child{
+    color:#666;
+    font-size:8px;
 }
 
-.qty{
-gap:6px;
+/* =========================
+EMPTY CART
+========================= */
+
+.empty{
+    padding:80px 25px;
+    text-align:center;
 }
 
-.qty button{
-padding:4px 8px;
+.empty-icon{
+    width:65px;
+    height:65px;
+    margin:0 auto 22px;
+    border:1px solid #292929;
+    border-radius:50%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    color:#666;
+    font-size:22px;
 }
 
-.total{
-font-size:16px;
-text-align:center;
+.empty h2{
+    margin:0;
+    font-family:'Playfair Display',serif;
+    font-size:27px;
 }
 
-.actions{
-flex-direction:column;
+.empty p{
+    color:#666;
+    font-size:11px;
+    margin:10px 0 25px;
 }
 
-.actions button{
-width:100%;
+.empty button{
+    padding:13px 25px;
+    background:#fff;
+    color:#000;
+    border:0;
+    border-radius:6px;
+    cursor:pointer;
+    font-size:10px;
+    font-weight:600;
 }
 
+/* =========================
+TOAST
+========================= */
+
+.toast{
+    position:fixed;
+    left:50%;
+    bottom:25px;
+    transform:translate(-50%,20px);
+    background:#111;
+    border:1px solid #333;
+    color:#fff;
+    padding:12px 18px;
+    border-radius:7px;
+    font-size:10px;
+    opacity:0;
+    pointer-events:none;
+    transition:.3s;
+    z-index:999;
 }
+
+.toast.show{
+    opacity:1;
+    transform:translate(-50%,0);
+}
+
+/* =========================
+MOBILE
+========================= */
+
+@media(max-width:850px){
+
+    nav{
+        padding:0 20px;
+    }
+
+    .nav-links{
+        gap:14px;
+    }
+
+    .nav-links a{
+        font-size:10px;
+    }
+
+    .page{
+        width:min(100% - 24px,700px);
+        padding:35px 0 60px;
+    }
+
+    .cart-layout{
+        grid-template-columns:1fr;
+    }
+
+    .summary{
+        position:static;
+    }
+
+}
+
+@media(max-width:600px){
+
+    nav{
+        height:auto;
+        min-height:65px;
+        padding:15px 18px;
+        gap:12px;
+        flex-direction:column;
+    }
+
+    .logo{
+        font-size:19px;
+    }
+
+    .nav-links{
+        width:100%;
+        justify-content:center;
+        flex-wrap:wrap;
+    }
+
+    .page-header{
+        align-items:flex-start;
+        flex-direction:column;
+        gap:7px;
+        margin-bottom:22px;
+    }
+
+    .page-title{
+        font-size:32px;
+    }
+
+    .item{
+        grid-template-columns:82px minmax(0,1fr);
+        gap:13px;
+        padding:17px 14px;
+    }
+
+    .item img{
+        width:82px;
+        height:110px;
+    }
+
+    .item-top{
+        gap:8px;
+    }
+
+    .item-name{
+        font-size:15px;
+    }
+
+    .item-price{
+        font-size:12px;
+    }
+
+    .item-actions{
+        margin-top:18px;
+        gap:8px;
+    }
+
+    .panel-head{
+        padding:17px 14px;
+    }
+
+    .summary{
+        padding:20px 16px;
+    }
+
+    .trust-item span:last-child{
+        font-size:7px;
+    }
+
+}
+
+@media(max-width:380px){
+
+    .nav-links{
+        gap:10px;
+    }
+
+    .item{
+        grid-template-columns:70px minmax(0,1fr);
+    }
+
+    .item img{
+        width:70px;
+        height:95px;
+    }
+
+    .item-actions{
+        flex-direction:column;
+        align-items:flex-start;
+    }
+
+}
+
 </style>
 </head>
 
 <body>
 
-<div class="overlay">
+<!-- =========================
+NAV
+========================= -->
 
-<div class="cart-box">
+<nav>
 
-<h2>Your Cart</h2>
+    <div class="logo">
+        VANTA
+    </div>
 
-<div class="items" id="items"></div>
+    <div class="nav-links">
 
-<div class="total" id="total"></div>
+        <a href="index.html">
+            Home
+        </a>
 
-<div class="actions">
-<button class="checkout" onclick="goCheckout()">Checkout</button>
-<button class="close" onclick="goBack()">Continue</button>
-</div>
+        <a href="shop.html">
+            Shop
+        </a>
 
-</div>
+        <a href="cart.html" class="cart-link">
+            Cart
+        </a>
 
-</div>
+    </div>
+
+</nav>
+
+
+<!-- =========================
+PAGE
+========================= -->
+
+<main class="page">
+
+    <div class="page-header">
+
+        <div>
+
+            <h1 class="page-title">
+                Shopping Bag
+            </h1>
+
+            <p class="page-subtitle">
+                Review your selected pieces before checkout.
+            </p>
+
+        </div>
+
+        <div
+            class="item-count"
+            id="itemCount"
+        >
+            0 Items
+        </div>
+
+    </div>
+
+
+    <div class="cart-layout">
+
+
+        <!-- =========================
+        ITEMS
+        ========================= -->
+
+        <section class="items-panel">
+
+            <div class="panel-head">
+
+                <h3>
+                    Your Selection
+                </h3>
+
+                <span id="panelCount">
+                    0 items
+                </span>
+
+            </div>
+
+            <div
+                class="items"
+                id="items"
+            ></div>
+
+        </section>
+
+
+        <!-- =========================
+        SUMMARY
+        ========================= -->
+
+        <aside class="summary">
+
+            <h2 class="summary-title">
+                Order Summary
+            </h2>
+
+
+            <!-- SHIPPING -->
+
+            <div class="shipping-box">
+
+                <div
+                    class="shipping-text"
+                    id="shippingText"
+                >
+                    Add <strong>2,500 EGP</strong> to unlock FREE SHIPPING.
+                </div>
+
+                <div class="progress">
+
+                    <div
+                        class="progress-bar"
+                        id="progressBar"
+                    ></div>
+
+                </div>
+
+            </div>
+
+
+            <!-- PROMO -->
+
+            <div class="promo-title">
+                Promo Code
+            </div>
+
+            <div class="promo">
+
+                <input
+                    type="text"
+                    id="promoInput"
+                    placeholder="Enter promo code"
+                >
+
+                <button
+                    onclick="applyPromo()"
+                    type="button"
+                >
+                    APPLY
+                </button>
+
+            </div>
+
+            <div
+                class="promo-message"
+                id="promoMessage"
+            ></div>
+
+
+            <!-- TOTALS -->
+
+            <div class="totals">
+
+                <div class="row">
+
+                    <span>
+                        Subtotal
+                    </span>
+
+                    <span id="subtotal">
+                        0 EGP
+                    </span>
+
+                </div>
+
+                <div class="row">
+
+                    <span>
+                        Shipping
+                    </span>
+
+                    <span id="shipping">
+                        100 EGP
+                    </span>
+
+                </div>
+
+                <div class="row discount">
+
+                    <span>
+                        Discount
+                    </span>
+
+                    <span id="discount">
+                        -0 EGP
+                    </span>
+
+                </div>
+
+                <div class="row total-row">
+
+                    <span>
+                        Total
+                    </span>
+
+                    <span id="total">
+                        0 EGP
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <!-- ACTIONS -->
+
+            <button
+                class="checkout"
+                onclick="goCheckout()"
+                type="button"
+            >
+                PROCEED TO CHECKOUT
+            </button>
+
+            <button
+                class="continue"
+                onclick="goBack()"
+                type="button"
+            >
+                ← CONTINUE SHOPPING
+            </button>
+
+
+            <!-- TRUST -->
+
+            <div class="trust">
+
+                <div class="trust-item">
+
+                    <span class="trust-icon">
+                        🔒
+                    </span>
+
+                    <span>
+                        Secure
+                    </span>
+
+                </div>
+
+                <div class="trust-item">
+
+                    <span class="trust-icon">
+                        ↩
+                    </span>
+
+                    <span>
+                        Easy Returns
+                    </span>
+
+                </div>
+
+                <div class="trust-item">
+
+                    <span class="trust-icon">
+                        🚚
+                    </span>
+
+                    <span>
+                        Fast Delivery
+                    </span>
+
+                </div>
+
+            </div>
+
+        </aside>
+
+    </div>
+
+</main>
+
+
+<!-- TOAST -->
+
+<div
+    class="toast"
+    id="toast"
+></div>
+
 
 <script>
 
+/* =========================
+CONFIG
+========================= */
+
+const FREE_SHIPPING_LIMIT = 2500;
+const SHIPPING_COST = 100;
+
+
+/* =========================
+HELPERS
+========================= */
+
+function getCart(){
+
+    return JSON.parse(
+        localStorage.getItem("cart")
+    ) || [];
+
+}
+
+
+function saveCart(cart){
+
+    localStorage.setItem(
+        "cart",
+        JSON.stringify(cart)
+    );
+
+}
+
+
+/* =========================
+ESCAPE HTML
+========================= */
+
+function escapeHTML(value){
+
+    if(
+        value === null ||
+        value === undefined
+    ){
+
+        return "";
+
+    }
+
+    return String(value)
+        .replace(/&/g,"&amp;")
+        .replace(/</g,"&lt;")
+        .replace(/>/g,"&gt;")
+        .replace(/"/g,"&quot;")
+        .replace(/'/g,"&#039;");
+
+}
+
+
+/* =========================
+TOAST
+========================= */
+
+function showToast(message){
+
+    const toast =
+        document.getElementById("toast");
+
+    toast.innerText =
+        message;
+
+    toast.classList.add("show");
+
+    clearTimeout(
+        window.toastTimer
+    );
+
+    window.toastTimer =
+        setTimeout(() => {
+
+            toast.classList.remove(
+                "show"
+            );
+
+        },2200);
+
+}
+
+
+/* =========================
+LOAD CART
+========================= */
+
 function loadCart(){
 
-let cart = JSON.parse(localStorage.getItem("cart")) || [];
-let container = document.getElementById("items");
-let total = 0;
+    const cart =
+        getCart();
 
-container.innerHTML="";
+    const container =
+        document.getElementById("items");
 
-cart.forEach((item,index)=>{
+    container.innerHTML = "";
 
-let price = parseInt(item.p || item.price);
-let qty = item.qty || 1;
-let size = item.size || "M";
+    if(!cart.length){
 
-total += price * qty;
+        renderEmptyCart();
 
-container.innerHTML += `
-<div class="item">
-<img src="${item.img || item.image}">
-<div class="info">
+        updateSummary(
+            0
+        );
 
-<div>${item.n || item.name}</div>
-<div>${price} EGP</div>
+        return;
 
-<div class="size">
-<select onchange="changeSize(${index}, this.value)">
-<option ${size==="M"?"selected":""}>M</option>
-<option ${size==="L"?"selected":""}>L</option>
-<option ${size==="XL"?"selected":""}>XL</option>
-<option ${size==="XXL"?"selected":""}>XXL</option>
-</select>
-</div>
+    }
 
-<div class="qty">
-<button onclick="changeQty(${index},-1)">-</button>
-<span>${qty}</span>
-<button onclick="changeQty(${index},1)">+</button>
-</div>
+    let subtotal = 0;
 
-<button class="remove" onclick="removeItem(${index})">Remove</button>
+    let totalItems = 0;
 
-</div>
-</div>
-`;
 
-});
+    cart.forEach(
+        (item,index) => {
 
-document.getElementById("total").innerText = "Total: " + total + " EGP";
+            const price =
+                Number(
+                    item.price ||
+                    item.p ||
+                    0
+                );
+
+            const qty =
+                Number(
+                    item.qty || 1
+                );
+
+            subtotal +=
+                price * qty;
+
+            totalItems +=
+                qty;
+
+
+            const image =
+                item.image ||
+                item.img ||
+                "";
+
+
+            const name =
+                item.name ||
+                item.n ||
+                "Product";
+
+
+            const brand =
+                item.brand ||
+                "";
+
+
+            const color =
+                item.color ||
+                "";
+
+
+            const size =
+                item.size ||
+                "M";
+
+
+            const colorHex =
+                item.colorHex ||
+                "#777";
+
+
+            container.innerHTML += `
+
+                <div class="item">
+
+                    <div class="item-image-wrap">
+
+                        <img
+                            src="${escapeHTML(image)}"
+                            alt="${escapeHTML(name)}"
+                        >
+
+                    </div>
+
+
+                    <div class="item-info">
+
+                        <div class="item-top">
+
+                            <div>
+
+                                <h3 class="item-name">
+                                    ${escapeHTML(name)}
+                                </h3>
+
+                                ${
+                                    brand
+                                    ? `
+                                        <div class="item-brand">
+                                            ${escapeHTML(brand)}
+                                        </div>
+                                      `
+                                    : ""
+                                }
+
+                            </div>
+
+
+                            <div class="item-price">
+
+                                ${(
+                                    price * qty
+                                ).toLocaleString()} EGP
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="item-meta">
+
+                            ${
+                                color
+                                ? `
+                                    <span class="meta-pill">
+
+                                        <span
+                                            class="color-dot"
+                                            style="background:${escapeHTML(colorHex)}"
+                                        ></span>
+
+                                        ${escapeHTML(color)}
+
+                                    </span>
+                                  `
+                                : ""
+                            }
+
+
+                            <select
+                                class="size-select"
+                                onchange="changeSize(${index},this.value)"
+                            >
+
+                                <option
+                                    value="M"
+                                    ${size==="M" ? "selected" : ""}
+                                >
+                                    M
+                                </option>
+
+                                <option
+                                    value="L"
+                                    ${size==="L" ? "selected" : ""}
+                                >
+                                    L
+                                </option>
+
+                                <option
+                                    value="XL"
+                                    ${size==="XL" ? "selected" : ""}
+                                >
+                                    XL
+                                </option>
+
+                                <option
+                                    value="XXL"
+                                    ${size==="XXL" ? "selected" : ""}
+                                >
+                                    XXL
+                                </option>
+
+                            </select>
+
+                        </div>
+
+
+                        <div class="item-actions">
+
+                            <div class="qty">
+
+                                <button
+                                    onclick="changeQty(${index},-1)"
+                                    type="button"
+                                >
+                                    −
+                                </button>
+
+                                <span>
+                                    ${qty}
+                                </span>
+
+                                <button
+                                    onclick="changeQty(${index},1)"
+                                    type="button"
+                                >
+                                    +
+                                </button>
+
+                            </div>
+
+
+                            <button
+                                class="remove"
+                                onclick="removeItem(${index})"
+                                type="button"
+                            >
+                                REMOVE
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            `;
+
+        }
+    );
+
+
+    updateSummary(
+        subtotal
+    );
+
+
+    document.getElementById(
+        "itemCount"
+    ).innerText =
+        `${totalItems} ${
+            totalItems === 1
+            ? "Item"
+            : "Items"
+        }`;
+
+
+    document.getElementById(
+        "panelCount"
+    ).innerText =
+        `${totalItems} ${
+            totalItems === 1
+            ? "item"
+            : "items"
+        }`;
 
 }
 
-/* SIZE CHANGE */
-function changeSize(i,val){
-let cart = JSON.parse(localStorage.getItem("cart")) || [];
-cart[i].size = val;
-localStorage.setItem("cart", JSON.stringify(cart));
+
+/* =========================
+EMPTY CART
+========================= */
+
+function renderEmptyCart(){
+
+    document.getElementById(
+        "items"
+    ).innerHTML = `
+
+        <div class="empty">
+
+            <div class="empty-icon">
+                🛍
+            </div>
+
+            <h2>
+                Your Cart is Empty
+            </h2>
+
+            <p>
+                Discover the latest VANTA pieces
+                and build your collection.
+            </p>
+
+            <button
+                onclick="goBack()"
+                type="button"
+            >
+                EXPLORE SHOP
+            </button>
+
+        </div>
+
+    `;
+
+    document.getElementById(
+        "itemCount"
+    ).innerText =
+        "0 Items";
+
+    document.getElementById(
+        "panelCount"
+    ).innerText =
+        "0 items";
+
 }
 
-/* QTY */
-function changeQty(i,delta){
-let cart = JSON.parse(localStorage.getItem("cart")) || [];
-cart[i].qty = (cart[i].qty || 1) + delta;
 
-if(cart[i].qty <= 0){
-cart.splice(i,1);
+/* =========================
+SUMMARY
+========================= */
+
+function updateSummary(subtotal){
+
+    const discount =
+        Number(
+            localStorage.getItem(
+                "cartDiscount"
+            )
+        ) || 0;
+
+
+    let shipping =
+        subtotal >= FREE_SHIPPING_LIMIT
+        ? 0
+        : subtotal > 0
+            ? SHIPPING_COST
+            : 0;
+
+
+    const total =
+        Math.max(
+            0,
+            subtotal +
+            shipping -
+            discount
+        );
+
+
+    document.getElementById(
+        "subtotal"
+    ).innerText =
+        `${subtotal.toLocaleString()} EGP`;
+
+
+    document.getElementById(
+        "shipping"
+    ).innerText =
+        shipping === 0
+        ? "FREE"
+        : `${shipping.toLocaleString()} EGP`;
+
+
+    document.getElementById(
+        "discount"
+    ).innerText =
+        `-${discount.toLocaleString()} EGP`;
+
+
+    document.getElementById(
+        "total"
+    ).innerText =
+        `${total.toLocaleString()} EGP`;
+
+
+    updateShippingProgress(
+        subtotal
+    );
+
 }
 
-localStorage.setItem("cart", JSON.stringify(cart));
-loadCart();
+
+/* =========================
+FREE SHIPPING
+========================= */
+
+function updateShippingProgress(
+    subtotal
+){
+
+    const progress =
+        Math.min(
+            (subtotal /
+            FREE_SHIPPING_LIMIT) *
+            100,
+            100
+        );
+
+
+    document.getElementById(
+        "progressBar"
+    ).style.width =
+        `${progress}%`;
+
+
+    const text =
+        document.getElementById(
+            "shippingText"
+        );
+
+
+    if(subtotal <= 0){
+
+        text.innerHTML =
+            `Add <strong>${FREE_SHIPPING_LIMIT.toLocaleString()} EGP</strong> to unlock FREE SHIPPING.`;
+
+        return;
+
+    }
+
+
+    if(
+        subtotal >=
+        FREE_SHIPPING_LIMIT
+    ){
+
+        text.innerHTML =
+            `🎉 <strong>You've unlocked FREE SHIPPING.</strong>`;
+
+        return;
+
+    }
+
+
+    const remaining =
+        FREE_SHIPPING_LIMIT -
+        subtotal;
+
+
+    text.innerHTML =
+        `Add <strong>${remaining.toLocaleString()} EGP</strong> more to unlock FREE SHIPPING.`;
+
 }
 
-/* REMOVE */
-function removeItem(i){
-let cart = JSON.parse(localStorage.getItem("cart")) || [];
-cart.splice(i,1);
-localStorage.setItem("cart", JSON.stringify(cart));
-loadCart();
+
+/* =========================
+SIZE
+========================= */
+
+function changeSize(
+    index,
+    value
+){
+
+    const cart =
+        getCart();
+
+    if(!cart[index]){
+        return;
+    }
+
+    cart[index].size =
+        value;
+
+    saveCart(cart);
+
+    showToast(
+        "Size updated"
+    );
+
+    loadCart();
+
 }
 
-/* ACTIONS */
+
+/* =========================
+QUANTITY
+========================= */
+
+function changeQty(
+    index,
+    delta
+){
+
+    const cart =
+        getCart();
+
+    if(!cart[index]){
+        return;
+    }
+
+
+    cart[index].qty =
+        Number(
+            cart[index].qty || 1
+        ) + delta;
+
+
+    if(
+        cart[index].qty <= 0
+    ){
+
+        cart.splice(
+            index,
+            1
+        );
+
+        showToast(
+            "Item removed"
+        );
+
+    }
+
+
+    saveCart(cart);
+
+    loadCart();
+
+}
+
+
+/* =========================
+REMOVE
+========================= */
+
+function removeItem(
+    index
+){
+
+    const cart =
+        getCart();
+
+    if(!cart[index]){
+        return;
+    }
+
+
+    cart.splice(
+        index,
+        1
+    );
+
+
+    saveCart(cart);
+
+    showToast(
+        "Item removed from cart"
+    );
+
+    loadCart();
+
+}
+
+
+/* =========================
+PROMO
+========================= */
+
+function applyPromo(){
+
+    const input =
+        document.getElementById(
+            "promoInput"
+        );
+
+    const message =
+        document.getElementById(
+            "promoMessage"
+        );
+
+
+    const code =
+        input.value
+            .trim()
+            .toUpperCase();
+
+
+    /*
+        Demo promo code.
+
+        Change this later to
+        your Supabase coupon system.
+    */
+
+    if(code === "VANTA10"){
+
+        localStorage.setItem(
+            "cartDiscount",
+            "10"
+        );
+
+
+        message.innerText =
+            "10 EGP discount applied.";
+
+
+        message.style.color =
+            "#aaa";
+
+
+        loadCart();
+
+        showToast(
+            "Promo code applied"
+        );
+
+        return;
+
+    }
+
+
+    if(!code){
+
+        message.innerText =
+            "Enter a promo code.";
+
+        return;
+
+    }
+
+
+    message.innerText =
+        "Invalid promo code.";
+
+    message.style.color =
+        "#777";
+
+}
+
+
+/* =========================
+CHECKOUT
+========================= */
+
 function goCheckout(){
-window.location.href="checkout.html";
+
+    const cart =
+        getCart();
+
+
+    if(!cart.length){
+
+        showToast(
+            "Your cart is empty"
+        );
+
+        return;
+
+    }
+
+
+    window.location.href =
+        "checkout.html";
+
 }
+
+
+/* =========================
+CONTINUE SHOPPING
+========================= */
 
 function goBack(){
-window.location.href="shop.html";
+
+    window.location.href =
+        "shop.html";
+
 }
+
+
+/* =========================
+INITIALIZE
+========================= */
 
 loadCart();
 
